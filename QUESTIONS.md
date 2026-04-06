@@ -132,7 +132,7 @@ This file contains a curated list of PHP interview questions and answers, merged
 **Answer:** 
 PHP uses a reference counting mechanism and a cyclic garbage collector to automatically free memory occupied by objects and variables that are no longer reachable.
 
-- **Reference Counting:** Every `zval` (except simple types in PHP 7+) has a `refcount`. When it reaches zero, memory is freed immediately.
+- **Reference Counting:** In PHP 7+, the `refcount` is moved from the `zval` itself into the complex value structures (`zend_string`, `zend_array`, etc.). Simple types (like `int` or `bool`) are not reference-counted. When a `refcount` reaches zero, the memory is freed.
 - **What is a "Cycle"?** A cycle occurs when objects point to each other (circular references), preventing their `refcounts` from reaching zero even after being unset.
 - **How it cleans:** When the "root buffer" reaches its limit, the collector temporarily decrements internal refcounts. If a refcount hits zero, the object is marked as garbage and swept.
 - **Performance:** GC prevents memory leaks (crucial for daemons/workers) but adds CPU overhead during collection cycles.
@@ -140,12 +140,20 @@ PHP uses a reference counting mechanism and a cyclic garbage collector to automa
 [Detailed Garbage Collection Guide](answers/garbage_collector.md)
 
 #### What is a zval and what is its basic structure? ⭐ **Important**
-**Answer:** A `zval` (Zend value) is the fundamental data structure used by the Zend Engine to represent any PHP variable. In PHP 5, it consists of:
-- **value:** A union that stores the actual data.
-- **refcount:** Number of symbols pointing to this `zval`.
-- **type:** The variable's type.
-- **is_ref:** A boolean flag indicating if it is a reference.
-[Detailed Zval Structure Guide](https://www.phpinternalsbook.com/php5/zvals/basic_structure.html)
+**Answer:** A `zval` (Zend value) is the fundamental data structure used by the Zend Engine to represent any PHP variable. In PHP 7+, it was significantly optimized to reduce memory usage (down to 16 bytes) and avoid unnecessary heap allocations.
+
+**Internal Structure (PHP 7+):**
+1. **value**: An 8-byte union storing the actual data (e.g., `lval` for integers, `dval` for doubles, or pointers like `*str`, `*arr`, `*obj`).
+2. **u1 (type_info)**: A 4-byte union containing the **type tag** (e.g., `IS_STRING`, `IS_LONG`) and **type flags** (indicating if the value is reference-counted or participates in garbage collection).
+3. **u2**: A 4-byte union used for auxiliary data (e.g., hash collision chains in arrays).
+
+**Key Differences from PHP 5:**
+- **Size**: Reduced from 24/32 bytes to 16 bytes.
+- **Reference Counting**: Moved from the `zval` itself into the complex value structures (`zend_string`, `zend_array`, etc.).
+- **Simple Types**: Types like `null`, `bool`, `int`, and `float` are stored directly in the `zval` and are no longer reference-counted or heap-allocated.
+
+[Detailed Zval Structure Guide](https://www.phpinternalsbook.com/php7/zvals/basic_structure.html)
+
 
 #### What is copy-on-write in PHP, and when does passing by value duplicate data? ⭐ **Important**
 **Answer:** **Copy-on-write (CoW)** is an optimization where PHP shares a single `zval` (memory storage) between multiple variables until one is modified.
