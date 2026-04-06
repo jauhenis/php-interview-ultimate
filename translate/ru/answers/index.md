@@ -33,6 +33,7 @@ slug: "/answers"
 * [Типы данных PHP](data_types.md)
 * [Числа с плавающей точкой](floating_point_numbers.md)
 * [Сборка мусора в PHP](garbage_collector.md)
+* [Copy-on-write в PHP](copy_on_write.md)
 * [Генераторы в PHP и `yield`](generators.md)
 * [PHP Reflection и SPL](php_advanced_extras.md)
 * [OpCache и JIT-компиляция](opcache_jit.md)

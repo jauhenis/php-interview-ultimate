@@ -33,6 +33,7 @@ This section contains detailed guides and explanations for various PHP-related t
 * [PHP Data Types](data_types.md)
 * [Floating Point Numbers Explained](floating_point_numbers.md)
 * [PHP Garbage Collection](garbage_collector.md)
+* [Copy-on-Write in PHP](copy_on_write.md)
 * [PHP Generators and `yield`](generators.md)
 * [PHP Reflection and SPL](php_advanced_extras.md)
 * [OpCache and JIT Compilation](opcache_jit.md)

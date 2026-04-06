@@ -147,6 +147,14 @@ PHP uses a reference counting mechanism and a cyclic garbage collector to automa
 - **is_ref:** A boolean flag indicating if it is a reference.
 [Detailed Zval Structure Guide](https://www.phpinternalsbook.com/php5/zvals/basic_structure.html)
 
+#### What is copy-on-write in PHP, and when does passing by value duplicate data? ⭐ **Important**
+**Answer:** **Copy-on-write (CoW)** is an optimization where PHP shares a single `zval` (memory storage) between multiple variables until one is modified.
+- **Read-only**: Passing a large array by value only shares the `zval` (no memory duplication).
+- **Modification**: Mutating the array triggers a "separation," creating a real copy in memory.
+- **Objects**: Pass by **handle**, so property changes are visible outside without the array-style CoW duplication.
+Do not use `&` purely for memory optimization; PHP's CoW is already efficient for read-heavy access.
+[Detailed Copy-on-Write Guide](answers/copy_on_write.md)
+
 #### What is OPCache?
 **Answer:** OPCache is a caching engine for PHP that stores precompiled script bytecode in shared memory, eliminating the need for PHP to load and parse scripts on each request.
 
