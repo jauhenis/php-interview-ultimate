@@ -51,8 +51,8 @@ const config = {
           editUrl: 'https://github.com/JauheniS/php-interview-ultimate/edit/main/docs/',
           path: 'docs',
           routeBasePath: '/',
-          showLastUpdateAuthor: true,
-          showLastUpdateTime: true,
+          showLastUpdateAuthor: false,
+          showLastUpdateTime: false,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
