@@ -49,7 +49,49 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Answer:** `CHAR` is fixed-length (padded with spaces), while `VARCHAR` is variable-length (uses only the necessary space plus 1-2 bytes for length).
+**Answer:** `CHAR` is fixed-length (padded with spaces), while `VARCHAR` is variable-length (uses only the necessary space plus 1-2 bytes for length). `CHAR` is slightly faster for very short, uniform data (like country codes), while `VARCHAR` saves space for varying text lengths.
+
+---
+
+### What are the main numeric data types in MySQL?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- **TINYINT:** 1 byte (-128 to 127).
+- **SMALLINT:** 2 bytes (-32,768 to 32,767).
+- **INT:** 4 bytes (-2.1B to 2.1B).
+- **BIGINT:** 8 bytes.
+- **DECIMAL:** Fixed-point for financial data (exact precision).
+- **FLOAT/DOUBLE:** Floating-point for approximate values.
+
+---
+
+### What is the difference between `DATETIME` and `TIMESTAMP`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- **DATETIME:** 8 bytes. Range: 1000-01-01 to 9999-12-31. Constant across time zones.
+- **TIMESTAMP:** 4 bytes. Range: 1970-01-01 to 2038-01-19. Converted to/from UTC based on the current time zone.
+
+---
+
+### What are the `ENUM` and `SET` types?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- **ENUM:** A string object that can have only one value chosen from a list of permitted values.
+- **SET:** A string object that can have zero or more values chosen from a list of permitted values (up to 64).
+
+---
+
+### What is the difference between `BLOB` and `TEXT`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Both store large amounts of data, but `TEXT` is for character strings (respects character sets/collations), while `BLOB` (Binary Large Object) is for binary data (images, files) and is treated as a byte string.
 
 ---
 
@@ -77,6 +119,119 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 - `%` matches any sequence of characters (zero or more).
 - `_` matches exactly one character.
+
+---
+
+### What are the different types of Joins in MySQL?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- **(INNER) JOIN:** Returns records that have matching values in both tables.
+- **LEFT (OUTER) JOIN:** Returns all records from the left table, and the matched records from the right table.
+- **RIGHT (OUTER) JOIN:** Returns all records from the right table, and the matched records from the left table.
+- **CROSS JOIN:** Returns the Cartesian product of the two tables (every row from the first table joined with every row from the second).
+- **Self Join:** A regular join, but the table is joined with itself.
+
+---
+
+### What is the difference between an Implicit and Explicit Join?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- **Implicit Join:** Uses the `FROM` clause to list multiple tables and the `WHERE` clause to specify the join condition (e.g., `SELECT * FROM TableA, TableB WHERE TableA.id = TableB.a_id`).
+- **Explicit Join:** Uses the `JOIN` keyword and the `ON` clause to specify the join condition (e.g., `SELECT * FROM TableA JOIN TableB ON TableA.id = TableB.a_id`). Explicit joins are generally preferred for readability and avoiding accidental Cartesian products.
+
+---
+
+### What are the main string functions in MySQL?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- `CONCAT(str1, str2, ...)`: Joins two or more strings.
+- `CONCAT_WS(separator, str1, str2, ...)`: Joins strings with a separator.
+- `LENGTH(str)` / `CHAR_LENGTH(str)`: Returns the length of a string in bytes/characters.
+- `LEFT(str, len)` / `RIGHT(str, len)`: Returns a specified number of characters from the start/end.
+- `SUBSTRING(str, start, len)`: Extracts a substring.
+- `SUBSTRING_INDEX(str, delimiter, count)`: Returns a substring before a specified number of delimiter occurrences.
+- `UPPER(str)` / `LOWER(str)`: Converts to uppercase/lowercase.
+- `TRIM(str)` / `LTRIM(str)` / `RTRIM(str)`: Removes leading/trailing spaces.
+- `REPLACE(str, from_str, to_str)`: Replaces occurrences of a substring.
+- `INSERT(str, start, len, new_str)`: Replaces a portion of a string with another string.
+- `LOCATE(substr, str)`: Returns the position of the first occurrence of a substring.
+- `REVERSE(str)`: Reverses the characters in a string.
+- `REPEAT(str, count)`: Repeats a string a specified number of times.
+- `LPAD(str, len, pad)` / `RPAD(str, len, pad)`: Pads a string to a certain length.
+
+---
+
+### What are the main numeric functions in MySQL?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- `ABS(n)`: Returns the absolute value.
+- `CEIL(n)` / `CEILING(n)`: Rounds up to the nearest integer.
+- `FLOOR(n)`: Rounds down to the nearest integer.
+- `ROUND(n, d)`: Rounds to a specified number of decimal places.
+- `TRUNCATE(n, d)`: Truncates to a specified number of decimal places.
+- `RAND()`: Returns a random floating-point value between 0 and 1.
+- `SQRT(n)`: Returns the square root.
+- `POWER(x, y)`: Returns $x$ raised to the power of $y$.
+- `SIGN(n)`: Returns -1, 0, or 1 depending on whether the number is negative, zero, or positive.
+
+---
+
+### What are the main date and time functions in MySQL?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- `NOW()` / `SYSDATE()` / `CURRENT_TIMESTAMP()`: Returns current date and time.
+- `CURDATE()` / `CURRENT_DATE()`: Returns current date.
+- `CURTIME()` / `CURRENT_TIME()`: Returns current time.
+- `UTC_DATE()` / `UTC_TIME()`: Returns current UTC date/time.
+- `DATE_ADD(date, INTERVAL expr unit)` / `DATE_SUB(...)`: Adds/subtracts time intervals.
+- `DATEDIFF(expr1, expr2)`: Returns the number of days between two dates.
+- `DATE_FORMAT(date, format)`: Formats a date as specified.
+- `EXTRACT(unit FROM date)`: Extracts a part of the date (YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, etc.).
+- `DAYOFMONTH()`, `DAYOFWEEK()`, `DAYOFYEAR()`, `LAST_DAY()`: Returns specific day information.
+- `MONTH()`, `YEAR()`, `QUARTER()`, `WEEK()`: Returns specific date parts.
+- `HOUR()`, `MINUTE()`, `SECOND()`: Returns specific time parts.
+- `TIME_TO_SEC(time)`: Converts time to seconds since midnight.
+
+---
+
+### What are the flow control functions in MySQL?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- `IF(expr1, expr2, expr3)`: If `expr1` is true, returns `expr2`, else `expr3`.
+- `IFNULL(expr1, expr2)`: If `expr1` is not NULL, returns `expr1`, else `expr2`.
+- `COALESCE(list)`: Returns the first non-NULL value in the list.
+- `CASE WHEN condition THEN result [ELSE result] END`: Evaluates a list of conditions and returns the corresponding result.
+
+---
+
+### What is the difference between `WHERE` and `HAVING`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** `WHERE` filters rows _before_ aggregation, while `HAVING` filters _after_ aggregation (usually with `GROUP BY`).
+
+---
+
+### What is the difference between a `WHERE` clause and a `JOIN ... ON` condition?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+- **`JOIN ... ON`**: Defines how tables are linked together. It is processed *during* the join operation.
+- **`WHERE`**: Filters the resulting rows *after* the join has been logically formed.
+- **Performance**: For `INNER JOIN`, they are often functionally equivalent as the optimizer can move conditions between them. For `OUTER JOIN` (LEFT/RIGHT), the placement is critical: a condition in `ON` determines which rows are joined (keeping all rows from the "outer" table), while a condition in `WHERE` filters the final result set (potentially turning a LEFT JOIN into an INNER JOIN if it filters out NULLs).
 
 ---
 
@@ -144,7 +299,127 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
-**Answer:** `UNION` removes duplicate rows from the result set, while `UNION ALL` includes all rows, including duplicates.
+**Answer:** `UNION` removes duplicate rows from the result set, while `UNION ALL` includes all rows, including duplicates. To use `UNION`, the number and data types of columns in both `SELECT` statements must match.
+
+---
+
+### How to perform conditional calculations in a `SELECT` query?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Use the `CASE` statement or `IF()` function. For example, to apply different interest rates based on a balance:
+```sql
+SELECT name, balance,
+  CASE 
+    WHEN balance < 3000 THEN balance * 1.1
+    ELSE balance * 1.3
+  END AS total
+FROM accounts;
+```
+
+---
+
+### What is the difference between `IN` and `BETWEEN`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+- **IN:** Checks if a value matches any value in a specified list or subquery.
+- **BETWEEN:** Checks if a value falls within a specified range (inclusive of start and end values).
+
+---
+
+### What are Aggregate Functions in MySQL?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Functions that perform a calculation on a set of values and return a single value. Common ones: `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`.
+
+---
+
+### What is the purpose of `GROUP BY` and `HAVING`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** `GROUP BY` groups rows that have the same values into summary rows. `HAVING` is used to filter these groups based on a condition (since `WHERE` cannot be used with aggregate functions).
+
+---
+
+### What is a Subquery?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A query nested inside another query (SELECT, INSERT, UPDATE, or DELETE). They can be correlated (dependent on the outer query) or non-correlated (independent).
+
+---
+
+### What is the `EXISTS` operator?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A logical operator used in a `WHERE` clause to check if a subquery returns any rows. It returns true if the subquery returns one or more records. It is often more efficient than `IN` for checking existence.
+
+---
+
+### What is the difference between `ANY` and `ALL` when used with subqueries?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+- **ANY (or SOME):** Returns true if the comparison is true for *at least one* value in the subquery result.
+- **ALL:** Returns true only if the comparison is true for *all* values in the subquery result.
+
+---
+
+### What are the common column constraints (attributes)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+- **NOT NULL:** Ensures a column cannot have a NULL value.
+- **UNIQUE:** Ensures all values in a column are different.
+- **PRIMARY KEY:** A combination of NOT NULL and UNIQUE.
+- **FOREIGN KEY:** Prevents actions that would destroy links between tables.
+- **DEFAULT:** Sets a default value for a column if none is specified.
+- **CHECK:** Ensures that the values in a column satisfy a specific condition.
+- **AUTO_INCREMENT:** Automatically generates a unique number for each new row.
+
+---
+
+### What are the `ON DELETE` and `ON UPDATE` actions for Foreign Keys?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+- **CASCADE:** Automatically delete or update rows in the child table when the parent row is deleted/updated.
+- **SET NULL:** Set the foreign key column in the child table to NULL.
+- **RESTRICT / NO ACTION:** Reject the delete or update operation in the parent table if related rows exist in the child table.
+
+---
+
+### What is the `CONSTRAINT` operator used for?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** It is used to define and name constraints (PRIMARY KEY, UNIQUE, FOREIGN KEY, CHECK) on a table. Naming constraints allows you to easily drop or modify them later using their names.
+
+---
+
+### What is the difference between `LIKE` and `REGEXP`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+- **LIKE:** Uses simple wildcards (`%` for any string, `_` for any single character).
+- **REGEXP:** Uses powerful regular expressions (`^`, `$`, `.`, `[ ]`, `|`, etc.) for complex pattern matching.
+
+---
+
+### How can you modify an existing table structure?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Using the `ALTER TABLE` command to add, delete, or modify columns and constraints.
 
 ---
 
@@ -229,7 +504,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--warning margin-bottom--md">Senior</span>
 
 **Answer:** MySQL is known for its speed and ease of use in web development, while PostgreSQL is an object-relational database known for its advanced features, strict SQL compliance, and better handling of complex queries and high-concurrency workloads.
-[MySQL vs PostgreSQL Comparison](/answers/mysql_advanced#10-mysql-vs-postgresql)
+[MySQL vs PostgreSQL Comparison](/answers/mysql_vs_postgresql)
 
 ---
 

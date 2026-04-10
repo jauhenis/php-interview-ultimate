@@ -37,7 +37,6 @@ The transition from **PHP 5** to **PHP 7/8** brought significant improvements in
 - **Simplified Class Instantiation (PHP 8.4):** Create class and call method/property without extra parentheses: `new User()->name`.
 - **Pipe Operator (PHP 8.5):** New operator (`|>`) for chaining function calls.
 - **URI Extension (PHP 8.5):** A new built-in extension for URI parsing and manipulation.
-- **Clone With (PHP 8.5):** Modify properties during cloning: `clone $u with { name: 'New' }`.
 - **array_first() and array_last() (PHP 8.5):** Get first and last elements of an array.
 - **#[\NoDiscard] Attribute (PHP 8.5):** Warn when return value of a function is not used.
 - **PIE (PHP 8.5+):** Official PHP Installer for Extensions replaces PECL.
@@ -377,21 +376,6 @@ $result = "  hello world  "
     |> 'trim'
     |> 'strtoupper'
     |> 'str_replace'('WORLD', 'PHP 8.5', ...); // "HELLO PHP 8.5"
-```
-
----
-
-### What is "Clone With" in PHP 8.5?
-
-<span className="badge badge--warning margin-bottom--md">Senior</span>
-
-**Answer:** It allows modifying properties of a cloned object during the cloning process using a syntax similar to object initializers.
-
-```php
-$user2 = clone $user1 with {
-    name: "New Name",
-    email: "new@example.com"
-};
 ```
 
 ---

@@ -30,18 +30,7 @@ $result = "  hello world  "
     |> 'str_replace'('WORLD', 'PHP 8.5', ...); // "HELLO PHP 8.5"
 ```
 
-## 3. Clone With
-
-Support for modifying properties of a cloned object during the cloning process using object initializer syntax. This is particularly useful for immutable objects.
-
-```php
-$user2 = clone $user1 with {
-    name: "New Name",
-    email: "new@example.com"
-};
-```
-
-## 4. `#[\NoDiscard]` Attribute
+## 3. `#[\NoDiscard]` Attribute
 
 A new built-in attribute that signals to static analysis tools and IDEs that the return value of a function or method must not be ignored.
 
@@ -56,7 +45,7 @@ function validateUser(): bool {
 validateUser();
 ```
 
-## 5. Closures and First-Class Callables in Constant Expressions
+## 4. Closures and First-Class Callables in Constant Expressions
 
 Closures and first-class callables (e.g., `strlen(...)`) can now be used in constant expressions, such as `const` declarations, class constants, and property defaults.
 
@@ -67,7 +56,7 @@ class Formatter {
 }
 ```
 
-## 6. New `array_first()` and `array_last()` functions
+## 5. New `array_first()` and `array_last()` functions
 
 PHP 8.5 finally adds native functions to get the first and last elements of an array without moving the internal array pointer.
 
@@ -77,7 +66,7 @@ $first = array_first($arr); // 1
 $last = array_last($arr);   // 3
 ```
 
-## 7. cURL: New `curl_multi_get_handles()` function
+## 6. cURL: New `curl_multi_get_handles()` function
 
 A new function for the cURL extension that allows retrieving all handles associated with a multi handle.
 
@@ -87,7 +76,7 @@ $multiHandle = curl_multi_init();
 $handles = curl_multi_get_handles($multiHandle);
 ```
 
-## 8. Filter: Exceptions on validation failures
+## 7. Filter: Exceptions on validation failures
 
 The `filter_var` and related functions now support throwing exceptions on validation failures using a new flag.
 
@@ -99,11 +88,11 @@ try {
 }
 ```
 
-## 9. New `max_memory_limit` INI directive
+## 8. New `max_memory_limit` INI directive
 
 This directive allows setting a ceiling for `memory_limit` that cannot be exceeded by `ini_set()` calls at runtime.
 
-## 10. PIE (PHP Installer for Extensions)
+## 9. PIE (PHP Installer for Extensions)
 
 PHP 8.5 marks the official transition from the legacy **PECL** to **PIE**. PIE is a modern, PHAR-based installer for PHP extensions that works similarly to Composer.
 

@@ -26,6 +26,7 @@ This file contains a curated list of PHP interview questions and answers, merged
 21. [PSR & PER Standards](#21-psr--per-standards)
 22. [Basic Algorithms](#22-basic-algorithms)
 23. [HaPHPiness - Best things in PHP](#23-haphpiness---best-things-in-php)
+24. [PostgreSQL](#24-postgresql)
 ---
 
 ## 1. PHP Basics & Language Features
@@ -770,12 +771,6 @@ public function count(Countable&Iterator $it) { ... }
 #### What are Fibers (introduced in PHP 8.1)?
 **Answer:** A way to create lightweight coroutines for non-blocking I/O and asynchronous tasks. They allow pausing and resuming execution within a single thread.
 
-#### What is "Clone With" (introduced in PHP 8.5)?
-**Answer:** Allows modifying properties of a cloned object during the cloning process using object initializer syntax.
-```php
-$user2 = clone $user1 with { name: "New Name" };
-```
-
 #### What is the Pipe Operator (introduced in PHP 8.5)?
 **Answer:** The `|>` operator allows chaining function calls in a more readable way, passing the result of the left side as the first argument to the right side.
 ```php
@@ -813,7 +808,29 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 **Answer:** A primary key is a column (or a set of columns) that uniquely identifies each record in a table. It cannot be null.
 
 #### What is the difference between `CHAR` and `VARCHAR`?
-**Answer:** `CHAR` is fixed-length (padded with spaces), while `VARCHAR` is variable-length (uses only the necessary space plus 1-2 bytes for length).
+**Answer:** `CHAR` is fixed-length (padded with spaces), while `VARCHAR` is variable-length (uses only the necessary space plus 1-2 bytes for length). `CHAR` is slightly faster for very short, uniform data (like country codes), while `VARCHAR` saves space for varying text lengths.
+
+#### What are the main numeric data types in MySQL?
+**Answer:**
+- **TINYINT:** 1 byte (-128 to 127).
+- **SMALLINT:** 2 bytes (-32,768 to 32,767).
+- **INT:** 4 bytes (-2.1B to 2.1B).
+- **BIGINT:** 8 bytes.
+- **DECIMAL:** Fixed-point for financial data (exact precision).
+- **FLOAT/DOUBLE:** Floating-point for approximate values.
+
+#### What is the difference between `DATETIME` and `TIMESTAMP`?
+**Answer:**
+- **DATETIME:** 8 bytes. Range: 1000-01-01 to 9999-12-31. Constant across time zones.
+- **TIMESTAMP:** 4 bytes. Range: 1970-01-01 to 2038-01-19. Converted to/from UTC based on the current time zone.
+
+#### What are the `ENUM` and `SET` types?
+**Answer:**
+- **ENUM:** A string object that can have only one value chosen from a list of permitted values.
+- **SET:** A string object that can have zero or more values chosen from a list of permitted values (up to 64).
+
+#### What is the difference between `BLOB` and `TEXT`?
+**Answer:** Both store large amounts of data, but `TEXT` is for character strings (respects character sets/collations), while `BLOB` (Binary Large Object) is for binary data (images, files) and is treated as a byte string.
 
 #### What is the default port for MySQL?
 **Answer:** 3306.
@@ -825,6 +842,79 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 **Answer:** 
 - `%` matches any sequence of characters (zero or more).
 - `_` matches exactly one character.
+
+#### What are the different types of Joins in MySQL?
+**Answer:**
+- **(INNER) JOIN:** Returns records that have matching values in both tables.
+- **LEFT (OUTER) JOIN:** Returns all records from the left table, and the matched records from the right table.
+- **RIGHT (OUTER) JOIN:** Returns all records from the right table, and the matched records from the left table.
+- **CROSS JOIN:** Returns the Cartesian product of the two tables (every row from the first table joined with every row from the second).
+- **Self Join:** A regular join, but the table is joined with itself.
+
+#### What is the difference between an Implicit and Explicit Join?
+**Answer:**
+- **Implicit Join:** Uses the `FROM` clause to list multiple tables and the `WHERE` clause to specify the join condition (e.g., `SELECT * FROM TableA, TableB WHERE TableA.id = TableB.a_id`).
+- **Explicit Join:** Uses the `JOIN` keyword and the `ON` clause to specify the join condition (e.g., `SELECT * FROM TableA JOIN TableB ON TableA.id = TableB.a_id`). Explicit joins are generally preferred for readability and avoiding accidental Cartesian products.
+
+#### What are the main string functions in MySQL?
+**Answer:**
+- `CONCAT(str1, str2, ...)`: Joins two or more strings.
+- `CONCAT_WS(separator, str1, str2, ...)`: Joins strings with a separator.
+- `LENGTH(str)` / `CHAR_LENGTH(str)`: Returns the length of a string in bytes/characters.
+- `LEFT(str, len)` / `RIGHT(str, len)`: Returns a specified number of characters from the start/end.
+- `SUBSTRING(str, start, len)`: Extracts a substring.
+- `SUBSTRING_INDEX(str, delimiter, count)`: Returns a substring before a specified number of delimiter occurrences.
+- `UPPER(str)` / `LOWER(str)`: Converts to uppercase/lowercase.
+- `TRIM(str)` / `LTRIM(str)` / `RTRIM(str)`: Removes leading/trailing spaces.
+- `REPLACE(str, from_str, to_str)`: Replaces occurrences of a substring.
+- `INSERT(str, start, len, new_str)`: Replaces a portion of a string with another string.
+- `LOCATE(substr, str)`: Returns the position of the first occurrence of a substring.
+- `REVERSE(str)`: Reverses the characters in a string.
+- `REPEAT(str, count)`: Repeats a string a specified number of times.
+- `LPAD(str, len, pad)` / `RPAD(str, len, pad)`: Pads a string to a certain length.
+
+#### What are the main numeric functions in MySQL?
+**Answer:**
+- `ABS(n)`: Returns the absolute value.
+- `CEIL(n)` / `CEILING(n)`: Rounds up to the nearest integer.
+- `FLOOR(n)`: Rounds down to the nearest integer.
+- `ROUND(n, d)`: Rounds to a specified number of decimal places.
+- `TRUNCATE(n, d)`: Truncates to a specified number of decimal places.
+- `RAND()`: Returns a random floating-point value between 0 and 1.
+- `SQRT(n)`: Returns the square root.
+- `POWER(x, y)`: Returns $x$ raised to the power of $y$.
+- `SIGN(n)`: Returns -1, 0, or 1 depending on whether the number is negative, zero, or positive.
+
+#### What are the main date and time functions in MySQL?
+**Answer:**
+- `NOW()` / `SYSDATE()` / `CURRENT_TIMESTAMP()`: Returns current date and time.
+- `CURDATE()` / `CURRENT_DATE()`: Returns current date.
+- `CURTIME()` / `CURRENT_TIME()`: Returns current time.
+- `UTC_DATE()` / `UTC_TIME()`: Returns current UTC date/time.
+- `DATE_ADD(date, INTERVAL expr unit)` / `DATE_SUB(...)`: Adds/subtracts time intervals.
+- `DATEDIFF(expr1, expr2)`: Returns the number of days between two dates.
+- `DATE_FORMAT(date, format)`: Formats a date as specified.
+- `EXTRACT(unit FROM date)`: Extracts a part of the date (YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, etc.).
+- `DAYOFMONTH()`, `DAYOFWEEK()`, `DAYOFYEAR()`, `LAST_DAY()`: Returns specific day information.
+- `MONTH()`, `YEAR()`, `QUARTER()`, `WEEK()`: Returns specific date parts.
+- `HOUR()`, `MINUTE()`, `SECOND()`: Returns specific time parts.
+- `TIME_TO_SEC(time)`: Converts time to seconds since midnight.
+
+#### What are the flow control functions in MySQL?
+**Answer:**
+- `IF(expr1, expr2, expr3)`: If `expr1` is true, returns `expr2`, else `expr3`.
+- `IFNULL(expr1, expr2)`: If `expr1` is not NULL, returns `expr1`, else `expr2`.
+- `COALESCE(list)`: Returns the first non-NULL value in the list.
+- `CASE WHEN condition THEN result [ELSE result] END`: Evaluates a list of conditions and returns the corresponding result.
+
+#### What is the difference between `WHERE` and `HAVING`?
+**Answer:** `WHERE` filters rows *before* aggregation, while `HAVING` filters *after* aggregation (usually with `GROUP BY`).
+
+#### What is the difference between a `WHERE` clause and a `JOIN ... ON` condition?
+**Answer:**
+- **`JOIN ... ON`**: Defines how tables are linked together. It is processed *during* the join operation.
+- **`WHERE`**: Filters the resulting rows *after* the join has been logically formed.
+- **Performance**: For `INNER JOIN`, they are often functionally equivalent as the optimizer can move conditions between them. For `OUTER JOIN` (LEFT/RIGHT), the placement is critical: a condition in `ON` determines which rows are joined (keeping all rows from the "outer" table), while a condition in `WHERE` filters the final result set (potentially turning a LEFT JOIN into an INNER JOIN if it filters out NULLs).
 
 ### Middle
 #### What is a Transaction?
@@ -873,7 +963,67 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 **Answer:** Most database indexes (including MySQL's InnoDB) are stored as **B-trees** (specifically B+Trees). They are "horizontally large" (high fan-out) and shallow, which minimizes the number of disk I/O operations needed to find a value. This structure allows for fast filtering (O(log n)) and efficient range scans. Proper ordering in composite indexes is crucial: generally, equality conditions and high-selectivity columns should come first, followed by range conditions.
 
 #### What is the difference between `UNION` and `UNION ALL`?
-**Answer:** `UNION` removes duplicate rows from the result set, while `UNION ALL` includes all rows, including duplicates.
+**Answer:** `UNION` removes duplicate rows from the result set, while `UNION ALL` includes all rows, including duplicates. To use `UNION`, the number and data types of columns in both `SELECT` statements must match.
+
+#### How to perform conditional calculations in a `SELECT` query?
+**Answer:** Use the `CASE` statement or `IF()` function. For example, to apply different interest rates based on a balance:
+```sql
+SELECT name, balance,
+  CASE 
+    WHEN balance < 3000 THEN balance * 1.1
+    ELSE balance * 1.3
+  END AS total
+FROM accounts;
+```
+
+#### What is the difference between `IN` and `BETWEEN`?
+**Answer:**
+- **IN:** Checks if a value matches any value in a specified list or subquery.
+- **BETWEEN:** Checks if a value falls within a specified range (inclusive of start and end values).
+
+#### What are Aggregate Functions in MySQL?
+**Answer:** Functions that perform a calculation on a set of values and return a single value. Common ones: `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`.
+
+#### What is the purpose of `GROUP BY` and `HAVING`?
+**Answer:** `GROUP BY` groups rows that have the same values into summary rows. `HAVING` is used to filter these groups based on a condition (since `WHERE` cannot be used with aggregate functions).
+
+#### What is a Subquery?
+**Answer:** A query nested inside another query (SELECT, INSERT, UPDATE, or DELETE). They can be correlated (dependent on the outer query) or non-correlated (independent).
+
+#### What is the `EXISTS` operator?
+**Answer:** A logical operator used in a `WHERE` clause to check if a subquery returns any rows. It returns true if the subquery returns one or more records. It is often more efficient than `IN` for checking existence.
+
+#### What is the difference between `ANY` and `ALL` when used with subqueries?
+**Answer:**
+- **ANY (or SOME):** Returns true if the comparison is true for *at least one* value in the subquery result.
+- **ALL:** Returns true only if the comparison is true for *all* values in the subquery result.
+
+#### What are the common column constraints (attributes)?
+**Answer:**
+- **NOT NULL:** Ensures a column cannot have a NULL value.
+- **UNIQUE:** Ensures all values in a column are different.
+- **PRIMARY KEY:** A combination of NOT NULL and UNIQUE.
+- **FOREIGN KEY:** Prevents actions that would destroy links between tables.
+- **DEFAULT:** Sets a default value for a column if none is specified.
+- **CHECK:** Ensures that the values in a column satisfy a specific condition.
+- **AUTO_INCREMENT:** Automatically generates a unique number for each new row.
+
+#### What are the `ON DELETE` and `ON UPDATE` actions for Foreign Keys?
+**Answer:**
+- **CASCADE:** Automatically delete or update rows in the child table when the parent row is deleted/updated.
+- **SET NULL:** Set the foreign key column in the child table to NULL.
+- **RESTRICT / NO ACTION:** Reject the delete or update operation in the parent table if related rows exist in the child table.
+
+#### What is the `CONSTRAINT` operator used for?
+**Answer:** It is used to define and name constraints (PRIMARY KEY, UNIQUE, FOREIGN KEY, CHECK) on a table. Naming constraints allows you to easily drop or modify them later using their names.
+
+#### What is the difference between `LIKE` and `REGEXP`?
+**Answer:**
+- **LIKE:** Uses simple wildcards (`%` for any string, `_` for any single character).
+- **REGEXP:** Uses powerful regular expressions (`^`, `$`, `.`, `[ ]`, `|`, etc.) for complex pattern matching.
+
+#### How can you modify an existing table structure?
+**Answer:** Using the `ALTER TABLE` command to add, delete, or modify columns and constraints.
 
 #### What is the difference between MariaDB and MySQL?
 **Answer:** MariaDB is an open-source fork of MySQL created by the original developers after Oracle's acquisition of Sun Microsystems (which owned MySQL). While it maintains high compatibility, MariaDB offers more storage engines, performance improvements, and remains fully open-source (GPL), whereas MySQL has both a community and an enterprise version.
@@ -1866,3 +2016,104 @@ This section highlights modern PHP features and the overall "happiness" of the e
 #### What is NativePHP?
 **Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
 [Detailed HaPHPiness Guide](answers/haphpiness.md#nativephp)
+
+## 24. PostgreSQL
+
+### Junior
+
+#### What is PostgreSQL and how does it differ from MySQL?
+**Answer:** PostgreSQL is a powerful, open-source object-relational database system (ORDBMS). Unlike MySQL, which is purely relational, PostgreSQL supports advanced data types (like arrays and geometric types) and is known for its strict SQL compliance and extensibility.
+[MySQL vs PostgreSQL Comparison](answers/mysql_vs_postgresql.md)
+
+#### What are the main numeric data types in PostgreSQL?
+**Answer:** 
+- **integers:** `smallint` (2 bytes), `integer` (4 bytes), `bigint` (8 bytes).
+- **floating-point:** `real` (4 bytes), `double precision` (8 bytes).
+- **fixed-point:** `numeric` or `decimal` (exact precision for financial data).
+- **autoincrement:** `serial`, `smallserial`, `bigserial`.
+[Detailed PostgreSQL Data Types](answers/postgresql_data_types.md)
+
+#### What is the difference between `VARCHAR(n)`, `CHAR(n)`, and `TEXT` in PostgreSQL?
+**Answer:** 
+- `CHAR(n)`: Fixed-length, padded with spaces.
+- `VARCHAR(n)`: Variable-length with a maximum limit.
+- `TEXT`: Variable-length with no specific limit.
+In PostgreSQL, there is no performance difference between these three types, so `TEXT` or `VARCHAR` (without `n`) is often preferred for flexibility.
+
+#### How do you define a Primary Key in PostgreSQL?
+**Answer:** You can use `PRIMARY KEY` at the column level or table level. It uniquely identifies each row and cannot be NULL.
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL
+);
+```
+
+#### What is a Foreign Key and how is it used?
+**Answer:** A foreign key links a column in one table to the primary key of another table. It ensures referential integrity.
+```sql
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+#### What is the difference between `INNER JOIN` and `LEFT JOIN`?
+**Answer:** `INNER JOIN` returns only matching rows from both tables. `LEFT JOIN` returns all rows from the left table and matching rows from the right table (with NULLs if no match exists).
+[PostgreSQL Table Relations](answers/postgresql_relations.md)
+
+### Middle
+
+#### What are the `CHECK` and `UNIQUE` constraints?
+**Answer:** 
+- `UNIQUE`: Ensures all values in a column (or group of columns) are distinct.
+- `CHECK`: Ensures that values in a column satisfy a specific boolean condition (e.g., `price > 0`).
+[PostgreSQL Constraints](answers/postgresql_constraints.md)
+
+#### What are Arrays in PostgreSQL?
+**Answer:** PostgreSQL allows columns to store arrays of any built-in or user-defined base type.
+```sql
+CREATE TABLE posts (
+    tags TEXT[]
+);
+INSERT INTO posts (tags) VALUES ('{"php", "postgres"}');
+```
+[PostgreSQL Complex Data Structures](answers/postgresql_complex_types.md)
+
+#### What is an `ENUM` type in PostgreSQL?
+**Answer:** An `ENUM` is a data type that comprises a static, ordered set of values.
+```sql
+CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
+```
+[PostgreSQL Complex Data Structures](answers/postgresql_complex_types.md)
+
+#### What is the difference between `WHERE` and `HAVING` in PostgreSQL?
+**Answer:** `WHERE` filters rows before grouping/aggregation. `HAVING` filters the results after `GROUP BY` has been applied.
+
+#### What are Aggregate Functions in PostgreSQL?
+**Answer:** Functions that compute a single result from a set of input values, such as `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`, and `STRING_AGG()`.
+
+### Senior
+
+#### What is MVCC (Multi-Version Concurrency Control) in PostgreSQL?
+**Answer:** MVCC allows multiple transactions to see a consistent snapshot of the database without locking each other. It uses hidden columns like `xmin` and `xmax` to track row versions.
+
+#### What are Correlated Subqueries?
+**Answer:** A subquery that refers to columns from the outer query. It is executed once for each row processed by the outer query.
+```sql
+SELECT name, (SELECT AVG(price) FROM products p2 WHERE p2.category = p1.category)
+FROM products p1;
+```
+
+#### How do `GROUPING SETS`, `ROLLUP`, and `CUBE` work?
+**Answer:** These are extensions of `GROUP BY` for generating multiple grouping sets in a single query (useful for reporting and analytics).
+- `ROLLUP`: Generates hierarchical subtotals.
+- `CUBE`: Generates subtotals for all possible combinations of columns.
+- `GROUPING SETS`: Allows specifying exact sets of columns to group by.
+
+#### How can you modify a table structure using `ALTER TABLE`?
+**Answer:** You can add/drop columns, change types, and add/remove constraints.
+```sql
+ALTER TABLE users ADD COLUMN email TEXT UNIQUE;
+ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
+```
