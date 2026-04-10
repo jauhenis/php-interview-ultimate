@@ -62,4 +62,4 @@ ALTER TABLE users ALTER COLUMN username SET NOT NULL;
 ```
 
 ---
-*Назад к [PostgreSQL](../questions/24-postgresql.mdx)*
+*Назад к [PostgreSQL](../questions/08-postgresql.mdx)*

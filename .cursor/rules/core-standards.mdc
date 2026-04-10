@@ -21,3 +21,20 @@ Changes must be synchronized between the root files and the Docusaurus content:
 - `answers/*.md` ↔ `docs/docs/answers/*.md`
 
 Ensure consistency in content, hierarchy, and level categorization across all synchronized files.
+
+## Link Integrity
+
+When reordering sections or renaming files:
+- **ALWAYS** perform a global search for links pointing to the affected files.
+- **ALWAYS** update relative links in both English and Russian documentation (`docs/docs/` and `docs/i18n/ru/`).
+- Verify that internal anchor links (e.g., `[Title](#anchor)`) match the new section numbering.
+
+## Multilingual Synchronization
+
+- **ALWAYS** update the Russian and English versions simultaneously.
+- Any change made to English content (`QUESTIONS.md`, `answers/*.md`, `docs/docs/`) **MUST** be immediately reflected in the corresponding Russian files (`translate/ru/`, `docs/i18n/ru/`).
+- The structure, numbering, and file naming **MUST** remain identical across both languages.
+
+## README.md Updates
+
+Always update `README.md` if a new topic is covered or a new section is added to ensure the overview remains accurate.

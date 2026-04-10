@@ -63,4 +63,4 @@ sidebar_label: 'MySQL vs PostgreSQL'
 | **Триггеры** | Базовая поддержка | Продвинутая поддержка (на строку, на выражение) |
 
 ---
-*Назад к [MySQL и базы данных](../questions/07-mysql-databases.mdx) или [PostgreSQL](../questions/24-postgresql.mdx)*
+*Назад к [MySQL и базы данных](../questions/07-mysql-databases.mdx) или [PostgreSQL](../questions/08-postgresql.mdx)*

@@ -1,0 +1,143 @@
+---
+title: '8. PostgreSQL'
+sidebar_label: '8. PostgreSQL'
+---
+
+# 8. PostgreSQL
+
+### What is PostgreSQL and how does it differ from MySQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** PostgreSQL is a powerful, open-source object-relational database system (ORDBMS). Unlike MySQL, which is purely relational, PostgreSQL supports advanced data types (like arrays and geometric types) and is known for its strict SQL compliance and extensibility.
+[MySQL vs PostgreSQL Comparison](../answers/mysql_vs_postgresql.md)
+
+---
+
+### What are the main numeric data types in PostgreSQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** 
+- **integers:** `smallint` (2 bytes), `integer` (4 bytes), `bigint` (8 bytes).
+- **floating-point:** `real` (4 bytes), `double precision` (8 bytes).
+- **fixed-point:** `numeric` or `decimal` (exact precision for financial data).
+- **autoincrement:** `serial`, `smallserial`, `bigserial`.
+[Detailed PostgreSQL Data Types](../answers/postgresql_data_types.md)
+
+---
+
+### What is the difference between `VARCHAR(n)`, `CHAR(n)`, and `TEXT` in PostgreSQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** 
+- `CHAR(n)`: Fixed-length, padded with spaces.
+- `VARCHAR(n)`: Variable-length with a maximum limit.
+- `TEXT`: Variable-length with no specific limit.
+In PostgreSQL, there is no performance difference between these three types, so `TEXT` or `VARCHAR` (without `n`) is often preferred for flexibility.
+
+---
+
+### How do you define a Primary Key in PostgreSQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** You can use `PRIMARY KEY` at the column level or table level. It uniquely identifies each row and cannot be NULL.
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL
+);
+```
+
+---
+
+### What is a Foreign Key and how is it used?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** A foreign key links a column in one table to the primary key of another table. It ensures referential integrity.
+```sql
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+---
+
+### What is the difference between `INNER JOIN` and `LEFT JOIN`?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** `INNER JOIN` returns only matching rows from both tables. `LEFT JOIN` returns all rows from the left table and matching rows from the right table (with NULLs if no match exists).
+[PostgreSQL Table Relations](../answers/postgresql_relations.md)
+
+---
+
+### What are the `CHECK` and `UNIQUE` constraints?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Answer:** 
+- `UNIQUE`: Ensures all values in a column (or group of columns) are distinct.
+- `CHECK`: Ensures that values in a column satisfy a specific boolean condition (e.g., `price > 0`).
+[PostgreSQL Constraints](../answers/postgresql_constraints.md)
+
+---
+
+### What are Arrays in PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Answer:** PostgreSQL allows columns to store arrays of any built-in or user-defined base type.
+```sql
+CREATE TABLE posts (
+    tags TEXT[]
+);
+INSERT INTO posts (tags) VALUES ('{"php", "postgres"}');
+```
+[PostgreSQL Complex Data Structures](../answers/postgresql_complex_types.md)
+
+---
+
+### What is an `ENUM` type in PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Answer:** An `ENUM` is a data type that comprises a static, ordered set of values.
+```sql
+CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
+```
+[PostgreSQL Complex Data Structures](../answers/postgresql_complex_types.md)
+
+---
+
+### What is the difference between `WHERE` and `HAVING` in PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Answer:** `WHERE` filters rows before grouping/aggregation. `HAVING` filters the results after `GROUP BY` has been applied.
+
+---
+
+### What are Aggregate Functions in PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Answer:** Functions that compute a single result from a set of input values, such as `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`, and `STRING_AGG()`.
+
+---
+
+### What is MVCC (Multi-Version Concurrency Control) in PostgreSQL?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Answer:** MVCC allows multiple transactions to see a consistent snapshot of the database without locking each other. It uses hidden columns like `xmin` and `xmax` to track row versions.
+
+---
+
+### What are Correlated Subqueries?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Answer:** A subquery that refers to columns from the outer query. It is executed once for each row processed by the outer query.
+```sql
+SELECT name, (SELECT AVG(price) FROM products p2 WHERE p2.category = p1.category)
+FROM products p1;
+```
+
+---
+
+### How do `GROUPING SETS`, `ROLLUP`, and `CUBE` work?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Answer:** These are extensions of `GROUP BY` for generating multiple grouping sets in a single query (useful for reporting and analytics).
+- `ROLLUP`: Generates hierarchical subtotals.
+- `CUBE`: Generates subtotals for all possible combinations of columns.
+- `GROUPING SETS`: Allows specifying exact sets of columns to group by.
+
+---
+
+### How can you modify a table structure using `ALTER TABLE`?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Answer:** You can add/drop columns, change types, and add/remove constraints.
+```sql
+ALTER TABLE users ADD COLUMN email TEXT UNIQUE;
+ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
+```
+---

@@ -53,4 +53,4 @@ ALTER TYPE mood ADD VALUE 'excited' AFTER 'happy';
 - `jsonb`: хранит данные в разложенном бинарном формате. Он немного медленнее при вводе, но значительно быстрее при обработке и поддерживает индексацию.
 
 ---
-*Назад к [PostgreSQL](../questions/24-postgresql.mdx)*
+*Назад к [PostgreSQL](../questions/08-postgresql.mdx)*

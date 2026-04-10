@@ -1,0 +1,143 @@
+---
+title: '8. PostgreSQL'
+sidebar_label: '8. PostgreSQL'
+---
+
+# 8. PostgreSQL
+
+### Что такое PostgreSQL и чем она отличается от MySQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** PostgreSQL — это мощная объектно-реляционная система управления базами данных (ORDBMS) с открытым исходным кодом. В отличие от MySQL, которая является чисто реляционной, PostgreSQL поддерживает расширенные типы данных (такие как массивы и геометрические типы) и известна своим строгим соответствием стандартам SQL и расширяемостью.
+[Сравнение MySQL и PostgreSQL](../answers/mysql_vs_postgresql.md)
+
+---
+
+### Какие основные числовые типы данных есть в PostgreSQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** 
+- **целые числа:** `smallint` (2 байта), `integer` (4 байта), `bigint` (8 байт).
+- **числа с плавающей точкой:** `real` (4 байта), `double precision` (8 байт).
+- **числа с фиксированной точкой:** `numeric` или `decimal` (точная точность для финансовых данных).
+- **автоинкремент:** `serial`, `smallserial`, `bigserial`.
+[Подробные типы данных PostgreSQL](../answers/postgresql_data_types.md)
+
+---
+
+### В чём разница между `VARCHAR(n)`, `CHAR(n)` и `TEXT` в PostgreSQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** 
+- `CHAR(n)`: фиксированная длина, дополняется пробелами.
+- `VARCHAR(n)`: переменная длина с максимальным ограничением.
+- `TEXT`: переменная длина без конкретного ограничения.
+В PostgreSQL нет разницы в производительности между этими тремя типами, поэтому для гибкости часто предпочитают `TEXT` или `VARCHAR` (без указания `n`).
+
+---
+
+### Как определить первичный ключ (Primary Key) в PostgreSQL?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** Вы можете использовать `PRIMARY KEY` на уровне столбца или таблицы. Он однозначно идентифицирует каждую строку и не может быть NULL.
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL
+);
+```
+
+---
+
+### Что такое внешний ключ (Foreign Key) и как он используется?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** Внешний ключ связывает столбец в одной таблице с первичным ключом другой таблицы. Он обеспечивает ссылочную целостность.
+```sql
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+---
+
+### В чём разница между `INNER JOIN` и `LEFT JOIN`?
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** `INNER JOIN` возвращает только совпадающие строки из обеих таблиц. `LEFT JOIN` возвращает все строки из левой таблицы и совпадающие строки из правой таблицы (с NULL, если совпадений нет).
+[Связи между таблицами в PostgreSQL](../answers/postgresql_relations.md)
+
+---
+
+### Что такое ограничения `CHECK` и `UNIQUE`?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Ответ:** 
+- `UNIQUE`: гарантирует, что все значения в столбце (или группе столбцов) уникальны.
+- `CHECK`: гарантирует, что значения в столбце удовлетворяют определённому логическому условию (например, `price > 0`).
+[Ограничения в PostgreSQL](../answers/postgresql_constraints.md)
+
+---
+
+### Что такое массивы (Arrays) в PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Ответ:** PostgreSQL позволяет столбцам хранить массивы любого встроенного или пользовательского базового типа.
+```sql
+CREATE TABLE posts (
+    tags TEXT[]
+);
+INSERT INTO posts (tags) VALUES ('{"php", "postgres"}');
+```
+[Сложные структуры данных в PostgreSQL](../answers/postgresql_complex_types.md)
+
+---
+
+### Что такое тип `ENUM` в PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Ответ:** `ENUM` (перечисление) — это тип данных, который представляет собой статический упорядоченный набор значений.
+```sql
+CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
+```
+[Сложные структуры данных в PostgreSQL](../answers/postgresql_complex_types.md)
+
+---
+
+### В чём разница между `WHERE` и `HAVING` в PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Ответ:** `WHERE` фильтрует строки до группировки/агрегации. `HAVING` фильтрует результаты после применения `GROUP BY`.
+
+---
+
+### Что такое агрегатные функции в PostgreSQL?
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+**Ответ:** Функции, которые вычисляют единый результат на основе набора входных значений, такие как `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()` и `STRING_AGG()`.
+
+---
+
+### Что такое MVCC (Multi-Version Concurrency Control) в PostgreSQL?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Ответ:** MVCC позволяет нескольким транзакциям видеть согласованный снимок базы данных, не блокируя друг друга. Он использует скрытые столбцы, такие как `xmin` and `xmax`, для отслеживания версий строк.
+
+---
+
+### Что такое коррелирующие подзапросы (Correlated Subqueries)?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Ответ:** Подзапрос, который ссылается на столбцы внешнего запроса. Он выполняется один раз для каждой строки, обрабатываемой внешним запросом.
+```sql
+SELECT name, (SELECT AVG(price) FROM products p2 WHERE p2.category = p1.category)
+FROM products p1;
+```
+
+---
+
+### Как работают `GROUPING SETS`, `ROLLUP` и `CUBE`?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Ответ:** Это расширения `GROUP BY` для создания нескольких наборов группировок в одном запросе (полезно для отчётов и аналитики).
+- `ROLLUP`: генерирует иерархические промежуточные итоги.
+- `CUBE`: генерирует промежуточные итоги для всех возможных комбинаций столбцов.
+- `GROUPING SETS`: позволяет указать точные наборы столбцов для группировки.
+
+---
+
+### Как можно изменить структуру таблицы с помощью `ALTER TABLE`?
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+**Ответ:** Вы можете добавлять/удалять столбцы, изменять типы и добавлять/удалять ограничения.
+```sql
+ALTER TABLE users ADD COLUMN email TEXT UNIQUE;
+ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
+```
+---

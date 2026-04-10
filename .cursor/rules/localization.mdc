@@ -16,5 +16,7 @@ Maintain a **Native Russian Speaking C1** level for all translated content.
 
 ## Synchronization
 
-Synchronize all content changes between the primary English source and the Russian translation.
-If you update English content, you MUST update the corresponding Russian translation.
+- **ALWAYS** synchronize all content changes between the primary English source and the Russian translation simultaneously.
+- If you update English content, you **MUST** update the corresponding Russian translation immediately.
+- The structure, section numbering, and file naming **MUST** be identical between English and Russian versions.
+- **ALWAYS** verify link integrity in both languages after any structural change.

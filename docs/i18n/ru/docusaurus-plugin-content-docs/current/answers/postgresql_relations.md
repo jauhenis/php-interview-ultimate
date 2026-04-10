@@ -36,4 +36,4 @@ PostgreSQL поддерживает стандартные соединения 
 Возвращает строки из первого результирующего набора, которых нет во втором.
 
 ---
-*Назад к [PostgreSQL](../questions/24-postgresql.mdx)*
+*Назад к [PostgreSQL](../questions/08-postgresql.mdx)*

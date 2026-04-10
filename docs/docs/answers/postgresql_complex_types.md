@@ -53,4 +53,4 @@ ALTER TYPE mood ADD VALUE 'excited' AFTER 'happy';
 - `jsonb`: Stores data in a decomposed binary format. It is slightly slower to input but significantly faster to process and supports indexing.
 
 ---
-*Back to [PostgreSQL](../questions/24-postgresql.mdx)**
+*Back to [PostgreSQL](../questions/08-postgresql.mdx)**

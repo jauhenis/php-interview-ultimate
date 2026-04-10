@@ -39,6 +39,7 @@ The content that was used to learn Design Patterns, Refactoring principles:
 - [Refactoring Guru](https://refactoring.guru/)
 - [Backend Roadmap](https://roadmap.sh/backend)
 - [HaPHPiness](https://haphpiness.com/)
+- [Metanit](https://metanit.com/)
 - Partially written and organized using [Gemini](https://gemini.google.com/), [Cursor](https://www.cursor.com/), and [JetBrains AI](https://www.jetbrains.com/ai/).
 
 ## Project Structure
@@ -79,12 +80,13 @@ docker compose run --service-ports node npm run dev
 The documentation will be available at `http://localhost:3333`.
 
 ## Key Topics Covered
-- The documentation is now organized into 23 major categories, including:
+- The documentation is now organized into 24 major categories, including:
 - **Core PHP**: Data types, generators, magic constants, PHP features (8.0+), and more.
 - **HaPHPiness**: Modern PHP features and best things in PHP.
 - **Frameworks**: Laravel, Symfony, and Doctrine.
 - **Design Patterns & OOP**: SOLID principles, common design patterns, and OOP fundamentals.
-- **Databases**: MySQL, Redis, Memcached, and ElasticSearch.
+- **Databases**: MySQL, PostgreSQL, Redis, Memcached, and ElasticSearch.
+- **PostgreSQL**: Advanced features, JSONB, and differences from MySQL.
 - **Architecture**: Microservices, highload, and system design.
 - **DevOps & Tools**: Docker, Git, and deployment strategies.
 - **Testing**: Unit, functional, and integration testing.

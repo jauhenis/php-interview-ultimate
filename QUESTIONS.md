@@ -10,23 +10,23 @@ This file contains a curated list of PHP interview questions and answers, merged
 5. [Design Patterns](#5-design-patterns)
 6. [PHP 7/8+ New Features](#6-php-78-new-features)
 7. [MySQL & Databases](#7-mysql--databases)
-8. [Laravel & Symfony](#8-laravel--symfony)
-9. [Tools & Composer](#9-tools--composer)
-10. [Caching & Redis](#10-caching--redis)
-11. [Infrastructure, Docker & DevOps](#11-infrastructure-docker--devops)
-12. [Testing & Quality](#12-testing--quality)
-13. [Security](#13-security)
-14. [Web & API](#14-web--api)
-15. [Highload & Scalability](#15-highload--scalability)
-16. [Clean Code & Best Practices](#16-clean-code--best-practices)
-17. [Elasticsearch](#17-elasticsearch)
-18. [Tricky Questions](#18-tricky-questions)
-19. [Laravel Plugins](#19-laravel-plugins)
-20. [Long-Running (RoadRunner)](#20-long-running-roadrunner)
-21. [PSR & PER Standards](#21-psr--per-standards)
-22. [Basic Algorithms](#22-basic-algorithms)
-23. [HaPHPiness - Best things in PHP](#23-haphpiness---best-things-in-php)
-24. [PostgreSQL](#24-postgresql)
+8. [PostgreSQL](#8-postgresql)
+9. [Laravel & Symfony](#9-laravel--symfony)
+10. [Tools & Composer](#10-tools--composer)
+11. [Caching & Redis](#11-caching--redis)
+12. [Infrastructure, Docker & DevOps](#12-infrastructure-docker--devops)
+13. [Testing & Quality](#13-testing--quality)
+14. [Security](#14-security)
+15. [Web & API](#15-web--api)
+16. [Highload & Scalability](#16-highload--scalability)
+17. [Clean Code & Best Practices](#17-clean-code--best-practices)
+18. [Elasticsearch](#18-elasticsearch)
+19. [Tricky Questions](#19-tricky-questions)
+20. [Laravel Plugins](#20-laravel-plugins)
+21. [Long-Running (RoadRunner)](#21-long-running-roadrunner)
+22. [PSR & PER Standards](#22-psr--per-standards)
+23. [Basic Algorithms](#23-basic-algorithms)
+24. [HaPHPiness - Best things in PHP](#24-haphpiness---best-things-in-php)
 ---
 
 ## 1. PHP Basics & Language Features
@@ -1151,7 +1151,110 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 8. Laravel & Symfony
+## 8. PostgreSQL
+
+### Junior
+
+#### What is PostgreSQL and how does it differ from MySQL?
+**Answer:** PostgreSQL is a powerful, open-source object-relational database system (ORDBMS). Unlike MySQL, which is purely relational, PostgreSQL supports advanced data types (like arrays and geometric types) and is known for its strict SQL compliance and extensibility.
+[MySQL vs PostgreSQL Comparison](answers/mysql_vs_postgresql.md)
+
+#### What are the main numeric data types in PostgreSQL?
+**Answer:** 
+- **integers:** `smallint` (2 bytes), `integer` (4 bytes), `bigint` (8 bytes).
+- **floating-point:** `real` (4 bytes), `double precision` (8 bytes).
+- **fixed-point:** `numeric` or `decimal` (exact precision for financial data).
+- **autoincrement:** `serial`, `smallserial`, `bigserial`.
+[Detailed PostgreSQL Data Types](answers/postgresql_data_types.md)
+
+#### What is the difference between `VARCHAR(n)`, `CHAR(n)`, and `TEXT` in PostgreSQL?
+**Answer:** 
+- `CHAR(n)`: Fixed-length, padded with spaces.
+- `VARCHAR(n)`: Variable-length with a maximum limit.
+- `TEXT`: Variable-length with no specific limit.
+In PostgreSQL, there is no performance difference between these three types, so `TEXT` or `VARCHAR` (without `n`) is often preferred for flexibility.
+
+#### How do you define a Primary Key in PostgreSQL?
+**Answer:** You can use `PRIMARY KEY` at the column level or table level. It uniquely identifies each row and cannot be NULL.
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL
+);
+```
+
+#### What is a Foreign Key and how is it used?
+**Answer:** A foreign key links a column in one table to the primary key of another table. It ensures referential integrity.
+```sql
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+#### What is the difference between `INNER JOIN` and `LEFT JOIN`?
+**Answer:** `INNER JOIN` returns only matching rows from both tables. `LEFT JOIN` returns all rows from the left table and matching rows from the right table (with NULLs if no match exists).
+[PostgreSQL Table Relations](answers/postgresql_relations.md)
+
+### Middle
+
+#### What are the `CHECK` and `UNIQUE` constraints?
+**Answer:** 
+- `UNIQUE`: Ensures all values in a column (or group of columns) are distinct.
+- `CHECK`: Ensures that values in a column satisfy a specific boolean condition (e.g., `price > 0`).
+[PostgreSQL Constraints](answers/postgresql_constraints.md)
+
+#### What are Arrays in PostgreSQL?
+**Answer:** PostgreSQL allows columns to store arrays of any built-in or user-defined base type.
+```sql
+CREATE TABLE posts (
+    tags TEXT[]
+);
+INSERT INTO posts (tags) VALUES ('{"php", "postgres"}');
+```
+[PostgreSQL Complex Data Structures](answers/postgresql_complex_types.md)
+
+#### What is an `ENUM` type in PostgreSQL?
+**Answer:** An `ENUM` is a data type that comprises a static, ordered set of values.
+```sql
+CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
+```
+[PostgreSQL Complex Data Structures](answers/postgresql_complex_types.md)
+
+#### What is the difference between `WHERE` and `HAVING` in PostgreSQL?
+**Answer:** `WHERE` filters rows before grouping/aggregation. `HAVING` filters the results after `GROUP BY` has been applied.
+
+#### What are Aggregate Functions in PostgreSQL?
+**Answer:** Functions that compute a single result from a set of input values, such as `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`, and `STRING_AGG()`.
+
+### Senior
+
+#### What is MVCC (Multi-Version Concurrency Control) in PostgreSQL?
+**Answer:** MVCC allows multiple transactions to see a consistent snapshot of the database without locking each other. It uses hidden columns like `xmin` and `xmax` to track row versions.
+
+#### What are Correlated Subqueries?
+**Answer:** A subquery that refers to columns from the outer query. It is executed once for each row processed by the outer query.
+```sql
+SELECT name, (SELECT AVG(price) FROM products p2 WHERE p2.category = p1.category)
+FROM products p1;
+```
+
+#### How do `GROUPING SETS`, `ROLLUP`, and `CUBE` work?
+**Answer:** These are extensions of `GROUP BY` for generating multiple grouping sets in a single query (useful for reporting and analytics).
+- `ROLLUP`: Generates hierarchical subtotals.
+- `CUBE`: Generates subtotals for all possible combinations of columns.
+- `GROUPING SETS`: Allows specifying exact sets of columns to group by.
+
+#### How can you modify a table structure using `ALTER TABLE`?
+**Answer:** You can add/drop columns, change types, and add/remove constraints.
+```sql
+ALTER TABLE users ADD COLUMN email TEXT UNIQUE;
+ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
+```
+
+---
+
+## 9. Laravel & Symfony
 
 ### Junior
 #### What is the MVC architecture and how does Laravel implement it?
@@ -1222,7 +1325,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 9. Tools & Composer
+## 10. Tools & Composer
 
 ### Junior
 #### What is Composer?
@@ -1239,7 +1342,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 10. Caching & Redis
+## 11. Caching & Redis
 
 ### Junior
 #### What is Caching?
@@ -1254,7 +1357,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 11. Infrastructure, Docker & DevOps
+## 12. Infrastructure, Docker & DevOps
 
 ### Junior
 #### What is Docker?
@@ -1287,7 +1390,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 12. Testing & Quality
+## 13. Testing & Quality
 
 ### Junior
 #### Why is it important to write tests?
@@ -1335,7 +1438,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 13. Security
+## 14. Security
 
 ### Junior
 #### What is the difference between Hashing and Encryption?
@@ -1365,7 +1468,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 14. Web & API
+## 15. Web & API
 
 ### Junior
 #### What is REST API?
@@ -1416,7 +1519,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 15. Highload & Scalability
+## 16. Highload & Scalability
 
 ### Middle
 #### What is Load Balancing?
@@ -1438,7 +1541,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 16. Clean Code & Best Practices
+## 17. Clean Code & Best Practices
 
 ### Junior
 #### What are DRY and KISS?
@@ -1468,7 +1571,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 17. Elasticsearch
+## 18. Elasticsearch
 
 ### Middle
 #### What is Elasticsearch and its main features?
@@ -1483,7 +1586,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 18. Tricky Questions
+## 19. Tricky Questions
 
 ### Junior
 #### What is the difference between `==` and `===`?
@@ -1520,7 +1623,7 @@ echo $a;
 
 ---
 
-## 19. Laravel Plugins
+## 20. Laravel Plugins
 
 ### Junior
 #### What are some of the most popular official Laravel plugins?
@@ -1579,7 +1682,7 @@ Below is a list of prominent Laravel packages and plugins, their short descripti
 
 ---
 
-## 20. Long-Running (RoadRunner)
+## 21. Long-Running (RoadRunner)
 
 ### Middle
 #### What is RoadRunner and how does it work?
@@ -1647,7 +1750,7 @@ For local development, `pool.debug = true` can be used to allocate a worker only
 
 ---
 
-## 21. PSR & PER Standards
+## 22. PSR & PER Standards
 
 ### Junior
 #### What PSR documentation is covering Basic Coding Standards?
@@ -1737,7 +1840,7 @@ The **PHP Evolved Recommendation (PER)** for Coding Style is the modern successo
 
 ---
 
-## 22. Basic Algorithms
+## 23. Basic Algorithms
 
 ### Junior
 
@@ -1895,7 +1998,7 @@ function merge(array $left, array $right): array
 
 ---
 
-## 23. HaPHPiness - Best things in PHP
+## 24. HaPHPiness - Best things in PHP
 
 This section highlights modern PHP features and the overall "happiness" of the ecosystem, as inspired by [haphpiness.com](https://haphpiness.com/).
 
@@ -2017,103 +2120,3 @@ This section highlights modern PHP features and the overall "happiness" of the e
 **Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
 [Detailed HaPHPiness Guide](answers/haphpiness.md#nativephp)
 
-## 24. PostgreSQL
-
-### Junior
-
-#### What is PostgreSQL and how does it differ from MySQL?
-**Answer:** PostgreSQL is a powerful, open-source object-relational database system (ORDBMS). Unlike MySQL, which is purely relational, PostgreSQL supports advanced data types (like arrays and geometric types) and is known for its strict SQL compliance and extensibility.
-[MySQL vs PostgreSQL Comparison](answers/mysql_vs_postgresql.md)
-
-#### What are the main numeric data types in PostgreSQL?
-**Answer:** 
-- **integers:** `smallint` (2 bytes), `integer` (4 bytes), `bigint` (8 bytes).
-- **floating-point:** `real` (4 bytes), `double precision` (8 bytes).
-- **fixed-point:** `numeric` or `decimal` (exact precision for financial data).
-- **autoincrement:** `serial`, `smallserial`, `bigserial`.
-[Detailed PostgreSQL Data Types](answers/postgresql_data_types.md)
-
-#### What is the difference between `VARCHAR(n)`, `CHAR(n)`, and `TEXT` in PostgreSQL?
-**Answer:** 
-- `CHAR(n)`: Fixed-length, padded with spaces.
-- `VARCHAR(n)`: Variable-length with a maximum limit.
-- `TEXT`: Variable-length with no specific limit.
-In PostgreSQL, there is no performance difference between these three types, so `TEXT` or `VARCHAR` (without `n`) is often preferred for flexibility.
-
-#### How do you define a Primary Key in PostgreSQL?
-**Answer:** You can use `PRIMARY KEY` at the column level or table level. It uniquely identifies each row and cannot be NULL.
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username TEXT NOT NULL
-);
-```
-
-#### What is a Foreign Key and how is it used?
-**Answer:** A foreign key links a column in one table to the primary key of another table. It ensures referential integrity.
-```sql
-CREATE TABLE orders (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
-);
-```
-
-#### What is the difference between `INNER JOIN` and `LEFT JOIN`?
-**Answer:** `INNER JOIN` returns only matching rows from both tables. `LEFT JOIN` returns all rows from the left table and matching rows from the right table (with NULLs if no match exists).
-[PostgreSQL Table Relations](answers/postgresql_relations.md)
-
-### Middle
-
-#### What are the `CHECK` and `UNIQUE` constraints?
-**Answer:** 
-- `UNIQUE`: Ensures all values in a column (or group of columns) are distinct.
-- `CHECK`: Ensures that values in a column satisfy a specific boolean condition (e.g., `price > 0`).
-[PostgreSQL Constraints](answers/postgresql_constraints.md)
-
-#### What are Arrays in PostgreSQL?
-**Answer:** PostgreSQL allows columns to store arrays of any built-in or user-defined base type.
-```sql
-CREATE TABLE posts (
-    tags TEXT[]
-);
-INSERT INTO posts (tags) VALUES ('{"php", "postgres"}');
-```
-[PostgreSQL Complex Data Structures](answers/postgresql_complex_types.md)
-
-#### What is an `ENUM` type in PostgreSQL?
-**Answer:** An `ENUM` is a data type that comprises a static, ordered set of values.
-```sql
-CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
-```
-[PostgreSQL Complex Data Structures](answers/postgresql_complex_types.md)
-
-#### What is the difference between `WHERE` and `HAVING` in PostgreSQL?
-**Answer:** `WHERE` filters rows before grouping/aggregation. `HAVING` filters the results after `GROUP BY` has been applied.
-
-#### What are Aggregate Functions in PostgreSQL?
-**Answer:** Functions that compute a single result from a set of input values, such as `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`, and `STRING_AGG()`.
-
-### Senior
-
-#### What is MVCC (Multi-Version Concurrency Control) in PostgreSQL?
-**Answer:** MVCC allows multiple transactions to see a consistent snapshot of the database without locking each other. It uses hidden columns like `xmin` and `xmax` to track row versions.
-
-#### What are Correlated Subqueries?
-**Answer:** A subquery that refers to columns from the outer query. It is executed once for each row processed by the outer query.
-```sql
-SELECT name, (SELECT AVG(price) FROM products p2 WHERE p2.category = p1.category)
-FROM products p1;
-```
-
-#### How do `GROUPING SETS`, `ROLLUP`, and `CUBE` work?
-**Answer:** These are extensions of `GROUP BY` for generating multiple grouping sets in a single query (useful for reporting and analytics).
-- `ROLLUP`: Generates hierarchical subtotals.
-- `CUBE`: Generates subtotals for all possible combinations of columns.
-- `GROUPING SETS`: Allows specifying exact sets of columns to group by.
-
-#### How can you modify a table structure using `ALTER TABLE`?
-**Answer:** You can add/drop columns, change types, and add/remove constraints.
-```sql
-ALTER TABLE users ADD COLUMN email TEXT UNIQUE;
-ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
-```
