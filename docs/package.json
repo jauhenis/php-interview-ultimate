@@ -42,6 +42,7 @@
   },
   "overrides": {
     "serialize-javascript": "^7.0.3",
-    "smol-toml": "^1.6.1"
+    "smol-toml": "^1.6.1",
+    "webpack": "5.94.0"
   }
 }
