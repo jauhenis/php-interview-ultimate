@@ -172,7 +172,7 @@ Transaction 1 performs a range query twice and gets a different number of rows b
 - **CHAR vs VARCHAR**: `CHAR` is fixed-length (padded with spaces), while `VARCHAR` is variable-length. `CHAR` is slightly faster for very short, uniform data (like country codes), while `VARCHAR` saves space for varying text lengths.
 - **ALTER TABLE on Live Tables**: For large tables (millions of rows), `ALTER TABLE` can lock the table and cause downtime. Solutions:
   - **pt-online-schema-change**: A tool from Percona that creates a shadow table, syncs data via triggers, and swaps them.
-  - **Ghost (GitHub Online Schema Migrations)**: Migrates schemas without triggers by tailing the binary log.
+  - **gh-ost (GitHub Online Schema Migrations)**: Migrates schemas without triggers by tailing the binary log.
   - **Online DDL**: Since MySQL 5.6+, many `ALTER TABLE` operations can be performed without locking the table for writes.
   - **Pagination Optimization**: Avoid `LIMIT 1000000, 10` as MySQL must read and discard 1M rows. Use **Cursor-based pagination** (e.g., `WHERE id > :last_id LIMIT 10`) for O(log n) performance on large datasets.
 
@@ -210,13 +210,14 @@ When filtering by multiple columns (e.g., `sku`, `creation_date`, and a low-card
 4.  **Selectivity and Order**:
     *   **High Selectivity First**: Usually, you put the most selective column (like `sku`) first. If a column is unique, the index becomes extremely fast for point lookups.
     *   **Equality before Range**: Columns used for exact matches (`=`) should come before columns used for range filters (`>`, `BETWEEN`, `LIKE 'abc%'`).
-    *   **Example**: For a filter with `sku` (unique), `integer_field` (values 1, 2, 3), and `creation_date` (range), the ideal order is `(sku, integer_field, creation_date)`. This narrows down the search space as quickly as possible.
+    *   **High Selectivity vs Low Cardinality for Equality**: Among columns used for equality, put the one with the highest selectivity first.
+    *   **Example**: For a filter with `sku` (unique), `status_field` (values 1-15), and `creation_date` (range), the ideal order is `(sku, status_field, creation_date)`. Since `sku` is unique, it will immediately narrow the search to a single row. If `sku` was not unique but still high-cardinality, it should still come before `status_field`.
 5.  **Covering Index**: If your `SELECT` statement only asks for these three columns (or a subset of them), MySQL can return the data directly from the index B-tree without ever touching the actual table rows (data pages). This is called a "Covering Index" and it's extremely fast.
 
 ### Why it's performant even if only `creation_date` is used:
 Even if the query doesn't filter by the leading column of the composite index, it can still be performant for two main reasons:
 
-1.  **Index Skip Scan (MySQL 8.0.13+)**: If the leading column (e.g., the `integer_field` with values 1, 2, 3) has **low cardinality**, MySQL can "skip" through the index. It essentially performs a range scan for each distinct value of the prefix column. If we order our index as `(integer_field, creation_date, sku)`, a query filtering only by `creation_date` will be very fast because MySQL only needs to perform 3 sub-scans.
+1.  **Index Skip Scan (MySQL 8.0.13+)**: If the leading column (e.g., the `status_field` with values 1-15) has **low cardinality**, MySQL can "skip" through the index. It essentially performs a range scan for each distinct value of the prefix column. If we order our index as `(status_field, creation_date, sku)`, a query filtering only by `creation_date` will be very fast because MySQL only needs to perform 15 sub-scans.
 2.  **Full Index Scan vs. Full Table Scan**: If the query is "covered" by the index (meaning all selected columns are in the index), MySQL can scan the entire index instead of the table. Since the index is much smaller and more likely to be cached in memory (the `innodb_buffer_pool`), a full scan of the index is significantly faster than a full scan of the entire table data.
 
 ### Comparison with No Index:
