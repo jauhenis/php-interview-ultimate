@@ -177,10 +177,11 @@ Transaction 1 performs a range query twice and gets a different number of rows b
   - **Pagination Optimization**: Avoid `LIMIT 1000000, 10` as MySQL must read and discard 1M rows. Use **Cursor-based pagination** (e.g., `WHERE id > :last_id LIMIT 10`) for O(log n) performance on large datasets.
 
 ## 8. Performance Tuning
-- **EXPLAIN**: Use this command to see how MySQL executes your query and if it uses indices.
-- **Slow Query Log**: Identify queries that take a long time to execute.
-- **Query Caching**: (Deprecated in 5.7, removed in 8.0). Use application-level caching (Redis/Memcached) instead.
-- **Connection Pooling**: Reusing database connections to reduce overhead.
+### CEQS Principles
+- **Connection Polling**: Reuse existing database connections, reduce the overhead and point of failure because opened connections.
+- **EXPLAIN**: Use the EXPLAIN command to see that you did your query right and its time to complete, parameters, joins and indexes where selected right.
+- **Query Caching**: Use application-level caching and invalidations to not bother your table for known results (long time ago written articles that would not be changes, products categories and tags, etc.)
+- **Slow Query Log**: Use this feature and add some observability tool to it to identify the queries that took too long to complete. Optimize those queries and add necessary indexes if needed, or use FORCE INDEX and ANALYZE TABLE if the optimizer didn't see your indexes and went into full-text search mode.
 
 ## 9. MariaDB vs MySQL
 MariaDB is a fork of MySQL created by the original developers in 2009 after Oracle's acquisition of MySQL.
