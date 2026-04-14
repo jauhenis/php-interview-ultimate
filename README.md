@@ -1,3 +1,8 @@
+# This repository contains all the questions and the answers for this topics:
+- 100 Must-Know PHP Interview Questions in 2026
+- PHP Interview Questions (all level)
+- Interview questions and answers
+
 # PHP Interview Questions - Ultimate Answer Repository
 
 [![Docs](https://img.shields.io/badge/docs-modern-blue.svg)](docs/)
