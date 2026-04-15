@@ -38,6 +38,7 @@ The content in this repository is sourced from the following GitHub projects:
 - [Sabbir-Hossain12/PHP-LARAVEL-Interview-questions](https://github.com/Sabbir-Hossain12/PHP-LARAVEL-Interview-questions)
 - [Devinterview-io/php-interview-questions](https://github.com/Devinterview-io/php-interview-questions)
 - [zsoro2/php-interview-questions](https://github.com/zsoro2/php-interview-questions)
+- [doocs/leetcode](https://github.com/doocs/leetcode) - LeetCode solutions in various languages.
 
 ## Source Projects and Learning Web Sites
 The content that was used to learn Design Patterns, Refactoring principles:
@@ -85,9 +86,10 @@ docker compose run --service-ports node npm run dev
 The documentation will be available at `http://localhost:3333`.
 
 ## Key Topics Covered
-- The documentation is now organized into 24 major categories, including:
+- The documentation is now organized into 25 major categories, including:
 - **Core PHP**: Data types, generators, magic constants, PHP features (8.0+), and more.
 - **HaPHPiness**: Modern PHP features and best things in PHP.
+- **LeetCode Solutions**: Solutions to LeetCode challenges in PHP.
 - **Frameworks**: Laravel, Symfony, and Doctrine.
 - **Design Patterns & OOP**: SOLID principles, common design patterns, and OOP fundamentals.
 - **Databases**: MySQL, PostgreSQL, Redis, Memcached, and ElasticSearch.

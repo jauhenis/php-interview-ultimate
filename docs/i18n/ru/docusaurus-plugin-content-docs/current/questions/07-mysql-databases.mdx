@@ -18,6 +18,16 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 ---
 
+### Что такое оператор `EXPLAIN` и как читать его вывод?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Оператор `EXPLAIN` предоставляет информацию о том, как MySQL выполняет запрос. Он показывает, какие индексы используются, как соединяются таблицы и оценочное количество просмотренных строк. Ключевые столбцы включают `type` (тип соединения, где `const` и `ref` — это хорошо, а `ALL` — полное сканирование таблицы), `key` (фактически используемый индекс) и `Extra` (дополнительная информация, такая как `Using filesort` или `Using temporary`, которые часто указывают на проблемы с производительностью).
+
+[Подробное руководство по EXPLAIN](../answers/mysql_explain.md)
+
+---
+
 ### В чём разница между `mysqli` и `PDO`?
 
 <span className="badge badge--success margin-bottom--md">Junior</span>

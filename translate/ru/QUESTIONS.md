@@ -27,6 +27,7 @@
 22. [Стандарты PSR и PER](#21-стандарты-psr-и-per)
 23. [Базовые алгоритмы](#22-базовые-алгоритмы)
 24. [HaPHPiness - Лучшее в PHP](#24-haphpiness---лучшее-в-php)
+25. [Решения LeetCode](#25-решения-leetcode)
 ---
 
 ## 1. Основы PHP и возможности языка
@@ -796,7 +797,17 @@ $result = "  hello  " |> 'trim' |> 'strtoupper';
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 ```
 
-#### В чём разница между `mysqli` и `PDO`?
+#### Что такое оператор `EXPLAIN` и как читать его вывод?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Оператор `EXPLAIN` предоставляет информацию о том, как MySQL выполняет запрос. Он показывает, какие индексы используются, как соединяются таблицы и оценочное количество просмотренных строк. Ключевые столбцы включают `type` (тип соединения, где `const` и `ref` — это хорошо, а `ALL` — полное сканирование таблицы), `key` (фактически используемый индекс) и `Extra` (дополнительная информация, такая как `Using filesort` или `Using temporary`, которые часто указывают на проблемы с производительностью).
+
+[Подробное руководство по EXPLAIN](answers/mysql_explain.md)
+
+---
+
+### В чём разница между `mysqli` и `PDO`?
 **Ответ:**
 - `mysqli` работает только с MySQL, тогда как `PDO` поддерживает несколько СУБД (PostgreSQL, SQLite и др.).
 - `PDO` поддерживает именованные плейсхолдеры в подготовленных запросах.
@@ -2100,7 +2111,7 @@ function merge(array $left, array $right): array
 **Ответ:** Атрибут, который выдает предупреждение, если возвращаемое значение функции игнорируется (PHP 8.5).
 [Подробный гайд HaPHPiness](answers/haphpiness.md#nodiscard)
 
-#### What are Fatal Error Backtraces?
+#### Что такое трассировка фатальных ошибок (Fatal Error Backtraces)?
 **Ответ:** Начиная с PHP 8.5, фатальные ошибки (например, таймауты) включают полную трассировку стека (backtrace).
 [Подробный гайд HaPHPiness](answers/haphpiness.md#fatal-error-backtraces)
 
@@ -2119,4 +2130,19 @@ function merge(array $left, array $right): array
 #### Что такое NativePHP?
 **Ответ:** Фреймворк для создания нативных десктопных и мобильных приложений на базе PHP и Laravel.
 [Подробный гайд HaPHPiness](answers/haphpiness.md#nativephp)
+
+## 25. Решения LeetCode
+
+В этом разделе представлены решения задач с LeetCode с акцентом на реализацию на PHP.
+
+Для получения полного списка решений, организованных по страницам, посетите [Документацию решений LeetCode](../../docs/i18n/ru/docusaurus-plugin-content-docs/current/questions/25-leetcode-solutions.mdx).
+
+### Список страниц
+- [Страница 1 (Задачи 1-35)](../../docs/i18n/ru/docusaurus-plugin-content-docs/current/answers/leetcode/page-1.mdx)
+- [Страница 2](../../docs/i18n/ru/docusaurus-plugin-content-docs/current/answers/leetcode/page-2.mdx)
+- [Страница 3](../../docs/i18n/ru/docusaurus-plugin-content-docs/current/answers/leetcode/page-3.mdx)
+- [Страница 4](../../docs/i18n/ru/docusaurus-plugin-content-docs/current/answers/leetcode/page-4.mdx)
+- [Страница 5](../../docs/i18n/ru/docusaurus-plugin-content-docs/current/answers/leetcode/page-5.mdx)
+
+
 

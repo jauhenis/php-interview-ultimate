@@ -1,0 +1,904 @@
+---
+title: "LeetCode Solutions - Page 1"
+sidebar_label: "Page 1"
+---
+
+# LeetCode Solutions - Page 1
+
+### 1. Two Sum
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $target
+     * @return Integer[]
+     */
+    function twoSum($nums, $target) {
+        $d = [];
+        foreach ($nums as $i => $x) {
+            $y = $target - $x;
+            if (isset($d[$y])) {
+                return [$d[$y], $i];
+            }
+            $d[$x] = $i;
+        }
+    }
+}
+```
+
+---
+
+### 9. Palindrome Number
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer x, return true if x is a palindrome, and false otherwise.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer $x
+     * @return Boolean
+     */
+    function isPalindrome($x) {
+        if ($x < 0 || ($x && $x % 10 == 0)) {
+            return false;
+        }
+        $y = 0;
+        while ($x > $y) {
+            $y = $y * 10 + ($x % 10);
+            $x = (int) ($x / 10);
+        }
+        return $x == $y || $x == (int) ($y / 10);
+    }
+}
+```
+
+---
+
+### 13. Roman to Integer
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M. Given a roman numeral, convert it to an integer.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Integer
+     */
+    function romanToInt($s) {
+        $d = [
+            'I' => 1,
+            'V' => 5,
+            'X' => 10,
+            'L' => 50,
+            'C' => 100,
+            'D' => 500,
+            'M' => 1000,
+        ];
+        $ans = 0;
+        $len = strlen($s);
+
+        for ($i = 0; $i < $len - 1; $i++) {
+            if ($d[$s[$i]] < $d[$s[$i + 1]]) {
+                $ans -= $d[$s[$i]];
+            } else {
+                $ans += $d[$s[$i]];
+            }
+        }
+
+        $ans += $d[$s[$len - 1]];
+        return $ans;
+    }
+}
+```
+
+---
+
+### 14. Longest Common Prefix
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Write a function to find the longest common prefix string amongst an array of strings.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String[] $strs
+     * @return String
+     */
+    function longestCommonPrefix($strs) {
+        $rs = '';
+        for ($i = 0; $i < strlen($strs[0]); $i++) {
+            for ($j = 1; $j < count($strs); $j++) {
+                if ($strs[0][$i] != $strs[$j][$i]) {
+                    return $rs;
+                }
+            }
+            $rs = $rs . $strs[0][$i];
+        }
+        return $rs;
+    }
+}
+```
+
+---
+
+### 20. Valid Parentheses
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param string $s
+     * @return boolean
+     */
+
+    function isValid($s) {
+        $stack = [];
+        $brackets = [
+            ')' => '(',
+            '}' => '{',
+            ']' => '[',
+        ];
+
+        for ($i = 0; $i < strlen($s); $i++) {
+            $char = $s[$i];
+            if (array_key_exists($char, $brackets)) {
+                if (empty($stack) || $stack[count($stack) - 1] !== $brackets[$char]) {
+                    return false;
+                }
+                array_pop($stack);
+            } else {
+                array_push($stack, $char);
+            }
+        }
+        return empty($stack);
+    }
+}
+```
+
+---
+
+### 21. Merge Two Sorted Lists
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Merge two sorted linked lists and return it as a sorted list.
+
+**Code:**
+```php
+/**
+ * Definition for a singly-linked list.
+ * class ListNode {
+ *     public $val = 0;
+ *     public $next = null;
+ *     function __construct($val = 0, $next = null) {
+ *         $this->val = $val;
+ *         $this->next = $next;
+ *     }
+ * }
+ */
+class Solution {
+    /**
+     * @param ListNode $list1
+     * @param ListNode $list2
+     * @return ListNode
+     */
+    function mergeTwoLists($list1, $list2) {
+        if (is_null($list1)) {
+            return $list2;
+        }
+        if (is_null($list2)) {
+            return $list1;
+        }
+        if ($list1->val <= $list2->val) {
+            $list1->next = $this->mergeTwoLists($list1->next, $list2);
+            return $list1;
+        } else {
+            $list2->next = $this->mergeTwoLists($list1, $list2->next);
+            return $list2;
+        }
+    }
+}
+```
+
+---
+
+### 26. Remove Duplicates from Sorted Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function removeDuplicates(&$nums) {
+        $k = 0;
+        foreach ($nums as $x) {
+            if ($k == 0 || $x != $nums[$k - 1]) {
+                $nums[$k++] = $x;
+            }
+        }
+        return $k;
+    }
+}
+```
+
+---
+
+### 27. Remove Element
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer array nums and an integer val, remove all occurrences of val in nums in-place.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $val
+     * @return Integer
+     */
+    function removeElement(&$nums, $val) {
+        for ($i = count($nums) - 1; $i >= 0; $i--) {
+            if ($nums[$i] == $val) {
+                array_splice($nums, $i, 1);
+            }
+        }
+    }
+}
+```
+
+---
+
+### 28. Find the Index of the First Occurrence in a String
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $haystack
+     * @param String $needle
+     * @return Integer
+     */
+    function strStr($haystack, $needle) {
+        $strNew = str_replace($needle, '+', $haystack);
+        $cnt = substr_count($strNew, '+');
+        if ($cnt > 0) {
+            for ($i = 0; $i < strlen($strNew); $i++) {
+                if ($strNew[$i] == '+') {
+                    return $i;
+                }
+            }
+        } else {
+            return -1;
+        }
+    }
+}
+```
+
+---
+
+### 35. Search Insert Position
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $target
+     * @return Integer
+     */
+    function searchInsert($nums, $target) {
+        $l = 0;
+        $r = count($nums);
+        while ($l < $r) {
+            $mid = $l + $r >> 1;
+            if ($nums[$mid] >= $target) {
+                $r = $mid;
+            } else {
+                $l = $mid + 1;
+            }
+        }
+        return $l;
+    }
+}
+```
+
+---
+
+### 58. Length of Last Word
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given a string s consisting of words and spaces, return the length of the last word in the string.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Integer
+     */
+    function lengthOfLastWord($s) {
+        $count = 0;
+        while ($s[strlen($s) - 1] == ' ') {
+            $s = substr($s, 0, -1);
+        }
+        while (strlen($s) != 0 && $s[strlen($s) - 1] != ' ') {
+            $count++;
+            $s = substr($s, 0, -1);
+        }
+        return $count;
+    }
+}
+```
+
+---
+
+### 70. Climbing Stairs
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Integer
+     */
+    function climbStairs($n) {
+        if ($n <= 2) {
+            return $n;
+        }
+        $dp = [0, 1, 2];
+        for ($i = 3; $i <= $n; $i++) {
+            $dp[$i] = $dp[$i - 2] + $dp[$i - 1];
+        }
+        return $dp[$n];
+    }
+}
+```
+
+---
+
+### 88. Merge Sorted Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively. Merge nums2 into nums1 as one sorted array.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums1
+     * @param Integer $m
+     * @param Integer[] $nums2
+     * @param Integer $n
+     * @return NULL
+     */
+    function merge(&$nums1, $m, $nums2, $n) {
+        while (count($nums1) > $m) {
+            array_pop($nums1);
+        }
+        for ($i = 0; $i < $n; $i++) {
+            array_push($nums1, $nums2[$i]);
+        }
+        asort($nums1);
+    }
+}
+```
+
+---
+
+### 100. Same Tree
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+
+**Code:**
+```php
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     public $val = null;
+ *     public $left = null;
+ *     public $right = null;
+ *     function __construct($val = 0, $left = null, $right = null) {
+ *         $this->val = $val;
+ *         $this->left = $left;
+ *         $this->right = $right;
+ *     }
+ * }
+ */
+class Solution {
+    /**
+     * @param TreeNode $p
+     * @param TreeNode $q
+     * @return Boolean
+     */
+    function isSameTree($p, $q) {
+        if ($p == null && $q == null) {
+            return true;
+        }
+        if ($p == null || $q == null) {
+            return false;
+        }
+        if ($p->val != $q->val) {
+            return false;
+        }
+        return $this->isSameTree($p->left, $q->left) && $this->isSameTree($p->right, $q->right);
+    }
+}
+```
+
+---
+
+### 121. Best Time to Buy and Sell Stock
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** You are given an array prices where prices[i] is the price of a given stock on the ith day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $prices
+     * @return Integer
+     */
+    function maxProfit($prices) {
+        $ans = 0;
+        $mi = $prices[0];
+        foreach ($prices as $v) {
+            $ans = max($ans, $v - $mi);
+            $mi = min($mi, $v);
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 125. Valid Palindrome
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Boolean
+     */
+    function isPalindrome($s) {
+        $regex = '/[a-z0-9]/';
+        $s = strtolower($s);
+        preg_match_all($regex, $s, $matches);
+        if ($matches[0] == null) {
+            return true;
+        }
+        $len = floor(count($matches[0]) / 2);
+        for ($i = 0; $i < $len; $i++) {
+            if ($matches[0][$i] != $matches[0][count($matches[0]) - 1 - $i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+---
+
+### 169. Majority Element
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an array nums of size n, return the majority element.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function majorityElement($nums) {
+        $m = 0;
+        $cnt = 0;
+        foreach ($nums as $x) {
+            if ($cnt == 0) {
+                $m = $x;
+            }
+            if ($m == $x) {
+                $cnt++;
+            } else {
+                $cnt--;
+            }
+        }
+        return $m;
+    }
+}
+```
+
+---
+
+### 217. Contains Duplicate
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Boolean
+     */
+    function containsDuplicate($nums) {
+        $numsUnique = array_unique($nums);
+        return count($nums) != count($numsUnique);
+    }
+}
+```
+
+---
+
+### 219. Contains Duplicate II
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $k
+     * @return Boolean
+     */
+    function containsNearbyDuplicate($nums, $k) {
+        $d = [];
+        for ($i = 0; $i < count($nums); ++$i) {
+            if (array_key_exists($nums[$i], $d) && $i - $d[$nums[$i]] <= $k) {
+                return true;
+            }
+            $d[$nums[$i]] = $i;
+        }
+        return false;
+    }
+}
+```
+
+---
+
+### 263. Ugly Number
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5. Given an integer n, return true if n is an ugly number.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Boolean
+     */
+    function isUgly($n) {
+        while ($n) {
+            if ($n % 2 == 0) {
+                $n = $n / 2;
+            } elseif ($n % 3 == 0) {
+                $n = $n / 3;
+            } elseif ($n % 5 == 0) {
+                $n = $n / 5;
+            } else {
+                break;
+            }
+        }
+        return $n == 1;
+    }
+}
+```
+
+---
+
+### 268. Missing Number
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function missingNumber($nums) {
+        $n = count($nums);
+        $sumN = (($n + 1) * $n) / 2;
+        for ($i = 0; $i < $n; $i++) {
+            $sumN -= $nums[$i];
+        }
+        return $sumN;
+    }
+}
+```
+
+---
+
+### 303. Range Sum Query - Immutable
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer array nums, handle multiple queries of the following type: Calculate the sum of the elements of nums between indices left and right inclusive where left <= right.
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### 349. Intersection of Two Arrays
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and you may return the result in any order.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums1
+     * @param Integer[] $nums2
+     * @return Integer[]
+     */
+    function intersection($nums1, $nums2) {
+        $s1 = array_unique($nums1);
+        $s2 = array_unique($nums2);
+        $ans = array_intersect($s1, $s2);
+        return array_values($ans);
+    }
+}
+```
+
+---
+
+### 350. Intersection of Two Arrays II
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must appear as many times as it shows in both arrays and you may return the result in any order.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums1
+     * @param Integer[] $nums2
+     * @return Integer[]
+     */
+    function intersect($nums1, $nums2) {
+        $cnt = [];
+        foreach ($nums1 as $x) {
+            if (isset($cnt[$x])) {
+                $cnt[$x]++;
+            } else {
+                $cnt[$x] = 1;
+            }
+        }
+
+        $ans = [];
+        foreach ($nums2 as $x) {
+            if (isset($cnt[$x]) && $cnt[$x] > 0) {
+                $ans[] = $x;
+                $cnt[$x]--;
+            }
+        }
+
+        return $ans;
+    }
+}
+```
+
+---
+
+### 383. Ransom Note
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given two strings ransomNote and magazine, return true if ransomNote can be constructed by using the letters from magazine and false otherwise.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $ransomNote
+     * @param String $magazine
+     * @return Boolean
+     */
+    function canConstruct($ransomNote, $magazine) {
+        $arrM = str_split($magazine);
+        for ($i = 0; $i < strlen($magazine); $i++) {
+            $hashtable[$arrM[$i]] += 1;
+        }
+        for ($j = 0; $j < strlen($ransomNote); $j++) {
+            if (!isset($hashtable[$ransomNote[$j]]) || $hashtable[$ransomNote[$j]] == 0) {
+                return false;
+            } else {
+                $hashtable[$ransomNote[$j]] -= 1;
+            }
+        }
+        return true;
+    }
+}
+```
+
+---
+
+### 387. First Unique Character in a String
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given a string s, find the first non-repeating character in it and return its index. If it does not exist, return -1.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Integer
+     */
+    function firstUniqChar($s) {
+        for ($i = 0; $i < strlen($s); $i++) {
+            $hashtable[$s[$i]]++;
+        }
+        for ($i = 0; $i < strlen($s); $i++) {
+            if ($hashtable[$s[$i]] == 1) {
+                return $i;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+---
+
+### 412. Fizz Buzz
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given an integer n, return a string array answer (1-indexed) where answer[i] is 'FizzBuzz', 'Fizz', 'Buzz', or i.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return String[]
+     */
+    function fizzBuzz($n) {
+        $ans = [];
+        for ($i = 1; $i <= $n; ++$i) {
+            $s = '';
+            if ($i % 3 == 0) {
+                $s .= 'Fizz';
+            }
+            if ($i % 5 == 0) {
+                $s .= 'Buzz';
+            }
+            if (strlen($s) == 0) {
+                $s .= $i;
+            }
+            $ans[] = $s;
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 434. Number of Segments in a String
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given a string s, return the number of segments in the string. A segment is defined to be a contiguous sequence of non-space characters.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Integer
+     */
+    function countSegments($s) {
+        $arr = explode(' ', $s);
+        $cnt = 0;
+        for ($i = 0; $i < count($arr); $i++) {
+            if (strlen($arr[$i]) != 0) {
+                $cnt++;
+            }
+        }
+        return $cnt;
+    }
+}
+```
+
+---
+
+### 485. Max Consecutive Ones
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Given a binary array nums, return the maximum number of consecutive 1's in the array.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function findMaxConsecutiveOnes($nums) {
+        $ans = $cnt = 0;
+
+        foreach ($nums as $x) {
+            if ($x == 1) {
+                $cnt += 1;
+                $ans = max($ans, $cnt);
+            } else {
+                $cnt = 0;
+            }
+        }
+
+        return $ans;
+    }
+}
+```
+
+---
+
+### 509. Fibonacci Number
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** The Fibonacci numbers, commonly denoted F(n) form a sequence, called the Fibonacci sequence, such that each number is the sum of the two preceding ones, starting from 0 and 1.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Integer
+     */
+    function fib($n) {
+        $a = 0;
+        $b = 1;
+        for ($i = 0; $i < $n; $i++) {
+            $temp = $a;
+            $a = $b;
+            $b = $temp + $b;
+        }
+        return $a;
+    }
+}
+```
+
+---
+

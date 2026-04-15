@@ -1,0 +1,888 @@
+---
+title: "Решения LeetCode - Страница 2"
+sidebar_label: "Страница 2"
+---
+
+# Решения LeetCode - Страница 2
+
+### 557. Reverse Words in a String III
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "reverse-words-in-a-string-iii" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return String
+     */
+    function reverseWords($s) {
+        $words = explode(' ', $s);
+        foreach ($words as $i => $word) {
+            $words[$i] = strrev($word);
+        }
+        return implode(' ', $words);
+    }
+}
+```
+
+---
+
+### 605. Can Place Flowers
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "can-place-flowers" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $flowerbed
+     * @param Integer $n
+     * @return Boolean
+     */
+    function canPlaceFlowers($flowerbed, $n) {
+        array_push($flowerbed, 0);
+        array_unshift($flowerbed, 0);
+        for ($i = 1; $i < count($flowerbed) - 1; $i++) {
+            if ($flowerbed[$i] === 0) {
+                if ($flowerbed[$i - 1] === 0 && $flowerbed[$i + 1] === 0) {
+                    $flowerbed[$i] = 1;
+                    $n--;
+                }
+            }
+        }
+        return $n <= 0;
+    }
+}
+```
+
+---
+
+### 643. Maximum Average Subarray I
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "maximum-average-subarray-i" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $k
+     * @return Float
+     */
+    function findMaxAverage($nums, $k) {
+        $s = 0;
+        for ($i = 0; $i < $k; $i++) {
+            $s += $nums[$i];
+        }
+        $ans = $s;
+        for ($j = $k; $j < count($nums); $j++) {
+            $s = $s - $nums[$j - $k] + $nums[$j];
+            $ans = max($ans, $s);
+        }
+        return $ans / $k;
+    }
+}
+```
+
+---
+
+### 674. Longest Continuous Increasing Subsequence
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "longest-continuous-increasing-subsequence" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function findLengthOfLCIS($nums) {
+        $ans = 1;
+        $cnt = 1;
+        for ($i = 1; $i < count($nums); ++$i) {
+            if ($nums[$i - 1] < $nums[$i]) {
+                $ans = max($ans, ++$cnt);
+            } else {
+                $cnt = 1;
+            }
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 744. Find Smallest Letter Greater Than Target
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "find-smallest-letter-greater-than-target" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String[] $letters
+     * @param String $target
+     * @return String
+     */
+    function nextGreatestLetter($letters, $target) {
+        $l = 0;
+        $r = count($letters);
+        while ($l < $r) {
+            $mid = $l + $r >> 1;
+            if ($letters[$mid] > $target) {
+                $r = $mid;
+            } else {
+                $l = $mid + 1;
+            }
+        }
+        return $letters[$l % count($letters)];
+    }
+}
+```
+
+---
+
+### 796. Rotate String
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "rotate-string" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @param String $goal
+     * @return Boolean
+     */
+    function rotateString($s, $goal) {
+        return strlen($goal) === strlen($s) && strpos($s . $s, $goal) !== false;
+    }
+}
+```
+
+---
+
+### 876. Middle of the Linked List
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "middle-of-the-linked-list" на PHP.
+
+**Код:**
+```php
+/**
+ * Definition for a singly-linked list.
+ * class ListNode {
+ *     public $val = 0;
+ *     public $next = null;
+ *     function __construct($val = 0, $next = null) {
+ *         $this->val = $val;
+ *         $this->next = $next;
+ *     }
+ * }
+ */
+class Solution {
+    /**
+     * @param ListNode $head
+     * @return ListNode
+     */
+    function middleNode($head) {
+        $count = 0;
+        $tmpHead = $head;
+        while ($tmpHead != null) {
+            $tmpHead = $tmpHead->next;
+            $count++;
+        }
+        $len = $count - floor($count / 2);
+        while ($count != $len) {
+            $head = $head->next;
+            $count--;
+        }
+        return $head;
+    }
+}
+```
+
+---
+
+### 977. Squares of a Sorted Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "squares-of-a-sorted-array" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer[]
+     */
+    function sortedSquares($nums) {
+        $n = count($nums);
+        $ans = array_fill(0, $n, 0);
+        for ($i = 0, $j = $n - 1, $k = $n - 1; $i <= $j; --$k) {
+            $a = $nums[$i] * $nums[$i];
+            $b = $nums[$j] * $nums[$j];
+            if ($a > $b) {
+                $ans[$k] = $a;
+                ++$i;
+            } else {
+                $ans[$k] = $b;
+                --$j;
+            }
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1056. Confusing Number 🔒
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "confusing-number" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Boolean
+     */
+    function confusingNumber($n) {
+        $d = [0, 1, -1, -1, -1, -1, 9, -1, 8, 6];
+        $x = $n;
+        $y = 0;
+        while ($x > 0) {
+            $v = $x % 10;
+            if ($d[$v] < 0) {
+                return false;
+            }
+            $y = $y * 10 + $d[$v];
+            $x = intval($x / 10);
+        }
+        return $y != $n;
+    }
+}
+```
+
+---
+
+### 1122. Relative Sort Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "relative-sort-array" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $arr1
+     * @param Integer[] $arr2
+     * @return Integer[]
+     */
+    function relativeSortArray($arr1, $arr2) {
+        $pos = [];
+        foreach ($arr2 as $i => $x) {
+            $pos[$x] = $i;
+        }
+        usort($arr1, function($a, $b) use ($pos, $arr2) {
+            $j1 = isset($pos[$a]) ? $pos[$a] : count($arr2);
+            $j2 = isset($pos[$b]) ? $pos[$b] : count($arr2);
+            if ($j1 != $j2) {
+                return $j1 - $j2;
+            }
+            return $a - $b;
+        });
+        return $arr1;
+    }
+}
+```
+
+---
+
+### 1137. N-th Tribonacci Number
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "n-th-tribonacci-number" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Integer
+     */
+    function tribonacci($n) {
+        $a = 0;
+        $b = 1;
+        $c = 1;
+
+        while ($n--) {
+            $d = $a + $b + $c;
+            $a = $b;
+            $b = $c;
+            $c = $d;
+        }
+
+        return $a;
+    }
+}
+```
+
+---
+
+### 1160. Find Words That Can Be Formed by Characters
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "find-words-that-can-be-formed-by-characters" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String[] $words
+     * @param String $chars
+     * @return Integer
+     */
+    function countCharacters($words, $chars) {
+        $sum = 0;
+        for ($i = 0; $i < strlen($chars); $i++) {
+            $hashtable[$chars[$i]] += 1;
+        }
+        for ($j = 0; $j < count($words); $j++) {
+            $tmp = $hashtable;
+            $sum += strlen($words[$j]);
+            for ($k = 0; $k < strlen($words[$j]); $k++) {
+                if (!isset($tmp[$words[$j][$k]]) || $tmp[$words[$j][$k]] === 0) {
+                    $sum -= strlen($words[$j]);
+                    break;
+                }
+                $tmp[$words[$j][$k]] -= 1;
+            }
+        }
+        return $sum;
+    }
+}
+```
+
+---
+
+### 1189. Maximum Number of Balloons
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "maximum-number-of-balloons" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String $text
+     * @return Integer
+     */
+    function maxNumberOfBalloons($text) {
+        $cnt1 = $cnt2 = $cnt3 = $cnt4 = $cnt5 = 0;
+        for ($i = 0; $i < strlen($text); $i++) {
+            if ($text[$i] == 'b') {
+                $cnt1 += 1;
+            } elseif ($text[$i] == 'a') {
+                $cnt2 += 1;
+            } elseif ($text[$i] == 'l') {
+                $cnt3 += 1;
+            } elseif ($text[$i] == 'o') {
+                $cnt4 += 1;
+            } elseif ($text[$i] == 'n') {
+                $cnt5 += 1;
+            }
+        }
+        $cnt3 = floor($cnt3 / 2);
+        $cnt4 = floor($cnt4 / 2);
+        return min($cnt1, $cnt2, $cnt3, $cnt4, $cnt5);
+    }
+}
+```
+
+---
+
+### 1213. Intersection of Three Sorted Arrays 🔒
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "intersection-of-three-sorted-arrays" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $arr1
+     * @param Integer[] $arr2
+     * @param Integer[] $arr3
+     * @return Integer[]
+     */
+    function arraysIntersection($arr1, $arr2, $arr3) {
+        $rs = [];
+        $arr = array_merge($arr1, $arr2, $arr3);
+        for ($i = 0; $i < count($arr); $i++) {
+            $hashtable[$arr[$i]] += 1;
+            if ($hashtable[$arr[$i]] === 3) {
+                array_push($rs, $arr[$i]);
+            }
+        }
+        return $rs;
+    }
+}
+```
+
+---
+
+### 1287. Element Appearing More Than 25% In Sorted Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "element-appearing-more-than-25%25-in-sorted-array" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $arr
+     * @return Integer
+     */
+    function findSpecialInteger($arr) {
+        $n = count($arr);
+        for ($i = 0; ; ++$i) {
+            if ($arr[$i] == $arr[$i + ($n >> 2)]) {
+                return $arr[$i];
+            }
+        }
+    }
+}
+```
+
+---
+
+### 1290. Convert Binary Number in a Linked List to Integer
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "convert-binary-number-in-a-linked-list-to-integer" на PHP.
+
+**Код:**
+```php
+/**
+ * Definition for a singly-linked list.
+ * class ListNode {
+ *     public $val = 0;
+ *     public $next = null;
+ *     function __construct($val = 0, $next = null) {
+ *         $this->val = $val;
+ *         $this->next = $next;
+ *     }
+ * }
+ */
+class Solution {
+    /**
+     * @param ListNode $head
+     * @return Integer
+     */
+    function getDecimalValue($head) {
+        $ans = 0;
+        while ($head !== null) {
+            $ans = ($ans << 1) | $head->val;
+            $head = $head->next;
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1323. Maximum 69 Number
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "maximum-69-number" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer $num
+     * @return Integer
+     */
+    function maximum69Number($num) {
+        $num = strval($num);
+        $n = strpos($num, '6');
+        $num[$n] = 9;
+        return intval($num);
+    }
+}
+```
+
+---
+
+### 1394. Find Lucky Integer in an Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "find-lucky-integer-in-an-array" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $arr
+     * @return Integer
+     */
+    function findLucky($arr) {
+        $cnt = array_fill(0, 501, 0);
+        foreach ($arr as $x) {
+            $cnt[$x]++;
+        }
+        for ($x = 500; $x > 0; $x--) {
+            if ($cnt[$x] === $x) {
+                return $x;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+---
+
+### 1426. Counting Elements 🔒
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "counting-elements" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $arr
+     * @return Integer
+     */
+    function countElements($arr) {
+        $cnt = array_count_values($arr);
+        $ans = 0;
+        foreach ($cnt as $x => $v) {
+            if (isset($cnt[$x + 1])) {
+                $ans += $v;
+            }
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1431. Kids With the Greatest Number of Candies
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "kids-with-the-greatest-number-of-candies" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $candies
+     * @param Integer $extraCandies
+     * @return Boolean[]
+     */
+    function kidsWithCandies($candies, $extraCandies) {
+        $max = max($candies);
+        $rs = [];
+        for ($i = 0; $i < count($candies); $i++) {
+            array_push($rs, $candies[$i] + $extraCandies >= $max);
+        }
+        return $rs;
+    }
+}
+```
+
+---
+
+### 1455. Check If a Word Occurs As a Prefix of Any Word in a Sentence
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "check-if-a-word-occurs-as-a-prefix-of-any-word-in-a-sentence" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String $sentence
+     * @param String $searchWord
+     * @return Integer
+     */
+    function isPrefixOfWord($sentence, $searchWord) {
+        $words = explode(' ', $sentence);
+        for ($i = 0; $i < count($words); ++$i) {
+            if (strpos($words[$i], $searchWord) === 0) {
+                return $i + 1;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+---
+
+### 1460. Make Two Arrays Equal by Reversing Subarrays
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "make-two-arrays-equal-by-reversing-subarrays" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $target
+     * @param Integer[] $arr
+     * @return Boolean
+     */
+    function canBeEqual($target, $arr) {
+        sort($target);
+        sort($arr);
+        return $target === $arr;
+    }
+}
+```
+
+---
+
+### 1464. Maximum Product of Two Elements in an Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "maximum-product-of-two-elements-in-an-array" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function maxProduct($nums) {
+        $max = 0;
+        $submax = 0;
+        for ($i = 0; $i < count($nums); $i++) {
+            if ($nums[$i] > $max) {
+                $submax = $max;
+                $max = $nums[$i];
+            } elseif ($nums[$i] > $submax) {
+                $submax = $nums[$i];
+            }
+        }
+        return ($max - 1) * ($submax - 1);
+    }
+}
+```
+
+---
+
+### 1475. Final Prices With a Special Discount in a Shop
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "final-prices-with-a-special-discount-in-a-shop" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $prices
+     * @return Integer[]
+     */
+    function finalPrices($prices) {
+        $stk = [];
+        $n = count($prices);
+
+        for ($i = $n - 1; $i >= 0; $i--) {
+            $x = $prices[$i];
+            while (!empty($stk) && $x < end($stk)) {
+                array_pop($stk);
+            }
+            if (!empty($stk)) {
+                $prices[$i] -= end($stk);
+            }
+            $stk[] = $x;
+        }
+
+        return $prices;
+    }
+}
+```
+
+---
+
+### 1480. Running Sum of 1d Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "running-sum-of-1d-array" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer[]
+     */
+    function runningSum($nums) {
+        for ($i = 1; $i < count($nums); $i++) {
+            $nums[$i] += $nums[$i - 1];
+        }
+        return $nums;
+    }
+}
+```
+
+---
+
+### 1491. Average Salary Excluding the Minimum and Maximum Salary
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "average-salary-excluding-the-minimum-and-maximum-salary" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $salary
+     * @return Float
+     */
+    function average($salary) {
+        $max = $sum = 0;
+        $min = 10 ** 6;
+        for ($i = 0; $i < count($salary); $i++) {
+            $min = min($min, $salary[$i]);
+            $max = max($max, $salary[$i]);
+            $sum += $salary[$i];
+        }
+        return ($sum - $max - $min) / (count($salary) - 2);
+    }
+}
+```
+
+---
+
+### 1507. Reformat Date
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "reformat-date" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param String $date
+     * @return String
+     */
+    function reformatDate($date) {
+        $arr = explode(' ', $date);
+        $months = [
+            'Jan' => '01',
+            'Feb' => '02',
+            'Mar' => '03',
+            'Apr' => '04',
+            'May' => '05',
+            'Jun' => '06',
+            'Jul' => '07',
+            'Aug' => '08',
+            'Sep' => '09',
+            'Oct' => '10',
+            'Nov' => '11',
+            'Dec' => '12',
+        ];
+        $year = $arr[2];
+        $month = $months[$arr[1]];
+        $day = intval($arr[0]);
+        if ($day > 0 && $day < 10) {
+            $day = '0' . $day;
+        }
+        return $year . '-' . $month . '-' . $day;
+    }
+}
+```
+
+---
+
+### 1512. Number of Good Pairs
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "number-of-good-pairs" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function numIdenticalPairs($nums) {
+        $ans = 0;
+        $cnt = array_fill(0, 101, 0);
+        foreach ($nums as $x) {
+            $ans += $cnt[$x]++;
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1518. Water Bottles
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "water-bottles" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer $numBottles
+     * @param Integer $numExchange
+     * @return Integer
+     */
+    function numWaterBottles($numBottles, $numExchange) {
+        $ans = $numBottles;
+        while ($numBottles >= $numExchange) {
+            $numBottles = $numBottles - $numExchange + 1;
+            $ans++;
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1523. Count Odd Numbers in an Interval Range
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Описание:** Решение задачи LeetCode "count-odd-numbers-in-an-interval-range" на PHP.
+
+**Код:**
+```php
+class Solution {
+    /**
+     * @param Integer $low
+     * @param Integer $high
+     * @return Integer
+     */
+    function countOdds($low, $high) {
+        return ($high + 1 >> 1) - ($low >> 1);
+    }
+}
+```
+
+---
+

@@ -1,0 +1,1145 @@
+---
+title: "LeetCode Solutions - Page 3"
+sidebar_label: "Page 3"
+---
+
+# LeetCode Solutions - Page 3
+
+### 1672. Richest Customer Wealth
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "richest-customer-wealth" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[][] $accounts
+     * @return Integer
+     */
+    function maximumWealth($accounts) {
+        $rs = 0;
+        for ($i = 0; $i < count($accounts); $i++) {
+            $sum = 0;
+            for ($j = 0; $j < count($accounts[$i]); $j++) {
+                $sum += $accounts[$i][$j];
+            }
+            if ($sum > $rs) {
+                $rs = $sum;
+            }
+        }
+        return $rs;
+    }
+}
+```
+
+---
+
+### 1704. Determine if String Halves Are Alike
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "determine-if-string-halves-are-alike" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Boolean
+     */
+    function halvesAreAlike($s) {
+        $n = strlen($s) / 2;
+        $vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
+        $cnt = 0;
+
+        for ($i = 0; $i < $n; $i++) {
+            if (in_array($s[$i], $vowels)) {
+                $cnt++;
+            }
+            if (in_array($s[$i + $n], $vowels)) {
+                $cnt--;
+            }
+        }
+
+        return $cnt == 0;
+    }
+}
+```
+
+---
+
+### 1732. Find the Highest Altitude
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "find-the-highest-altitude" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $gain
+     * @return Integer
+     */
+    function largestAltitude($gain) {
+        $max = 0;
+        for ($i = 0; $i < count($gain); $i++) {
+            $tmp += $gain[$i];
+            if ($tmp > $max) {
+                $max = $tmp;
+            }
+        }
+        return $max;
+    }
+}
+```
+
+---
+
+### 1748. Sum of Unique Elements
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "sum-of-unique-elements" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function sumOfUnique($nums) {
+        $sum = 0;
+        for ($i = 0; $i < count($nums); $i++) {
+            $hashtable[$nums[$i]] += 1;
+            if ($hashtable[$nums[$i]] == 1) {
+                $sum += $nums[$i];
+            }
+            if ($hashtable[$nums[$i]] == 2) {
+                $sum -= $nums[$i];
+            }
+        }
+        return $sum;
+    }
+}
+```
+
+---
+
+### 1876. Substrings of Size Three with Distinct Characters
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "substrings-of-size-three-with-distinct-characters" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Integer
+     */
+    function countGoodSubstrings($s) {
+        $ans = 0;
+        $n = strlen($s);
+        $l = 0;
+        $r = 0;
+        $mask = 0;
+
+        while ($r < $n) {
+            $x = ord($s[$r]) - ord('a');
+            while (($mask >> $x) & 1) {
+                $y = ord($s[$l++]) - ord('a');
+                $mask ^= 1 << $y;
+            }
+            $mask |= 1 << $x;
+            if ($r - $l + 1 >= 3) {
+                $ans++;
+            }
+            $r++;
+        }
+
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1941. Check if All Characters Have Equal Number of Occurrences
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "check-if-all-characters-have-equal-number-of-occurrences" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return Boolean
+     */
+    function areOccurrencesEqual($s) {
+        $cnt = array_fill(0, 26, 0);
+        for ($i = 0; $i < strlen($s); $i++) {
+            $cnt[ord($s[$i]) - ord('a')]++;
+        }
+        $v = 0;
+        foreach ($cnt as $x) {
+            if ($x == 0) {
+                continue;
+            }
+            if ($v && $v != $x) {
+                return false;
+            }
+            $v = $x;
+        }
+        return true;
+    }
+}
+```
+
+---
+
+### 1945. Sum of Digits of String After Convert
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "sum-of-digits-of-string-after-convert" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @param Integer $k
+     * @return Integer
+     */
+    function getLucky($s, $k) {
+        $rs = '';
+        for ($i = 0; $i < strlen($s); $i++) {
+            $num = ord($s[$i]) - 96;
+            $rs = $rs . strval($num);
+        }
+        while ($k != 0) {
+            $sum = 0;
+            for ($j = 0; $j < strlen($rs); $j++) {
+                $sum += intval($rs[$j]);
+            }
+            $rs = strval($sum);
+            $k--;
+        }
+        return intval($rs);
+    }
+}
+```
+
+---
+
+### 1957. Delete Characters to Make Fancy String
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "delete-characters-to-make-fancy-string" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return String
+     */
+    function makeFancyString($s) {
+        $ans = '';
+        for ($i = 0; $i < strlen($s); $i++) {
+            $c = $s[$i];
+            if ($i < 2 || $c !== $s[$i - 1] || $c !== $s[$i - 2]) {
+                $ans .= $c;
+            }
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 1984. Minimum Difference Between Highest and Lowest of K Scores
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "minimum-difference-between-highest-and-lowest-of-k-scores" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $k
+     * @return Integer
+     */
+    function minimumDifference($nums, $k) {
+        sort($nums);
+        $ans = 10 ** 5;
+        for ($i = 0; $i < count($nums) - $k + 1; $i++) {
+            $ans = min($ans, $nums[$i + $k - 1] - $nums[$i]);
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 2000. Reverse Prefix of Word
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "reverse-prefix-of-word" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $word
+     * @param String $ch
+     * @return String
+     */
+    function reversePrefix($word, $ch) {
+        $len = strlen($word);
+        $rs = '';
+        for ($i = 0; $i < $len; $i++) {
+            $rs = $rs . $word[$i];
+            if ($word[$i] == $ch) {
+                break;
+            }
+        }
+        if (strlen($rs) == $len && $rs[$len - 1] != $ch) {
+            return $word;
+        }
+        $rs = strrev($rs);
+        $rs = $rs . substr($word, strlen($rs));
+        return $rs;
+    }
+}
+```
+
+---
+
+### 2068. Check Whether Two Strings are Almost Equivalent
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "check-whether-two-strings-are-almost-equivalent" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $word1
+     * @param String $word2
+     * @return Boolean
+     */
+    function checkAlmostEquivalent($word1, $word2) {
+        for ($i = 0; $i < strlen($word1); $i++) {
+            $hashtable[$word1[$i]] += 1;
+            $hashtable[$word2[$i]] -= 1;
+        }
+        $keys = array_keys($hashtable);
+        for ($j = 0; $j < count($keys); $j++) {
+            if (abs($hashtable[$keys[$j]]) > 3) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+---
+
+### 2190. Most Frequent Number Following Key In an Array
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "most-frequent-number-following-key-in-an-array" using PHP.
+
+**Code:**
+```php
+class Solution {
+    function mostFrequent($nums, $key) {
+        $cnt = array_fill(0, max($nums) + 1, 0);
+        $ans = 0;
+        $mx = 0;
+        for ($i = 0; $i < count($nums) - 1; ++$i) {
+            if ($nums[$i] === $key) {
+                $cnt[$nums[$i + 1]]++;
+                if ($mx < $cnt[$nums[$i + 1]]) {
+                    $mx = $cnt[$nums[$i + 1]];
+                    $ans = $nums[$i + 1];
+                }
+            }
+        }
+        return $ans;
+    }
+}
+```
+
+---
+
+### 2215. Find the Difference of Two Arrays
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "find-the-difference-of-two-arrays" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums1
+     * @param Integer[] $nums2
+     * @return Integer[][]
+     */
+    function findDifference($nums1, $nums2) {
+        $s1 = array_flip($nums1);
+        $s2 = array_flip($nums2);
+
+        $diff1 = array_diff_key($s1, $s2);
+        $diff2 = array_diff_key($s2, $s1);
+
+        return [array_keys($diff1), array_keys($diff2)];
+    }
+}
+```
+
+---
+
+### 2248. Intersection of Multiple Arrays
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "intersection-of-multiple-arrays" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[][] $nums
+     * @return Integer[]
+     */
+    function intersection($nums) {
+        $rs = [];
+        for ($i = 0; $i < count($nums); $i++) {
+            for ($j = 0; $j < count($nums[$i]); $j++) {
+                $hashtable[$nums[$i][$j]] += 1;
+                if ($hashtable[$nums[$i][$j]] === count($nums)) {
+                    array_push($rs, $nums[$i][$j]);
+                }
+            }
+        }
+        sort($rs);
+        return $rs;
+    }
+}
+```
+
+---
+
+### 2259. Remove Digit From Number to Maximize Result
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "remove-digit-from-number-to-maximize-result" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $number
+     * @param String $digit
+     * @return String
+     */
+    function removeDigit($number, $digit) {
+        $max = 0;
+        for ($i = 0; $i < strlen($number); $i++) {
+            if ($number[$i] == $digit) {
+                $tmp = substr($number, 0, $i) . substr($number, $i + 1);
+                if ($tmp > $max) {
+                    $max = $tmp;
+                }
+            }
+        }
+        return $max;
+    }
+}
+```
+
+---
+
+### 2351. First Letter to Appear Twice
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "first-letter-to-appear-twice" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $s
+     * @return String
+     */
+    function repeatedCharacter($s) {
+        for ($i = 0; ; $i++) {
+            $hashtable[$s[$i]] += 1;
+            if ($hashtable[$s[$i]] == 2) {
+                return $s[$i];
+            }
+        }
+    }
+}
+```
+
+---
+
+### 2379. Minimum Recolors to Get K Consecutive Black Blocks
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "minimum-recolors-to-get-k-consecutive-black-blocks" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param String $blocks
+     * @param Integer $k
+     * @return Integer
+     */
+    function minimumRecolors($blocks, $k) {
+        $cnt = 0;
+        for ($i = 0; $i < $k; $i++) {
+            if ($blocks[$i] === 'W') {
+                $cnt++;
+            }
+        }
+        $min = $cnt;
+        for ($i = $k; $i < strlen($blocks); $i++) {
+            if ($blocks[$i] === 'W') {
+                $cnt++;
+            }
+            if ($blocks[$i - $k] === 'W') {
+                $cnt--;
+            }
+            $min = min($min, $cnt);
+        }
+        return $min;
+    }
+}
+```
+
+---
+
+### 2404. Most Frequent Even Element
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "most-frequent-even-element" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function mostFrequentEven($nums) {
+        $max = $rs = -1;
+        for ($i = 0; $i < count($nums); $i++) {
+            if ($nums[$i] % 2 == 0) {
+                $hashtable[$nums[$i]] += 1;
+                if (
+                    $hashtable[$nums[$i]] > $max ||
+                    ($hashtable[$nums[$i]] == $max && $rs > $nums[$i])
+                ) {
+                    $max = $hashtable[$nums[$i]];
+                    $rs = $nums[$i];
+                }
+            }
+        }
+        return $rs;
+    }
+}
+```
+
+---
+
+### 2485. Find the Pivot Integer
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** Solve the LeetCode challenge "find-the-pivot-integer" using PHP.
+
+**Code:**
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Integer
+     */
+    function pivotInteger($n) {
+        $sum = ($n * ($n + 1)) / 2;
+        $pre = 0;
+        for ($i = 1; $i <= $n; $i++) {
+            if ($pre + $i === $sum - $pre) {
+                return $i;
+            }
+            $pre += $i;
+        }
+        return -1;
+    }
+}
+```
+
+---
+
+### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given the <code>root</code> of a binary tree, return <em>the inorder traversal of its nodes&#39; values</em>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1,null,2,3]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[1,3,2]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0000-0099/0094.Binary%20Tree%20Inorder%20Traversal/images/screenshot-2024-08-29-202743.png" style="width: 200px; height: 264px;" /></p>
+</div>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1,2,3,4,5,null,8,null,null,6,7,9]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[4,2,6,5,7,1,3,9,8]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0000-0099/0094.Binary%20Tree%20Inorder%20Traversal/images/tree_2.png" style="width: 350px; height: 286px;" /></p>
+</div>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = []</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[]</span></p>
+</div>
+
+<p><strong class="example">Example 4:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[1]</span></p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of nodes in the tree is in the range <code>[0, 100]</code>.</li>
+	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+</ul>
+
+<p>&nbsp;</p>
+<strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given a binary tree, find its minimum depth.</p>
+
+<p>The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.</p>
+
+<p><strong>Note:</strong>&nbsp;A leaf is a node with no children.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0111.Minimum%20Depth%20of%20Binary%20Tree/images/ex_depth.jpg" style="width: 432px; height: 302px;" />
+<pre>
+<strong>Input:</strong> root = [3,9,20,null,null,15,7]
+<strong>Output:</strong> 2
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<pre>
+<strong>Input:</strong> root = [2,null,3,null,4,null,5,null,6]
+<strong>Output:</strong> 5
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of nodes in the tree is in the range <code>[0, 10<sup>5</sup>]</code>.</li>
+	<li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
+</ul>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given <code>head</code>, the head of a linked list, determine if the linked list has a cycle in it.</p>
+
+<p>There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the&nbsp;<code>next</code>&nbsp;pointer. Internally, <code>pos</code>&nbsp;is used to denote the index of the node that&nbsp;tail&#39;s&nbsp;<code>next</code>&nbsp;pointer is connected to.&nbsp;<strong>Note that&nbsp;<code>pos</code>&nbsp;is not passed as a parameter</strong>.</p>
+
+<p>Return&nbsp;<code>true</code><em> if there is a cycle in the linked list</em>. Otherwise, return <code>false</code>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0141.Linked%20List%20Cycle/images/circularlinkedlist.png" style="width: 300px; height: 97px; margin-top: 8px; margin-bottom: 8px;" />
+<pre>
+<strong>Input:</strong> head = [3,2,0,-4], pos = 1
+<strong>Output:</strong> true
+<strong>Explanation:</strong> There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0141.Linked%20List%20Cycle/images/circularlinkedlist_test2.png" style="width: 141px; height: 74px;" />
+<pre>
+<strong>Input:</strong> head = [1,2], pos = 0
+<strong>Output:</strong> true
+<strong>Explanation:</strong> There is a cycle in the linked list, where the tail connects to the 0th node.
+</pre>
+
+<p><strong class="example">Example 3:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0141.Linked%20List%20Cycle/images/circularlinkedlist_test3.png" style="width: 45px; height: 45px;" />
+<pre>
+<strong>Input:</strong> head = [1], pos = -1
+<strong>Output:</strong> false
+<strong>Explanation:</strong> There is no cycle in the linked list.
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of the nodes in the list is in the range <code>[0, 10<sup>4</sup>]</code>.</li>
+	<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
+	<li><code>pos</code> is <code>-1</code> or a <strong>valid index</strong> in the linked-list.</li>
+</ul>
+
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong> Can you solve it using <code>O(1)</code> (i.e. constant) memory?</p>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given the <code>root</code> of a binary tree, return <em>the preorder traversal of its nodes&#39; values</em>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1,null,2,3]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[1,2,3]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0144.Binary%20Tree%20Preorder%20Traversal/images/screenshot-2024-08-29-202743.png" style="width: 200px; height: 264px;" /></p>
+</div>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1,2,3,4,5,null,8,null,null,6,7,9]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[1,2,4,5,6,7,3,8,9]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0144.Binary%20Tree%20Preorder%20Traversal/images/tree_2.png" style="width: 350px; height: 286px;" /></p>
+</div>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = []</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[]</span></p>
+</div>
+
+<p><strong class="example">Example 4:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[1]</span></p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of nodes in the tree is in the range <code>[0, 100]</code>.</li>
+	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+</ul>
+
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?</p>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given the <code>root</code> of a&nbsp;binary tree, return <em>the postorder traversal of its nodes&#39; values</em>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1,null,2,3]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[3,2,1]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0145.Binary%20Tree%20Postorder%20Traversal/images/screenshot-2024-08-29-202743.png" style="width: 200px; height: 264px;" /></p>
+</div>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1,2,3,4,5,null,8,null,null,6,7,9]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[4,6,7,5,2,9,8,3,1]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0145.Binary%20Tree%20Postorder%20Traversal/images/tree_2.png" style="width: 350px; height: 286px;" /></p>
+</div>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = []</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[]</span></p>
+</div>
+
+<p><strong class="example">Example 4:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">root = [1]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[1]</span></p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of the nodes in the tree is in the range <code>[0, 100]</code>.</li>
+	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+</ul>
+
+<p>&nbsp;</p>
+<strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given the <code>head</code> of a singly linked list, reverse the list, and return <em>the reversed list</em>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0206.Reverse%20Linked%20List/images/rev1ex1.jpg" style="width: 542px; height: 222px;" />
+<pre>
+<strong>Input:</strong> head = [1,2,3,4,5]
+<strong>Output:</strong> [5,4,3,2,1]
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0206.Reverse%20Linked%20List/images/rev1ex2.jpg" style="width: 182px; height: 222px;" />
+<pre>
+<strong>Input:</strong> head = [1,2]
+<strong>Output:</strong> [2,1]
+</pre>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<pre>
+<strong>Input:</strong> head = []
+<strong>Output:</strong> []
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of nodes in the list is the range <code>[0, 5000]</code>.</li>
+	<li><code>-5000 &lt;= Node.val &lt;= 5000</code></li>
+</ul>
+
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong> A linked list can be reversed either iteratively or recursively. Could you implement both?</p>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given the <code>root</code> of a <strong>complete</strong> binary tree, return the number of the nodes in the tree.</p>
+
+<p>According to <strong><a href="http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees" target="_blank">Wikipedia</a></strong>, every level, except possibly the last, is completely filled in a complete binary tree, and all nodes in the last level are as far left as possible. It can have between <code>1</code> and <code>2<sup>h</sup></code> nodes inclusive at the last level <code>h</code>.</p>
+
+<p>Design an algorithm that runs in less than&nbsp;<code data-stringify-type="code">O(n)</code>&nbsp;time complexity.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0222.Count%20Complete%20Tree%20Nodes/images/complete.jpg" style="width: 372px; height: 302px;" />
+<pre>
+<strong>Input:</strong> root = [1,2,3,4,5,6]
+<strong>Output:</strong> 6
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<pre>
+<strong>Input:</strong> root = []
+<strong>Output:</strong> 0
+</pre>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<pre>
+<strong>Input:</strong> root = [1]
+<strong>Output:</strong> 1
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of nodes in the tree is in the range <code>[0, 5 * 10<sup>4</sup>]</code>.</li>
+	<li><code>0 &lt;= Node.val &lt;= 5 * 10<sup>4</sup></code></li>
+	<li>The tree is guaranteed to be <strong>complete</strong>.</li>
+</ul>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [231. Power of Two](https://leetcode.com/problems/power-of-two)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given an integer <code>n</code>, return <em><code>true</code> if it is a power of two. Otherwise, return <code>false</code></em>.</p>
+
+<p>An integer <code>n</code> is a power of two, if there exists an integer <code>x</code> such that <code>n == 2<sup>x</sup></code>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<pre>
+<strong>Input:</strong> n = 1
+<strong>Output:</strong> true
+<strong>Explanation: </strong>2<sup>0</sup> = 1
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<pre>
+<strong>Input:</strong> n = 16
+<strong>Output:</strong> true
+<strong>Explanation: </strong>2<sup>4</sup> = 16
+</pre>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<pre>
+<strong>Input:</strong> n = 3
+<strong>Output:</strong> false
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
+</ul>
+
+<p>&nbsp;</p>
+<strong>Follow up:</strong> Could you solve it without loops/recursion?
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [270. Closest Binary Search Tree Value 🔒](https://leetcode.com/problems/closest-binary-search-tree-value)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given the <code>root</code> of a binary search tree and a <code>target</code> value, return <em>the value in the BST that is closest to the</em> <code>target</code>. If there are multiple answers, print the smallest.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0270.Closest%20Binary%20Search%20Tree%20Value/images/closest1-1-tree.jpg" style="width: 292px; height: 302px;" />
+<pre>
+<strong>Input:</strong> root = [4,2,5,1,3], target = 3.714286
+<strong>Output:</strong> 4
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<pre>
+<strong>Input:</strong> root = [1], target = 4.428571
+<strong>Output:</strong> 1
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.</li>
+	<li><code>0 &lt;= Node.val &lt;= 10<sup>9</sup></code></li>
+	<li><code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code></li>
+</ul>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [326. Power of Three](https://leetcode.com/problems/power-of-three)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given an integer <code>n</code>, return <em><code>true</code> if it is a power of three. Otherwise, return <code>false</code></em>.</p>
+
+<p>An integer <code>n</code> is a power of three, if there exists an integer <code>x</code> such that <code>n == 3<sup>x</sup></code>.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<pre>
+<strong>Input:</strong> n = 27
+<strong>Output:</strong> true
+<strong>Explanation:</strong> 27 = 3<sup>3</sup>
+</pre>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<pre>
+<strong>Input:</strong> n = 0
+<strong>Output:</strong> false
+<strong>Explanation:</strong> There is no x where 3<sup>x</sup> = 0.
+</pre>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<pre>
+<strong>Input:</strong> n = -1
+<strong>Output:</strong> false
+<strong>Explanation:</strong> There is no x where 3<sup>x</sup> = (-1).
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
+</ul>
+
+<p>&nbsp;</p>
+<strong>Follow up:</strong> Could you solve it without loops/recursion?
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+
+### [346. Moving Average from Data Stream 🔒](https://leetcode.com/problems/moving-average-from-data-stream)
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Description:** <p>Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.</p>
+
+<p>Implement the&nbsp;<code>MovingAverage</code> class:</p>
+
+<ul>
+	<li><code>MovingAverage(int size)</code> Initializes&nbsp;the object with the size of the window <code>size</code>.</li>
+	<li><code>double next(int val)</code> Returns the moving average of the last <code>size</code> values of the stream.</li>
+</ul>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<pre>
+<strong>Input</strong>
+[&quot;MovingAverage&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;]
+[[3], [1], [10], [3], [5]]
+<strong>Output</strong>
+[null, 1.0, 5.5, 4.66667, 6.0]
+
+<strong>Explanation</strong>
+MovingAverage movingAverage = new MovingAverage(3);
+movingAverage.next(1); // return 1.0 = 1 / 1
+movingAverage.next(10); // return 5.5 = (1 + 10) / 2
+movingAverage.next(3); // return 4.66667 = (1 + 10 + 3) / 3
+movingAverage.next(5); // return 6.0 = (10 + 3 + 5) / 3
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>1 &lt;= size &lt;= 1000</code></li>
+	<li><code>-10<sup>5</sup> &lt;= val &lt;= 10<sup>5</sup></code></li>
+	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>next</code>.</li>
+</ul>
+
+**Code:**
+```php
+// PHP solution for this challenge is currently being updated.
+```
+
+---
+

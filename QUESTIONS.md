@@ -26,7 +26,8 @@ This file contains a curated list of PHP interview questions and answers, merged
 21. [Long-Running (RoadRunner)](#21-long-running-roadrunner)
 22. [PSR & PER Standards](#22-psr--per-standards)
 23. [Basic Algorithms](#23-basic-algorithms)
-24. [HaPHPiness - Best things in PHP](#24-haphpiness---best-things-in-php)
+24. [HaPHPiness - Best Things in PHP](#24-haphpiness---best-things-in-php)
+25. [LeetCode Solutions](#25-leetcode-solutions)
 ---
 
 ## 1. PHP Basics & Language Features
@@ -796,7 +797,17 @@ $result = "  hello  " |> 'trim' |> 'strtoupper';
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 ```
 
-#### What is the difference between `mysqli` and `PDO`?
+#### What is the `EXPLAIN` statement and how to read its output?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** The `EXPLAIN` statement provides information about how MySQL executes a query. It shows which indexes are used, how tables are joined, and the estimated number of rows examined. Key columns include `type` (join type, where `const` and `ref` are good, while `ALL` is a full table scan), `key` (the actual index used), and `Extra` (additional info like `Using filesort` or `Using temporary`, which often indicate performance issues).
+
+[Detailed Guide on EXPLAIN](answers/mysql_explain.md)
+
+---
+
+### What is the difference between `mysqli` and `PDO`?
 **Answer:** 
 - `mysqli` is specific to MySQL, while `PDO` supports multiple database systems (PostgreSQL, SQLite, etc.).
 - `PDO` supports named placeholders in prepared statements.
@@ -2119,4 +2130,19 @@ This section highlights modern PHP features and the overall "happiness" of the e
 #### What is NativePHP?
 **Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
 [Detailed HaPHPiness Guide](answers/haphpiness.md#nativephp)
+
+## 25. LeetCode Solutions
+
+This section contains solutions to LeetCode challenges, focusing on PHP implementations.
+
+For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/25-leetcode-solutions.mdx).
+
+### Summary of Solutions
+- [Page 1 (Challenges 1-35)](./docs/docs/answers/leetcode/page-1.mdx)
+- [Page 2](./docs/docs/answers/leetcode/page-2.mdx)
+- [Page 3](./docs/docs/answers/leetcode/page-3.mdx)
+- [Page 4](./docs/docs/answers/leetcode/page-4.mdx)
+- [Page 5](./docs/docs/answers/leetcode/page-5.mdx)
+
+
 

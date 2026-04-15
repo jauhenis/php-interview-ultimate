@@ -49,4 +49,4 @@ The `boolean` type can have the state `true`, `false`, or `unknown` (represented
 - **XML:** `xml` for XML data.
 
 ---
-*Back to [PostgreSQL](../questions/24-postgresql.mdx)*
+*Back to [PostgreSQL](../questions/08-postgresql.mdx)*

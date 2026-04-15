@@ -31,4 +31,4 @@ Returns only the rows that are present in both result sets.
 Returns rows from the first result set that are not present in the second.
 
 ---
-*Back to [PostgreSQL](../questions/24-postgresql.mdx)*
+*Back to [PostgreSQL](../questions/08-postgresql.mdx)*
