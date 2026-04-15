@@ -313,7 +313,7 @@ class Solution {
         $l = 0;
         $r = count($nums);
         while ($l < $r) {
-            $mid = $l + $r >> 1;
+            $mid = ($l + $r) >> 1;
             if ($nums[$mid] >= $target) {
                 $r = $mid;
             } else {
@@ -568,7 +568,7 @@ class Solution {
 ### 219. Contains Duplicate II
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Описание:** Дан массив целых чисел nums и целое число k, верните true, если в массиве есть два различных индекса i и j, таких что nums[i] == nums[j] и abs(i - j) <= k.
+**Описание:** Дан массив целых чисел nums и целое число k, верните true, если в массиве есть два различных индекса i и j, таких что nums[i] == nums[j] и abs(i - j) &lt;= k.
 
 **Код:**
 ```php
@@ -652,7 +652,7 @@ class Solution {
 ### 303. Range Sum Query - Immutable
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Описание:** Дан массив целых чисел nums, обработайте несколько запросов следующего типа: вычислить сумму элементов nums между индексами left и right включительно, где left <= right.
+**Описание:** Дан массив целых чисел nums, обработайте несколько запросов следующего типа: вычислить сумму элементов nums между индексами left и right включительно, где left &lt;= right.
 
 **Код:**
 ```php

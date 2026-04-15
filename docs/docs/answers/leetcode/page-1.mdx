@@ -313,7 +313,7 @@ class Solution {
         $l = 0;
         $r = count($nums);
         while ($l < $r) {
-            $mid = $l + $r >> 1;
+            $mid = ($l + $r) >> 1;
             if ($nums[$mid] >= $target) {
                 $r = $mid;
             } else {
@@ -568,7 +568,7 @@ class Solution {
 ### 219. Contains Duplicate II
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+**Description:** Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) &lt;= k.
 
 **Code:**
 ```php
@@ -652,7 +652,7 @@ class Solution {
 ### 303. Range Sum Query - Immutable
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** Given an integer array nums, handle multiple queries of the following type: Calculate the sum of the elements of nums between indices left and right inclusive where left <= right.
+**Description:** Given an integer array nums, handle multiple queries of the following type: Calculate the sum of the elements of nums between indices left and right inclusive where left &lt;= right.
 
 **Code:**
 ```php

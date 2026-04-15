@@ -8,48 +8,46 @@ sidebar_label: "Page 5"
 ### [1608. Special Array With X Elements Greater Than or Equal X](https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given an array <code>nums</code> of non-negative integers. <code>nums</code> is considered <strong>special</strong> if there exists a number <code>x</code> such that there are <strong>exactly</strong> <code>x</code> numbers in <code>nums</code> that are <strong>greater than or equal to</strong> <code>x</code>.</p>
+**Description:** 
 
-<p>Notice that <code>x</code> <strong>does not</strong> have to be an element in <code>nums</code>.</p>
+You are given an array `nums` of non-negative integers. `nums` is considered **special** if there exists a number `x` such that there are **exactly** `x` numbers in `nums` that are **greater than or equal to** `x`.
 
-<p>Return <code>x</code> <em>if the array is <strong>special</strong>, otherwise, return </em><code>-1</code>. It can be proven that if <code>nums</code> is special, the value for <code>x</code> is <strong>unique</strong>.</p>
+Notice that `x` **does not** have to be an element in `nums`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return `x` *if the array is **special**, otherwise, return *`-1`. It can be proven that if `nums` is special, the value for `x` is **unique**.
 
-<pre>
-<strong>Input:</strong> nums = [3,5]
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> There are 2 values (3 and 5) that are greater than or equal to 2.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: nums = [3,5]
+Output: 2
+Explanation: There are 2 values (3 and 5) that are greater than or equal to 2.
+```
 
-<pre>
-<strong>Input:</strong> nums = [0,0]
-<strong>Output:</strong> -1
-<strong>Explanation:</strong> No numbers fit the criteria for x.
-If x = 0, there should be 0 numbers &gt;= x, but there are 2.
-If x = 1, there should be 1 number &gt;= x, but there are 0.
-If x = 2, there should be 2 numbers &gt;= x, but there are 0.
+**Example 2:**
+
+```text
+Input: nums = [0,0]
+Output: -1
+Explanation: No numbers fit the criteria for x.
+If x = 0, there should be 0 numbers >= x, but there are 2.
+If x = 1, there should be 1 number >= x, but there are 0.
+If x = 2, there should be 2 numbers >= x, but there are 0.
 x cannot be greater since there are only 2 numbers in nums.
-</pre>
+```
 
-<p><strong class="example">Example 3:</strong></p>
+**Example 3:**
 
-<pre>
-<strong>Input:</strong> nums = [0,4,3,0,4]
-<strong>Output:</strong> 3
-<strong>Explanation:</strong> There are 3 values that are greater than or equal to 3.
-</pre>
+```text
+Input: nums = [0,4,3,0,4]
+Output: 3
+Explanation: There are 3 values that are greater than or equal to 3.
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= nums.length &lt;= 100</code></li>
-	<li><code>0 &lt;= nums[i] &lt;= 1000</code></li>
-</ul>
+	- `1 &lt;= nums.length &lt;= 100`
+	- `0 &lt;= nums[i] &lt;= 1000`
 
 **Code:**
 ```php
@@ -61,54 +59,50 @@ x cannot be greater since there are only 2 numbers in nums.
 ### [1652. Defuse the Bomb](https://leetcode.com/problems/defuse-the-bomb)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You have a bomb to defuse, and your time is running out! Your informer will provide you with a <strong>circular</strong> array <code>code</code>&nbsp;of length of <code>n</code>&nbsp;and a key <code>k</code>.</p>
+**Description:** 
 
-<p>To decrypt the code, you must replace every number. All the numbers are replaced <strong>simultaneously</strong>.</p>
+You have a bomb to defuse, and your time is running out! Your informer will provide you with a **circular** array `code` of length of `n` and a key `k`.
 
-<ul>
-	<li>If <code>k &gt; 0</code>, replace the <code>i<sup>th</sup></code> number with the sum of the <strong>next</strong> <code>k</code> numbers.</li>
-	<li>If <code>k &lt; 0</code>, replace the <code>i<sup>th</sup></code> number with the sum of the <strong>previous</strong>&nbsp;-<code>k</code> numbers.</li>
-	<li>If <code>k == 0</code>, replace the <code>i<sup>th</sup></code> number with <code>0</code>.</li>
-</ul>
+To decrypt the code, you must replace every number. All the numbers are replaced **simultaneously**.
 
-<p>As <code>code</code> is circular, the next element of <code>code[n-1]</code> is <code>code[0]</code>, and the previous element of <code>code[0]</code> is <code>code[n-1]</code>.</p>
+	- If `k > 0`, replace the `i^th` number with the sum of the **next** `k` numbers.
+	- If `k < 0`, replace the `i^th` number with the sum of the **previous** -`k` numbers.
+	- If `k == 0`, replace the `i^th` number with `0`.
 
-<p>Given the <strong>circular</strong> array <code>code</code> and an integer key <code>k</code>, return <em>the decrypted code to defuse the bomb</em>!</p>
+As `code` is circular, the next element of `code[n-1]` is `code[0]`, and the previous element of `code[0]` is `code[n-1]`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given the **circular** array `code` and an integer key `k`, return *the decrypted code to defuse the bomb*!
 
-<pre>
-<strong>Input:</strong> code = [5,7,1,4], k = 3
-<strong>Output:</strong> [12,10,16,13]
-<strong>Explanation:</strong> Each number is replaced by the sum of the next 3 numbers. The decrypted code is [7+1+4, 1+4+5, 4+5+7, 5+7+1]. Notice that the numbers wrap around.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: code = [5,7,1,4], k = 3
+Output: [12,10,16,13]
+Explanation: Each number is replaced by the sum of the next 3 numbers. The decrypted code is [7+1+4, 1+4+5, 4+5+7, 5+7+1]. Notice that the numbers wrap around.
+```
 
-<pre>
-<strong>Input:</strong> code = [1,2,3,4], k = 0
-<strong>Output:</strong> [0,0,0,0]
-<strong>Explanation:</strong> When k is zero, the numbers are replaced by 0. 
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: code = [1,2,3,4], k = 0
+Output: [0,0,0,0]
+Explanation: When k is zero, the numbers are replaced by 0.
+```
 
-<pre>
-<strong>Input:</strong> code = [2,4,9,3], k = -2
-<strong>Output:</strong> [12,5,6,13]
-<strong>Explanation:</strong> The decrypted code is [3+9, 2+3, 4+2, 9+4]. Notice that the numbers wrap around again. If k is negative, the sum is of the <strong>previous</strong> numbers.
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: code = [2,4,9,3], k = -2
+Output: [12,5,6,13]
+Explanation: The decrypted code is [3+9, 2+3, 4+2, 9+4]. Notice that the numbers wrap around again. If k is negative, the sum is of the previous numbers.
+```
 
-<ul>
-	<li><code>n == code.length</code></li>
-	<li><code>1 &lt;= n&nbsp;&lt;= 100</code></li>
-	<li><code>1 &lt;= code[i] &lt;= 100</code></li>
-	<li><code>-(n - 1) &lt;= k &lt;= n - 1</code></li>
-</ul>
+**Constraints:**
+
+	- `n == code.length`
+	- `1 &lt;= n &lt;= 100`
+	- `1 &lt;= code[i] &lt;= 100`
+	- `-(n - 1) &lt;= k &lt;= n - 1`
 
 **Code:**
 ```php
@@ -120,44 +114,43 @@ x cannot be greater since there are only 2 numbers in nums.
 ### [1662. Check If Two String Arrays are Equivalent](https://leetcode.com/problems/check-if-two-string-arrays-are-equivalent)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given two string arrays <code>word1</code> and <code>word2</code>, return<em> </em><code>true</code><em> if the two arrays <strong>represent</strong> the same string, and </em><code>false</code><em> otherwise.</em></p>
+**Description:** 
 
-<p>A string is <strong>represented</strong> by an array if the array elements concatenated <strong>in order</strong> forms the string.</p>
+Given two string arrays `word1` and `word2`, return* *`true`* if the two arrays **represent** the same string, and *`false`* otherwise.*
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+A string is **represented** by an array if the array elements concatenated **in order** forms the string.
 
-<pre>
-<strong>Input:</strong> word1 = [&quot;ab&quot;, &quot;c&quot;], word2 = [&quot;a&quot;, &quot;bc&quot;]
-<strong>Output:</strong> true
-<strong>Explanation:</strong>
-word1 represents string &quot;ab&quot; + &quot;c&quot; -&gt; &quot;abc&quot;
-word2 represents string &quot;a&quot; + &quot;bc&quot; -&gt; &quot;abc&quot;
-The strings are the same, so return true.</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: word1 = ["ab", "c"], word2 = ["a", "bc"]
+Output: true
+Explanation:
+word1 represents string "ab" + "c" -> "abc"
+word2 represents string "a" + "bc" -> "abc"
+The strings are the same, so return true.
+```
 
-<pre>
-<strong>Input:</strong> word1 = [&quot;a&quot;, &quot;cb&quot;], word2 = [&quot;ab&quot;, &quot;c&quot;]
-<strong>Output:</strong> false
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: word1 = ["a", "cb"], word2 = ["ab", "c"]
+Output: false
+```
 
-<pre>
-<strong>Input:</strong> word1  = [&quot;abc&quot;, &quot;d&quot;, &quot;defg&quot;], word2 = [&quot;abcddefg&quot;]
-<strong>Output:</strong> true
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: word1  = ["abc", "d", "defg"], word2 = ["abcddefg"]
+Output: true
+```
 
-<ul>
-	<li><code>1 &lt;= word1.length, word2.length &lt;= 10<sup>3</sup></code></li>
-	<li><code>1 &lt;= word1[i].length, word2[i].length &lt;= 10<sup>3</sup></code></li>
-	<li><code>1 &lt;= sum(word1[i].length), sum(word2[i].length) &lt;= 10<sup>3</sup></code></li>
-	<li><code>word1[i]</code> and <code>word2[i]</code> consist of lowercase letters.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= word1.length, word2.length &lt;= 10^3`
+	- `1 &lt;= word1[i].length, word2[i].length &lt;= 10^3`
+	- `1 &lt;= sum(word1[i].length), sum(word2[i].length) &lt;= 10^3`
+	- `word1[i]` and `word2[i]` consist of lowercase letters.
 
 **Code:**
 ```php
@@ -169,44 +162,42 @@ The strings are the same, so return true.</pre>
 ### [1678. Goal Parser Interpretation](https://leetcode.com/problems/goal-parser-interpretation)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You own a <strong>Goal Parser</strong> that can interpret a string <code>command</code>. The <code>command</code> consists of an alphabet of <code>&quot;G&quot;</code>, <code>&quot;()&quot;</code> and/or <code>&quot;(al)&quot;</code> in some order. The Goal Parser will interpret <code>&quot;G&quot;</code> as the string <code>&quot;G&quot;</code>, <code>&quot;()&quot;</code> as the string <code>&quot;o&quot;</code>, and <code>&quot;(al)&quot;</code> as the string <code>&quot;al&quot;</code>. The interpreted strings are then concatenated in the original order.</p>
+**Description:** 
 
-<p>Given the string <code>command</code>, return <em>the <strong>Goal Parser</strong>&#39;s interpretation of </em><code>command</code>.</p>
+You own a **Goal Parser** that can interpret a string `command`. The `command` consists of an alphabet of `"G"`, `"()"` and/or `"(al)"` in some order. The Goal Parser will interpret `"G"` as the string `"G"`, `"()"` as the string `"o"`, and `"(al)"` as the string `"al"`. The interpreted strings are then concatenated in the original order.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given the string `command`, return *the **Goal Parser**&#39;s interpretation of *`command`.
 
-<pre>
-<strong>Input:</strong> command = &quot;G()(al)&quot;
-<strong>Output:</strong> &quot;Goal&quot;
-<strong>Explanation:</strong>&nbsp;The Goal Parser interprets the command as follows:
-G -&gt; G
-() -&gt; o
-(al) -&gt; al
-The final concatenated result is &quot;Goal&quot;.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: command = "G()(al)"
+Output: "Goal"
+Explanation: The Goal Parser interprets the command as follows:
+G -> G
+() -> o
+(al) -> al
+The final concatenated result is "Goal".
+```
 
-<pre>
-<strong>Input:</strong> command = &quot;G()()()()(al)&quot;
-<strong>Output:</strong> &quot;Gooooal&quot;
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: command = "G()()()()(al)"
+Output: "Gooooal"
+```
 
-<pre>
-<strong>Input:</strong> command = &quot;(al)G(al)()()G&quot;
-<strong>Output:</strong> &quot;alGalooG&quot;
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: command = "(al)G(al)()()G"
+Output: "alGalooG"
+```
 
-<ul>
-	<li><code>1 &lt;= command.length &lt;= 100</code></li>
-	<li><code>command</code> consists of <code>&quot;G&quot;</code>, <code>&quot;()&quot;</code>, and/or <code>&quot;(al)&quot;</code> in some order.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= command.length &lt;= 100`
+	- `command` consists of `"G"`, `"()"`, and/or `"(al)"` in some order.
 
 **Code:**
 ```php
@@ -218,45 +209,43 @@ The final concatenated result is &quot;Goal&quot;.
 ### [1684. Count the Number of Consistent Strings](https://leetcode.com/problems/count-the-number-of-consistent-strings)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given a string <code>allowed</code> consisting of <strong>distinct</strong> characters and an array of strings <code>words</code>. A string is <strong>consistent </strong>if all characters in the string appear in the string <code>allowed</code>.</p>
+**Description:** 
 
-<p>Return<em> the number of <strong>consistent</strong> strings in the array </em><code>words</code>.</p>
+You are given a string `allowed` consisting of **distinct** characters and an array of strings `words`. A string is **consistent **if all characters in the string appear in the string `allowed`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return* the number of **consistent** strings in the array *`words`.
 
-<pre>
-<strong>Input:</strong> allowed = &quot;ab&quot;, words = [&quot;ad&quot;,&quot;bd&quot;,&quot;aaab&quot;,&quot;baa&quot;,&quot;badab&quot;]
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> Strings &quot;aaab&quot; and &quot;baa&quot; are consistent since they only contain characters &#39;a&#39; and &#39;b&#39;.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: allowed = "ab", words = ["ad","bd","aaab","baa","badab"]
+Output: 2
+Explanation: Strings "aaab" and "baa" are consistent since they only contain characters &#39;a&#39; and &#39;b&#39;.
+```
 
-<pre>
-<strong>Input:</strong> allowed = &quot;abc&quot;, words = [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;ab&quot;,&quot;ac&quot;,&quot;bc&quot;,&quot;abc&quot;]
-<strong>Output:</strong> 7
-<strong>Explanation:</strong> All strings are consistent.
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: allowed = "abc", words = ["a","b","c","ab","ac","bc","abc"]
+Output: 7
+Explanation: All strings are consistent.
+```
 
-<pre>
-<strong>Input:</strong> allowed = &quot;cad&quot;, words = [&quot;cc&quot;,&quot;acd&quot;,&quot;b&quot;,&quot;ba&quot;,&quot;bac&quot;,&quot;bad&quot;,&quot;ac&quot;,&quot;d&quot;]
-<strong>Output:</strong> 4
-<strong>Explanation:</strong> Strings &quot;cc&quot;, &quot;acd&quot;, &quot;ac&quot;, and &quot;d&quot; are consistent.
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: allowed = "cad", words = ["cc","acd","b","ba","bac","bad","ac","d"]
+Output: 4
+Explanation: Strings "cc", "acd", "ac", and "d" are consistent.
+```
 
-<ul>
-	<li><code>1 &lt;= words.length &lt;= 10<sup>4</sup></code></li>
-	<li><code>1 &lt;= allowed.length &lt;=<sup> </sup>26</code></li>
-	<li><code>1 &lt;= words[i].length &lt;= 10</code></li>
-	<li>The characters in <code>allowed</code> are <strong>distinct</strong>.</li>
-	<li><code>words[i]</code> and <code>allowed</code> contain only lowercase English letters.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= words.length &lt;= 10^4`
+	- `1 &lt;= allowed.length <=^ 26`
+	- `1 &lt;= words[i].length &lt;= 10`
+	- The characters in `allowed` are **distinct**.
+	- `words[i]` and `allowed` contain only lowercase English letters.
 
 **Code:**
 ```php
@@ -268,46 +257,42 @@ The final concatenated result is &quot;Goal&quot;.
 ### [1710. Maximum Units on a Truck](https://leetcode.com/problems/maximum-units-on-a-truck)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are assigned to put some amount of boxes onto <strong>one truck</strong>. You are given a 2D array <code>boxTypes</code>, where <code>boxTypes[i] = [numberOfBoxes<sub>i</sub>, numberOfUnitsPerBox<sub>i</sub>]</code>:</p>
+**Description:** 
 
-<ul>
-	<li><code>numberOfBoxes<sub>i</sub></code> is the number of boxes of type <code>i</code>.</li>
-	<li><code>numberOfUnitsPerBox<sub>i</sub></code><sub> </sub>is the number of units in each box of the type <code>i</code>.</li>
-</ul>
+You are assigned to put some amount of boxes onto **one truck**. You are given a 2D array `boxTypes`, where `boxTypes[i] = [numberOfBoxes~i, numberOfUnitsPerBox~i]`:
 
-<p>You are also given an integer <code>truckSize</code>, which is the <strong>maximum</strong> number of <strong>boxes</strong> that can be put on the truck. You can choose any boxes to put on the truck as long as the number&nbsp;of boxes does not exceed <code>truckSize</code>.</p>
+	- `numberOfBoxes~i` is the number of boxes of type `i`.
+	- `numberOfUnitsPerBox~i`~ is the number of units in each box of the type `i`.
 
-<p>Return <em>the <strong>maximum</strong> total number of <strong>units</strong> that can be put on the truck.</em></p>
+You are also given an integer `truckSize`, which is the **maximum** number of **boxes** that can be put on the truck. You can choose any boxes to put on the truck as long as the number of boxes does not exceed `truckSize`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return *the **maximum** total number of **units** that can be put on the truck.*
 
-<pre>
-<strong>Input:</strong> boxTypes = [[1,3],[2,2],[3,1]], truckSize = 4
-<strong>Output:</strong> 8
-<strong>Explanation:</strong> There are:
+**Example 1:**
+
+```text
+Input: boxTypes = [[1,3],[2,2],[3,1]], truckSize = 4
+Output: 8
+Explanation: There are:
 - 1 box of the first type that contains 3 units.
 - 2 boxes of the second type that contain 2 units each.
 - 3 boxes of the third type that contain 1 unit each.
 You can take all the boxes of the first and second types, and one box of the third type.
 The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> boxTypes = [[5,10],[2,5],[4,7],[3,9]], truckSize = 10
-<strong>Output:</strong> 91
-</pre>
+```text
+Input: boxTypes = [[5,10],[2,5],[4,7],[3,9]], truckSize = 10
+Output: 91
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= boxTypes.length &lt;= 1000</code></li>
-	<li><code>1 &lt;= numberOfBoxes<sub>i</sub>, numberOfUnitsPerBox<sub>i</sub> &lt;= 1000</code></li>
-	<li><code>1 &lt;= truckSize &lt;= 10<sup>6</sup></code></li>
-</ul>
+	- `1 &lt;= boxTypes.length &lt;= 1000`
+	- `1 &lt;= numberOfBoxes~i, numberOfUnitsPerBox~i &lt;= 1000`
+	- `1 &lt;= truckSize &lt;= 10^6`
 
 **Code:**
 ```php
@@ -319,43 +304,41 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 ### [1716. Calculate Money in Leetcode Bank](https://leetcode.com/problems/calculate-money-in-leetcode-bank)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Hercy wants to save money for his first car. He puts money in the Leetcode&nbsp;bank <strong>every day</strong>.</p>
+**Description:** 
 
-<p>He starts by putting in <code>$1</code> on Monday, the first day. Every day from Tuesday to Sunday, he will put in <code>$1</code> more than the day before. On every subsequent Monday, he will put in <code>$1</code> more than the <strong>previous Monday</strong>.<span style="display: none;"> </span></p>
+Hercy wants to save money for his first car. He puts money in the Leetcode bank **every day**.
 
-<p>Given <code>n</code>, return <em>the total amount of money he will have in the Leetcode bank at the end of the </em><code>n<sup>th</sup></code><em> day.</em></p>
+He starts by putting in `$1` on Monday, the first day. Every day from Tuesday to Sunday, he will put in `$1` more than the day before. On every subsequent Monday, he will put in `$1` more than the **previous Monday**. 
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given `n`, return *the total amount of money he will have in the Leetcode bank at the end of the *`n^th`* day.*
 
-<pre>
-<strong>Input:</strong> n = 4
-<strong>Output:</strong> 10
-<strong>Explanation:</strong>&nbsp;After the 4<sup>th</sup> day, the total is 1 + 2 + 3 + 4 = 10.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: n = 4
+Output: 10
+Explanation: After the 4^th day, the total is 1 + 2 + 3 + 4 = 10.
+```
 
-<pre>
-<strong>Input:</strong> n = 10
-<strong>Output:</strong> 37
-<strong>Explanation:</strong>&nbsp;After the 10<sup>th</sup> day, the total is (1 + 2 + 3 + 4 + 5 + 6 + 7) + (2 + 3 + 4) = 37. Notice that on the 2<sup>nd</sup> Monday, Hercy only puts in $2.
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: n = 10
+Output: 37
+Explanation: After the 10^th day, the total is (1 + 2 + 3 + 4 + 5 + 6 + 7) + (2 + 3 + 4) = 37. Notice that on the 2^nd Monday, Hercy only puts in $2.
+```
 
-<pre>
-<strong>Input:</strong> n = 20
-<strong>Output:</strong> 96
-<strong>Explanation:</strong>&nbsp;After the 20<sup>th</sup> day, the total is (1 + 2 + 3 + 4 + 5 + 6 + 7) + (2 + 3 + 4 + 5 + 6 + 7 + 8) + (3 + 4 + 5 + 6 + 7 + 8) = 96.
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: n = 20
+Output: 96
+Explanation: After the 20^th day, the total is (1 + 2 + 3 + 4 + 5 + 6 + 7) + (2 + 3 + 4 + 5 + 6 + 7 + 8) + (3 + 4 + 5 + 6 + 7 + 8) = 96.
+```
 
-<ul>
-	<li><code>1 &lt;= n &lt;= 1000</code></li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= n &lt;= 1000`
 
 **Code:**
 ```php
@@ -367,34 +350,32 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 ### [1796. Second Largest Digit in a String](https://leetcode.com/problems/second-largest-digit-in-a-string)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given an alphanumeric string <code>s</code>, return <em>the <strong>second largest</strong> numerical digit that appears in </em><code>s</code><em>, or </em><code>-1</code><em> if it does not exist</em>.</p>
+**Description:** 
 
-<p>An <strong>alphanumeric</strong><strong> </strong>string is a string consisting of lowercase English letters and digits.</p>
+Given an alphanumeric string `s`, return *the **second largest** numerical digit that appears in *`s`*, or *`-1`* if it does not exist*.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+An **alphanumeric**** **string is a string consisting of lowercase English letters and digits.
 
-<pre>
-<strong>Input:</strong> s = &quot;dfa12321afd&quot;
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> The digits that appear in s are [1, 2, 3]. The second largest digit is 2.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: s = "dfa12321afd"
+Output: 2
+Explanation: The digits that appear in s are [1, 2, 3]. The second largest digit is 2.
+```
 
-<pre>
-<strong>Input:</strong> s = &quot;abc1111&quot;
-<strong>Output:</strong> -1
-<strong>Explanation:</strong> The digits that appear in s are [1]. There is no second largest digit. 
-</pre>
+**Example 2:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: s = "abc1111"
+Output: -1
+Explanation: The digits that appear in s are [1]. There is no second largest digit.
+```
 
-<ul>
-	<li><code>1 &lt;= s.length &lt;= 500</code></li>
-	<li><code>s</code> consists of only lowercase English letters and digits.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= s.length &lt;= 500`
+	- `s` consists of only lowercase English letters and digits.
 
 **Code:**
 ```php
@@ -406,33 +387,31 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 ### [1832. Check if the Sentence Is Pangram](https://leetcode.com/problems/check-if-the-sentence-is-pangram)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>A <strong>pangram</strong> is a sentence where every letter of the English alphabet appears at least once.</p>
+**Description:** 
 
-<p>Given a string <code>sentence</code> containing only lowercase English letters, return<em> </em><code>true</code><em> if </em><code>sentence</code><em> is a <strong>pangram</strong>, or </em><code>false</code><em> otherwise.</em></p>
+A **pangram** is a sentence where every letter of the English alphabet appears at least once.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given a string `sentence` containing only lowercase English letters, return* *`true`* if *`sentence`* is a **pangram**, or *`false`* otherwise.*
 
-<pre>
-<strong>Input:</strong> sentence = &quot;thequickbrownfoxjumpsoverthelazydog&quot;
-<strong>Output:</strong> true
-<strong>Explanation:</strong> sentence contains at least one of every letter of the English alphabet.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: sentence = "thequickbrownfoxjumpsoverthelazydog"
+Output: true
+Explanation: sentence contains at least one of every letter of the English alphabet.
+```
 
-<pre>
-<strong>Input:</strong> sentence = &quot;leetcode&quot;
-<strong>Output:</strong> false
-</pre>
+**Example 2:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: sentence = "leetcode"
+Output: false
+```
 
-<ul>
-	<li><code>1 &lt;= sentence.length &lt;= 1000</code></li>
-	<li><code>sentence</code> consists of lowercase English letters.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= sentence.length &lt;= 1000`
+	- `sentence` consists of lowercase English letters.
 
 **Code:**
 ```php
@@ -444,38 +423,37 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 ### [1863. Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>The <strong>XOR total</strong> of an array is defined as the bitwise <code>XOR</code> of<strong> all its elements</strong>, or <code>0</code> if the array is<strong> empty</strong>.</p>
+**Description:** 
 
-<ul>
-	<li>For example, the <strong>XOR total</strong> of the array <code>[2,5,6]</code> is <code>2 XOR 5 XOR 6 = 1</code>.</li>
-</ul>
+The **XOR total** of an array is defined as the bitwise `XOR` of** all its elements**, or `0` if the array is** empty**.
 
-<p>Given an array <code>nums</code>, return <em>the <strong>sum</strong> of all <strong>XOR totals</strong> for every <strong>subset</strong> of </em><code>nums</code>.&nbsp;</p>
+	- For example, the **XOR total** of the array `[2,5,6]` is `2 XOR 5 XOR 6 = 1`.
 
-<p><strong>Note:</strong> Subsets with the <strong>same</strong> elements should be counted <strong>multiple</strong> times.</p>
+Given an array `nums`, return *the **sum** of all **XOR totals** for every **subset** of *`nums`. 
 
-<p>An array <code>a</code> is a <strong>subset</strong> of an array <code>b</code> if <code>a</code> can be obtained from <code>b</code> by deleting some (possibly zero) elements of <code>b</code>.</p>
+**Note:** Subsets with the **same** elements should be counted **multiple** times.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+An array `a` is a **subset** of an array `b` if `a` can be obtained from `b` by deleting some (possibly zero) elements of `b`.
 
-<pre>
-<strong>Input:</strong> nums = [1,3]
-<strong>Output:</strong> 6
-<strong>Explanation: </strong>The 4 subsets of [1,3] are:
+**Example 1:**
+
+```text
+Input: nums = [1,3]
+Output: 6
+Explanation: The 4 subsets of [1,3] are:
 - The empty subset has an XOR total of 0.
 - [1] has an XOR total of 1.
 - [3] has an XOR total of 3.
 - [1,3] has an XOR total of 1 XOR 3 = 2.
 0 + 1 + 3 + 2 = 6
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> nums = [5,1,6]
-<strong>Output:</strong> 28
-<strong>Explanation: </strong>The 8 subsets of [5,1,6] are:
+```text
+Input: nums = [5,1,6]
+Output: 28
+Explanation: The 8 subsets of [5,1,6] are:
 - The empty subset has an XOR total of 0.
 - [5] has an XOR total of 5.
 - [1] has an XOR total of 1.
@@ -485,23 +463,20 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 - [1,6] has an XOR total of 1 XOR 6 = 7.
 - [5,1,6] has an XOR total of 5 XOR 1 XOR 6 = 2.
 0 + 5 + 1 + 6 + 4 + 3 + 7 + 2 = 28
-</pre>
+```
 
-<p><strong class="example">Example 3:</strong></p>
+**Example 3:**
 
-<pre>
-<strong>Input:</strong> nums = [3,4,5,6,7,8]
-<strong>Output:</strong> 480
-<strong>Explanation:</strong> The sum of all XOR totals for every subset is 480.
-</pre>
+```text
+Input: nums = [3,4,5,6,7,8]
+Output: 480
+Explanation: The sum of all XOR totals for every subset is 480.
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= nums.length &lt;= 12</code></li>
-	<li><code>1 &lt;= nums[i] &lt;= 20</code></li>
-</ul>
+	- `1 &lt;= nums.length &lt;= 12`
+	- `1 &lt;= nums[i] &lt;= 20`
 
 **Code:**
 ```php
@@ -513,44 +488,42 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 ### [1971. Find if Path Exists in Graph](https://leetcode.com/problems/find-if-path-exists-in-graph)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>There is a <strong>bi-directional</strong> graph with <code>n</code> vertices, where each vertex is labeled from <code>0</code> to <code>n - 1</code> (<strong>inclusive</strong>). The edges in the graph are represented as a 2D integer array <code>edges</code>, where each <code>edges[i] = [u<sub>i</sub>, v<sub>i</sub>]</code> denotes a bi-directional edge between vertex <code>u<sub>i</sub></code> and vertex <code>v<sub>i</sub></code>. Every vertex pair is connected by <strong>at most one</strong> edge, and no vertex has an edge to itself.</p>
+**Description:** 
 
-<p>You want to determine if there is a <strong>valid path</strong> that exists from vertex <code>source</code> to vertex <code>destination</code>.</p>
+There is a **bi-directional** graph with `n` vertices, where each vertex is labeled from `0` to `n - 1` (**inclusive**). The edges in the graph are represented as a 2D integer array `edges`, where each `edges[i] = [u~i, v~i]` denotes a bi-directional edge between vertex `u~i` and vertex `v~i`. Every vertex pair is connected by **at most one** edge, and no vertex has an edge to itself.
 
-<p>Given <code>edges</code> and the integers <code>n</code>, <code>source</code>, and <code>destination</code>, return <code>true</code><em> if there is a <strong>valid path</strong> from </em><code>source</code><em> to </em><code>destination</code><em>, or </em><code>false</code><em> otherwise</em><em>.</em></p>
+You want to determine if there is a **valid path** that exists from vertex `source` to vertex `destination`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1971.Find%20if%20Path%20Exists%20in%20Graph/images/validpath-ex1.png" style="width: 141px; height: 121px;" />
-<pre>
-<strong>Input:</strong> n = 3, edges = [[0,1],[1,2],[2,0]], source = 0, destination = 2
-<strong>Output:</strong> true
-<strong>Explanation:</strong> There are two paths from vertex 0 to vertex 2:
+Given `edges` and the integers `n`, `source`, and `destination`, return `true`* if there is a **valid path** from *`source`* to *`destination`*, or *`false`* otherwise**.*
+
+**Example 1:**
+
+```text
+Input: n = 3, edges = [[0,1],[1,2],[2,0]], source = 0, destination = 2
+Output: true
+Explanation: There are two paths from vertex 0 to vertex 2:
 - 0 &rarr; 1 &rarr; 2
 - 0 &rarr; 2
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1900-1999/1971.Find%20if%20Path%20Exists%20in%20Graph/images/validpath-ex2.png" style="width: 281px; height: 141px;" />
-<pre>
-<strong>Input:</strong> n = 6, edges = [[0,1],[0,2],[3,5],[5,4],[4,3]], source = 0, destination = 5
-<strong>Output:</strong> false
-<strong>Explanation:</strong> There is no path from vertex 0 to vertex 5.
-</pre>
+**Example 2:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: n = 6, edges = [[0,1],[0,2],[3,5],[5,4],[4,3]], source = 0, destination = 5
+Output: false
+Explanation: There is no path from vertex 0 to vertex 5.
+```
 
-<ul>
-	<li><code>1 &lt;= n &lt;= 2 * 10<sup>5</sup></code></li>
-	<li><code>0 &lt;= edges.length &lt;= 2 * 10<sup>5</sup></code></li>
-	<li><code>edges[i].length == 2</code></li>
-	<li><code>0 &lt;= u<sub>i</sub>, v<sub>i</sub> &lt;= n - 1</code></li>
-	<li><code>u<sub>i</sub> != v<sub>i</sub></code></li>
-	<li><code>0 &lt;= source, destination &lt;= n - 1</code></li>
-	<li>There are no duplicate edges.</li>
-	<li>There are no self edges.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= n &lt;= 2 * 10^5`
+	- `0 &lt;= edges.length &lt;= 2 * 10^5`
+	- `edges[i].length == 2`
+	- `0 &lt;= u~i, v~i &lt;= n - 1`
+	- `u~i != v~i`
+	- `0 &lt;= source, destination &lt;= n - 1`
+	- There are no duplicate edges.
+	- There are no self edges.
 
 **Code:**
 ```php
@@ -562,9 +535,11 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 ### [1978. Employees Whose Manager Left the Company](https://leetcode.com/problems/employees-whose-manager-left-the-company)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Table: <code>Employees</code></p>
+**Description:** 
 
-<pre>
+Table: `Employees`
+
+```text
 +-------------+----------+
 | Column Name | Type     |
 +-------------+----------+
@@ -574,22 +549,19 @@ The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
 | salary      | int      |
 +-------------+----------+
 In SQL, employee_id is the primary key for this table.
-This table contains information about the employees, their salary, and the ID of their manager. Some employees do not have a manager (manager_id is null). 
-</pre>
+This table contains information about the employees, their salary, and the ID of their manager. Some employees do not have a manager (manager_id is null).
+```
 
-<p>&nbsp;</p>
+Find the IDs of the employees whose salary is strictly less than `$30000` and whose manager left the company. When a manager leaves the company, their information is deleted from the `Employees` table, but the reports still have their `manager_id` set to the manager that left.
 
-<p>Find the IDs of the employees whose salary is strictly less than <code>$30000</code> and whose manager left the company. When a manager leaves the company, their information is deleted from the <code>Employees</code> table, but the reports still have their <code>manager_id</code> set to the manager that left.</p>
+Return the result table ordered by `employee_id`.
 
-<p>Return the result table ordered by <code>employee_id</code>.</p>
+The result format is in the following example.
 
-<p>The result format is in the following example.</p>
+**Example 1:**
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-
-<pre>
-<strong>Input: </strong> 
+```text
+Input:  
 Employees table:
 +-------------+-----------+------------+--------+
 | employee_id | name      | manager_id | salary |
@@ -601,18 +573,18 @@ Employees table:
 | 9           | Mikaela   | null       | 50937  |
 | 11          | Joziah    | 6          | 28485  |
 +-------------+-----------+------------+--------+
-<strong>Output:</strong> 
+Output: 
 +-------------+
 | employee_id |
 +-------------+
 | 11          |
 +-------------+
 
-<strong>Explanation:</strong> 
+Explanation: 
 The employees with a salary less than $30000 are 1 (Kalel) and 11 (Joziah).
 Kalel&#39;s manager is employee 11, who is still in the company (Joziah).
 Joziah&#39;s manager is employee 6, who left the company because there is no row for employee 6 as it was deleted.
-</pre>
+```
 
 **Code:**
 ```php
@@ -624,55 +596,51 @@ Joziah&#39;s manager is employee 6, who left the company because there is no row
 ### [2006. Count Number of Pairs With Absolute Difference K](https://leetcode.com/problems/count-number-of-pairs-with-absolute-difference-k)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <em>the number of pairs</em> <code>(i, j)</code> <em>where</em> <code>i &lt; j</code> <em>such that</em> <code>|nums[i] - nums[j]| == k</code>.</p>
+**Description:** 
 
-<p>The value of <code>|x|</code> is defined as:</p>
+Given an integer array `nums` and an integer `k`, return *the number of pairs* `(i, j)` *where* `i < j` *such that* `|nums[i] - nums[j]| == k`.
 
-<ul>
-	<li><code>x</code> if <code>x &gt;= 0</code>.</li>
-	<li><code>-x</code> if <code>x &lt; 0</code>.</li>
-</ul>
+The value of `|x|` is defined as:
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+	- `x` if `x &gt;= 0`.
+	- `-x` if `x < 0`.
 
-<pre>
-<strong>Input:</strong> nums = [1,2,2,1], k = 1
-<strong>Output:</strong> 4
-<strong>Explanation:</strong> The pairs with an absolute difference of 1 are:
-- [<strong><u>1</u></strong>,<strong><u>2</u></strong>,2,1]
-- [<strong><u>1</u></strong>,2,<strong><u>2</u></strong>,1]
-- [1,<strong><u>2</u></strong>,2,<strong><u>1</u></strong>]
-- [1,2,<strong><u>2</u></strong>,<strong><u>1</u></strong>]
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: nums = [1,2,2,1], k = 1
+Output: 4
+Explanation: The pairs with an absolute difference of 1 are:
+- [_1_,_2_,2,1]
+- [_1_,2,_2_,1]
+- [1,_2_,2,_1_]
+- [1,2,_2_,_1_]
+```
 
-<pre>
-<strong>Input:</strong> nums = [1,3], k = 3
-<strong>Output:</strong> 0
-<strong>Explanation:</strong> There are no pairs with an absolute difference of 3.
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: nums = [1,3], k = 3
+Output: 0
+Explanation: There are no pairs with an absolute difference of 3.
+```
 
-<pre>
-<strong>Input:</strong> nums = [3,2,1,5,4], k = 2
-<strong>Output:</strong> 3
+**Example 3:**
+
+```text
+Input: nums = [3,2,1,5,4], k = 2
+Output: 3
 <b>Explanation:</b> The pairs with an absolute difference of 2 are:
-- [<strong><u>3</u></strong>,2,<strong><u>1</u></strong>,5,4]
-- [<strong><u>3</u></strong>,2,1,<strong><u>5</u></strong>,4]
-- [3,<strong><u>2</u></strong>,1,5,<strong><u>4</u></strong>]
-</pre>
+- [_3_,2,_1_,5,4]
+- [_3_,2,1,_5_,4]
+- [3,_2_,1,5,_4_]
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= nums.length &lt;= 200</code></li>
-	<li><code>1 &lt;= nums[i] &lt;= 100</code></li>
-	<li><code>1 &lt;= k &lt;= 99</code></li>
-</ul>
+	- `1 &lt;= nums.length &lt;= 200`
+	- `1 &lt;= nums[i] &lt;= 100`
+	- `1 &lt;= k &lt;= 99`
 
 **Code:**
 ```php
@@ -684,47 +652,43 @@ Joziah&#39;s manager is employee 6, who left the company because there is no row
 ### [2169. Count Operations to Obtain Zero](https://leetcode.com/problems/count-operations-to-obtain-zero)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given two <strong>non-negative</strong> integers <code>num1</code> and <code>num2</code>.</p>
+**Description:** 
 
-<p>In one <strong>operation</strong>, if <code>num1 &gt;= num2</code>, you must subtract <code>num2</code> from <code>num1</code>, otherwise subtract <code>num1</code> from <code>num2</code>.</p>
+You are given two **non-negative** integers `num1` and `num2`.
 
-<ul>
-	<li>For example, if <code>num1 = 5</code> and <code>num2 = 4</code>, subtract <code>num2</code> from <code>num1</code>, thus obtaining <code>num1 = 1</code> and <code>num2 = 4</code>. However, if <code>num1 = 4</code> and <code>num2 = 5</code>, after one operation, <code>num1 = 4</code> and <code>num2 = 1</code>.</li>
-</ul>
+In one **operation**, if `num1 &gt;= num2`, you must subtract `num2` from `num1`, otherwise subtract `num1` from `num2`.
 
-<p>Return <em>the <strong>number of operations</strong> required to make either</em> <code>num1 = 0</code> <em>or</em> <code>num2 = 0</code>.</p>
+	- For example, if `num1 = 5` and `num2 = 4`, subtract `num2` from `num1`, thus obtaining `num1 = 1` and `num2 = 4`. However, if `num1 = 4` and `num2 = 5`, after one operation, `num1 = 4` and `num2 = 1`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return *the **number of operations** required to make either* `num1 = 0` *or* `num2 = 0`.
 
-<pre>
-<strong>Input:</strong> num1 = 2, num2 = 3
-<strong>Output:</strong> 3
-<strong>Explanation:</strong> 
-- Operation 1: num1 = 2, num2 = 3. Since num1 &lt; num2, we subtract num1 from num2 and get num1 = 2, num2 = 3 - 2 = 1.
-- Operation 2: num1 = 2, num2 = 1. Since num1 &gt; num2, we subtract num2 from num1.
+**Example 1:**
+
+```text
+Input: num1 = 2, num2 = 3
+Output: 3
+Explanation: 
+- Operation 1: num1 = 2, num2 = 3. Since num1 < num2, we subtract num1 from num2 and get num1 = 2, num2 = 3 - 2 = 1.
+- Operation 2: num1 = 2, num2 = 1. Since num1 > num2, we subtract num2 from num1.
 - Operation 3: num1 = 1, num2 = 1. Since num1 == num2, we subtract num2 from num1.
 Now num1 = 0 and num2 = 1. Since num1 == 0, we do not need to perform any further operations.
 So the total number of operations required is 3.
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> num1 = 10, num2 = 10
-<strong>Output:</strong> 1
-<strong>Explanation:</strong> 
+```text
+Input: num1 = 10, num2 = 10
+Output: 1
+Explanation: 
 - Operation 1: num1 = 10, num2 = 10. Since num1 == num2, we subtract num2 from num1 and get num1 = 10 - 10 = 0.
 Now num1 = 0 and num2 = 10. Since num1 == 0, we are done.
 So the total number of operations required is 1.
-</pre>
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>0 &lt;= num1, num2 &lt;= 10<sup>5</sup></code></li>
-</ul>
+	- `0 &lt;= num1, num2 &lt;= 10^5`
 
 **Code:**
 ```php
@@ -736,45 +700,43 @@ So the total number of operations required is 1.
 ### [2200. Find All K-Distant Indices in an Array](https://leetcode.com/problems/find-all-k-distant-indices-in-an-array)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code> and two integers <code>key</code> and <code>k</code>. A <strong>k-distant index</strong> is an index <code>i</code> of <code>nums</code> for which there exists at least one index <code>j</code> such that <code>|i - j| &lt;= k</code> and <code>nums[j] == key</code>.</p>
+**Description:** 
 
-<p>Return <em>a list of all k-distant indices sorted in <strong>increasing order</strong></em>.</p>
+You are given a **0-indexed** integer array `nums` and two integers `key` and `k`. A **k-distant index** is an index `i` of `nums` for which there exists at least one index `j` such that `|i - j| &lt;= k` and `nums[j] == key`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return *a list of all k-distant indices sorted in **increasing order***.
 
-<pre>
-<strong>Input:</strong> nums = [3,4,9,1,3,9,5], key = 9, k = 1
-<strong>Output:</strong> [1,2,3,4,5,6]
-<strong>Explanation:</strong> Here, <code>nums[2] == key</code> and <code>nums[5] == key.
-- For index 0, |0 - 2| &gt; k and |0 - 5| &gt; k, so there is no j</code> where <code>|0 - j| &lt;= k</code> and <code>nums[j] == key. Thus, 0 is not a k-distant index.
-- For index 1, |1 - 2| &lt;= k and nums[2] == key, so 1 is a k-distant index.
-- For index 2, |2 - 2| &lt;= k and nums[2] == key, so 2 is a k-distant index.
-- For index 3, |3 - 2| &lt;= k and nums[2] == key, so 3 is a k-distant index.
-- For index 4, |4 - 5| &lt;= k and nums[5] == key, so 4 is a k-distant index.
-- For index 5, |5 - 5| &lt;= k and nums[5] == key, so 5 is a k-distant index.
-- For index 6, |6 - 5| &lt;= k and nums[5] == key, so 6 is a k-distant index.
-</code>Thus, we return [1,2,3,4,5,6] which is sorted in increasing order. 
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: nums = [3,4,9,1,3,9,5], key = 9, k = 1
+Output: [1,2,3,4,5,6]
+Explanation: Here, `nums[2] == key` and `nums[5] == key.
+- For index 0, |0 - 2| > k and |0 - 5| > k, so there is no j` where `|0 - j| <= k` and `nums[j] == key. Thus, 0 is not a k-distant index.
+- For index 1, |1 - 2| <= k and nums[2] == key, so 1 is a k-distant index.
+- For index 2, |2 - 2| <= k and nums[2] == key, so 2 is a k-distant index.
+- For index 3, |3 - 2| <= k and nums[2] == key, so 3 is a k-distant index.
+- For index 4, |4 - 5| <= k and nums[5] == key, so 4 is a k-distant index.
+- For index 5, |5 - 5| <= k and nums[5] == key, so 5 is a k-distant index.
+- For index 6, |6 - 5| <= k and nums[5] == key, so 6 is a k-distant index.
+`Thus, we return [1,2,3,4,5,6] which is sorted in increasing order.
+```
 
-<pre>
-<strong>Input:</strong> nums = [2,2,2,2,2], key = 2, k = 2
-<strong>Output:</strong> [0,1,2,3,4]
-<strong>Explanation:</strong> For all indices i in nums, there exists some index j such that |i - j| &lt;= k and nums[j] == key, so every index is a k-distant index. 
+**Example 2:**
+
+```text
+Input: nums = [2,2,2,2,2], key = 2, k = 2
+Output: [0,1,2,3,4]
+Explanation: For all indices i in nums, there exists some index j such that |i - j| <= k and nums[j] == key, so every index is a k-distant index. 
 Hence, we return [0,1,2,3,4].
-</pre>
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= nums.length &lt;= 1000</code></li>
-	<li><code>1 &lt;= nums[i] &lt;= 1000</code></li>
-	<li><code>key</code> is an integer from the array <code>nums</code>.</li>
-	<li><code>1 &lt;= k &lt;= nums.length</code></li>
-</ul>
+	- `1 &lt;= nums.length &lt;= 1000`
+	- `1 &lt;= nums[i] &lt;= 1000`
+	- `key` is an integer from the array `nums`.
+	- `1 &lt;= k &lt;= nums.length`
 
 **Code:**
 ```php
@@ -786,57 +748,51 @@ Hence, we return [0,1,2,3,4].
 ### [2269. Find the K-Beauty of a Number](https://leetcode.com/problems/find-the-k-beauty-of-a-number)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>The <strong>k-beauty</strong> of an integer <code>num</code> is defined as the number of <strong>substrings</strong> of <code>num</code> when it is read as a string that meet the following conditions:</p>
+**Description:** 
 
-<ul>
-	<li>It has a length of <code>k</code>.</li>
-	<li>It is a divisor of <code>num</code>.</li>
-</ul>
+The **k-beauty** of an integer `num` is defined as the number of **substrings** of `num` when it is read as a string that meet the following conditions:
 
-<p>Given integers <code>num</code> and <code>k</code>, return <em>the k-beauty of </em><code>num</code>.</p>
+	- It has a length of `k`.
+	- It is a divisor of `num`.
 
-<p>Note:</p>
+Given integers `num` and `k`, return *the k-beauty of *`num`.
 
-<ul>
-	<li><strong>Leading zeros</strong> are allowed.</li>
-	<li><code>0</code> is not a divisor of any value.</li>
-</ul>
+Note:
 
-<p>A <strong>substring</strong> is a contiguous sequence of characters in a string.</p>
+	- **Leading zeros** are allowed.
+	- `0` is not a divisor of any value.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+A **substring** is a contiguous sequence of characters in a string.
 
-<pre>
-<strong>Input:</strong> num = 240, k = 2
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> The following are the substrings of num of length k:
-- &quot;24&quot; from &quot;<strong><u>24</u></strong>0&quot;: 24 is a divisor of 240.
-- &quot;40&quot; from &quot;2<u><strong>40</strong></u>&quot;: 40 is a divisor of 240.
+**Example 1:**
+
+```text
+Input: num = 240, k = 2
+Output: 2
+Explanation: The following are the substrings of num of length k:
+- "24" from "_24_0": 24 is a divisor of 240.
+- "40" from "2_40_": 40 is a divisor of 240.
 Therefore, the k-beauty is 2.
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> num = 430043, k = 2
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> The following are the substrings of num of length k:
-- &quot;43&quot; from &quot;<u><strong>43</strong></u>0043&quot;: 43 is a divisor of 430043.
-- &quot;30&quot; from &quot;4<u><strong>30</strong></u>043&quot;: 30 is not a divisor of 430043.
-- &quot;00&quot; from &quot;43<u><strong>00</strong></u>43&quot;: 0 is not a divisor of 430043.
-- &quot;04&quot; from &quot;430<u><strong>04</strong></u>3&quot;: 4 is not a divisor of 430043.
-- &quot;43&quot; from &quot;4300<u><strong>43</strong></u>&quot;: 43 is a divisor of 430043.
+```text
+Input: num = 430043, k = 2
+Output: 2
+Explanation: The following are the substrings of num of length k:
+- "43" from "_43_0043": 43 is a divisor of 430043.
+- "30" from "4_30_043": 30 is not a divisor of 430043.
+- "00" from "43_00_43": 0 is not a divisor of 430043.
+- "04" from "430_04_3": 4 is not a divisor of 430043.
+- "43" from "4300_43_": 43 is a divisor of 430043.
 Therefore, the k-beauty is 2.
-</pre>
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= num &lt;= 10<sup>9</sup></code></li>
-	<li><code>1 &lt;= k &lt;= num.length</code> (taking <code>num</code> as a string)</li>
-</ul>
+	- `1 &lt;= num &lt;= 10^9`
+	- `1 &lt;= k &lt;= num.length` (taking `num` as a string)
 
 **Code:**
 ```php
@@ -848,46 +804,44 @@ Therefore, the k-beauty is 2.
 ### [2309. Greatest English Letter in Upper and Lower Case](https://leetcode.com/problems/greatest-english-letter-in-upper-and-lower-case)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given a string of English letters <code>s</code>, return <em>the <strong>greatest </strong>English letter which occurs as <strong>both</strong> a lowercase and uppercase letter in</em> <code>s</code>. The returned letter should be in <strong>uppercase</strong>. If no such letter exists, return <em>an empty string</em>.</p>
+**Description:** 
 
-<p>An English letter <code>b</code> is <strong>greater</strong> than another letter <code>a</code> if <code>b</code> appears <strong>after</strong> <code>a</code> in the English alphabet.</p>
+Given a string of English letters `s`, return *the **greatest **English letter which occurs as **both** a lowercase and uppercase letter in* `s`. The returned letter should be in **uppercase**. If no such letter exists, return *an empty string*.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+An English letter `b` is **greater** than another letter `a` if `b` appears **after** `a` in the English alphabet.
 
-<pre>
-<strong>Input:</strong> s = &quot;l<strong><u>Ee</u></strong>TcOd<u><strong>E</strong></u>&quot;
-<strong>Output:</strong> &quot;E&quot;
-<strong>Explanation:</strong>
+**Example 1:**
+
+```text
+Input: s = "l_Ee_TcOd_E_"
+Output: "E"
+Explanation:
 The letter &#39;E&#39; is the only letter to appear in both lower and upper case.
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> s = &quot;a<strong><u>rR</u></strong>AzFif&quot;
-<strong>Output:</strong> &quot;R&quot;
-<strong>Explanation:</strong>
+```text
+Input: s = "a_rR_AzFif"
+Output: "R"
+Explanation:
 The letter &#39;R&#39; is the greatest letter to appear in both lower and upper case.
 Note that &#39;A&#39; and &#39;F&#39; also appear in both lower and upper case, but &#39;R&#39; is greater than &#39;F&#39; or &#39;A&#39;.
-</pre>
+```
 
-<p><strong class="example">Example 3:</strong></p>
+**Example 3:**
 
-<pre>
-<strong>Input:</strong> s = &quot;AbCdEfGhIjK&quot;
-<strong>Output:</strong> &quot;&quot;
-<strong>Explanation:</strong>
+```text
+Input: s = "AbCdEfGhIjK"
+Output: ""
+Explanation:
 There is no letter that appears in both lower and upper case.
-</pre>
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= s.length &lt;= 1000</code></li>
-	<li><code>s</code> consists of lowercase and uppercase English letters.</li>
-</ul>
+	- `1 &lt;= s.length &lt;= 1000`
+	- `s` consists of lowercase and uppercase English letters.
 
 **Code:**
 ```php
@@ -899,46 +853,42 @@ There is no letter that appears in both lower and upper case.
 ### [2367. Number of Arithmetic Triplets](https://leetcode.com/problems/number-of-arithmetic-triplets)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given a <strong>0-indexed</strong>, <strong>strictly increasing</strong> integer array <code>nums</code> and a positive integer <code>diff</code>. A triplet <code>(i, j, k)</code> is an <strong>arithmetic triplet</strong> if the following conditions are met:</p>
+**Description:** 
 
-<ul>
-	<li><code>i &lt; j &lt; k</code>,</li>
-	<li><code>nums[j] - nums[i] == diff</code>, and</li>
-	<li><code>nums[k] - nums[j] == diff</code>.</li>
-</ul>
+You are given a **0-indexed**, **strictly increasing** integer array `nums` and a positive integer `diff`. A triplet `(i, j, k)` is an **arithmetic triplet** if the following conditions are met:
 
-<p>Return <em>the number of unique <strong>arithmetic triplets</strong>.</em></p>
+	- `i < j < k`,
+	- `nums[j] - nums[i] == diff`, and
+	- `nums[k] - nums[j] == diff`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return *the number of unique **arithmetic triplets**.*
 
-<pre>
-<strong>Input:</strong> nums = [0,1,4,6,7,10], diff = 3
-<strong>Output:</strong> 2
-<strong>Explanation:</strong>
+**Example 1:**
+
+```text
+Input: nums = [0,1,4,6,7,10], diff = 3
+Output: 2
+Explanation:
 (1, 2, 4) is an arithmetic triplet because both 7 - 4 == 3 and 4 - 1 == 3.
-(2, 4, 5) is an arithmetic triplet because both 10 - 7 == 3 and 7 - 4 == 3. 
-</pre>
+(2, 4, 5) is an arithmetic triplet because both 10 - 7 == 3 and 7 - 4 == 3.
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> nums = [4,5,6,7,8,9], diff = 2
-<strong>Output:</strong> 2
-<strong>Explanation:</strong>
+```text
+Input: nums = [4,5,6,7,8,9], diff = 2
+Output: 2
+Explanation:
 (0, 2, 4) is an arithmetic triplet because both 8 - 6 == 2 and 6 - 4 == 2.
 (1, 3, 5) is an arithmetic triplet because both 9 - 7 == 2 and 7 - 5 == 2.
-</pre>
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>3 &lt;= nums.length &lt;= 200</code></li>
-	<li><code>0 &lt;= nums[i] &lt;= 200</code></li>
-	<li><code>1 &lt;= diff &lt;= 50</code></li>
-	<li><code>nums</code> is <strong>strictly</strong> increasing.</li>
-</ul>
+	- `3 &lt;= nums.length &lt;= 200`
+	- `0 &lt;= nums[i] &lt;= 200`
+	- `1 &lt;= diff &lt;= 50`
+	- `nums` is **strictly** increasing.
 
 **Code:**
 ```php
@@ -950,40 +900,39 @@ There is no letter that appears in both lower and upper case.
 ### [2389. Longest Subsequence With Limited Sum](https://leetcode.com/problems/longest-subsequence-with-limited-sum)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given an integer array <code>nums</code> of length <code>n</code>, and an integer array <code>queries</code> of length <code>m</code>.</p>
+**Description:** 
 
-<p>Return <em>an array </em><code>answer</code><em> of length </em><code>m</code><em> where </em><code>answer[i]</code><em> is the <strong>maximum</strong> size of a <strong>subsequence</strong> that you can take from </em><code>nums</code><em> such that the <strong>sum</strong> of its elements is less than or equal to </em><code>queries[i]</code>.</p>
+You are given an integer array `nums` of length `n`, and an integer array `queries` of length `m`.
 
-<p>A <strong>subsequence</strong> is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.</p>
+Return *an array *`answer`* of length *`m`* where *`answer[i]`* is the **maximum** size of a **subsequence** that you can take from *`nums`* such that the **sum** of its elements is less than or equal to *`queries[i]`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+A **subsequence** is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
 
-<pre>
-<strong>Input:</strong> nums = [4,5,2,1], queries = [3,10,21]
-<strong>Output:</strong> [2,3,4]
-<strong>Explanation:</strong> We answer the queries as follows:
+**Example 1:**
+
+```text
+Input: nums = [4,5,2,1], queries = [3,10,21]
+Output: [2,3,4]
+Explanation: We answer the queries as follows:
 - The subsequence [2,1] has a sum less than or equal to 3. It can be proven that 2 is the maximum size of such a subsequence, so answer[0] = 2.
 - The subsequence [4,5,1] has a sum less than or equal to 10. It can be proven that 3 is the maximum size of such a subsequence, so answer[1] = 3.
 - The subsequence [4,5,2,1] has a sum less than or equal to 21. It can be proven that 4 is the maximum size of such a subsequence, so answer[2] = 4.
-</pre>
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> nums = [2,3,4,5], queries = [1]
-<strong>Output:</strong> [0]
-<strong>Explanation:</strong> The empty subsequence is the only subsequence that has a sum less than or equal to 1, so answer[0] = 0.</pre>
+```text
+Input: nums = [2,3,4,5], queries = [1]
+Output: [0]
+Explanation: The empty subsequence is the only subsequence that has a sum less than or equal to 1, so answer[0] = 0.
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>n == nums.length</code></li>
-	<li><code>m == queries.length</code></li>
-	<li><code>1 &lt;= n, m &lt;= 1000</code></li>
-	<li><code>1 &lt;= nums[i], queries[i] &lt;= 10<sup>6</sup></code></li>
-</ul>
+	- `n == nums.length`
+	- `m == queries.length`
+	- `1 &lt;= n, m &lt;= 1000`
+	- `1 &lt;= nums[i], queries[i] &lt;= 10^6`
 
 **Code:**
 ```php
@@ -995,33 +944,31 @@ There is no letter that appears in both lower and upper case.
 ### [2427. Number of Common Factors](https://leetcode.com/problems/number-of-common-factors)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given two positive integers <code>a</code> and <code>b</code>, return <em>the number of <strong>common</strong> factors of </em><code>a</code><em> and </em><code>b</code>.</p>
+**Description:** 
 
-<p>An integer <code>x</code> is a <strong>common factor</strong> of <code>a</code> and <code>b</code> if <code>x</code> divides both <code>a</code> and <code>b</code>.</p>
+Given two positive integers `a` and `b`, return *the number of **common** factors of *`a`* and *`b`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+An integer `x` is a **common factor** of `a` and `b` if `x` divides both `a` and `b`.
 
-<pre>
-<strong>Input:</strong> a = 12, b = 6
-<strong>Output:</strong> 4
-<strong>Explanation:</strong> The common factors of 12 and 6 are 1, 2, 3, 6.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: a = 12, b = 6
+Output: 4
+Explanation: The common factors of 12 and 6 are 1, 2, 3, 6.
+```
 
-<pre>
-<strong>Input:</strong> a = 25, b = 30
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> The common factors of 25 and 30 are 1, 5.
-</pre>
+**Example 2:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: a = 25, b = 30
+Output: 2
+Explanation: The common factors of 25 and 30 are 1, 5.
+```
 
-<ul>
-	<li><code>1 &lt;= a, b &lt;= 1000</code></li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= a, b &lt;= 1000`
 
 **Code:**
 ```php
@@ -1033,46 +980,44 @@ There is no letter that appears in both lower and upper case.
 ### [2437. Number of Valid Clock Times](https://leetcode.com/problems/number-of-valid-clock-times)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given a string of length <code>5</code> called <code>time</code>, representing the current time on a digital clock in the format <code>&quot;hh:mm&quot;</code>. The <strong>earliest</strong> possible time is <code>&quot;00:00&quot;</code> and the <strong>latest</strong> possible time is <code>&quot;23:59&quot;</code>.</p>
+**Description:** 
 
-<p>In the string <code>time</code>, the digits represented by the <code>?</code>&nbsp;symbol are <strong>unknown</strong>, and must be <strong>replaced</strong> with a digit from <code>0</code> to <code>9</code>.</p>
+You are given a string of length `5` called `time`, representing the current time on a digital clock in the format `"hh:mm"`. The **earliest** possible time is `"00:00"` and the **latest** possible time is `"23:59"`.
 
-<p>Return<em> an integer </em><code>answer</code><em>, the number of valid clock times that can be created by replacing every </em><code>?</code><em>&nbsp;with a digit from </em><code>0</code><em> to </em><code>9</code>.</p>
+In the string `time`, the digits represented by the `?` symbol are **unknown**, and must be **replaced** with a digit from `0` to `9`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return* an integer *`answer`*, the number of valid clock times that can be created by replacing every *`?`* with a digit from *`0`* to *`9`.
 
-<pre>
-<strong>Input:</strong> time = &quot;?5:00&quot;
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> We can replace the ? with either a 0 or 1, producing &quot;05:00&quot; or &quot;15:00&quot;. Note that we cannot replace it with a 2, since the time &quot;25:00&quot; is invalid. In total, we have two choices.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: time = "?5:00"
+Output: 2
+Explanation: We can replace the ? with either a 0 or 1, producing "05:00" or "15:00". Note that we cannot replace it with a 2, since the time "25:00" is invalid. In total, we have two choices.
+```
 
-<pre>
-<strong>Input:</strong> time = &quot;0?:0?&quot;
-<strong>Output:</strong> 100
-<strong>Explanation:</strong> Each ? can be replaced by any digit from 0 to 9, so we have 100 total choices.
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: time = "0?:0?"
+Output: 100
+Explanation: Each ? can be replaced by any digit from 0 to 9, so we have 100 total choices.
+```
 
-<pre>
-<strong>Input:</strong> time = &quot;??:??&quot;
-<strong>Output:</strong> 1440
-<strong>Explanation:</strong> There are 24 possible choices for the hours, and 60 possible choices for the minutes. In total, we have 24 * 60 = 1440 choices.
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: time = "??:??"
+Output: 1440
+Explanation: There are 24 possible choices for the hours, and 60 possible choices for the minutes. In total, we have 24 * 60 = 1440 choices.
+```
 
-<ul>
-	<li><code>time</code> is a valid string of length <code>5</code> in the format <code>&quot;hh:mm&quot;</code>.</li>
-	<li><code>&quot;00&quot; &lt;= hh &lt;= &quot;23&quot;</code></li>
-	<li><code>&quot;00&quot; &lt;= mm &lt;= &quot;59&quot;</code></li>
-	<li>Some of the digits might be replaced with <code>&#39;?&#39;</code> and need to be replaced with digits from <code>0</code> to <code>9</code>.</li>
-</ul>
+**Constraints:**
+
+	- `time` is a valid string of length `5` in the format `"hh:mm"`.
+	- `"00" &lt;= hh &lt;= "23"`
+	- `"00" &lt;= mm &lt;= "59"`
+	- Some of the digits might be replaced with `&#39;?&#39;` and need to be replaced with digits from `0` to `9`.
 
 **Code:**
 ```php
@@ -1084,48 +1029,44 @@ There is no letter that appears in both lower and upper case.
 ### [2475. Number of Unequal Triplets in Array](https://leetcode.com/problems/number-of-unequal-triplets-in-array)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>You are given a <strong>0-indexed</strong> array of positive integers <code>nums</code>. Find the number of triplets <code>(i, j, k)</code> that meet the following conditions:</p>
+**Description:** 
 
-<ul>
-	<li><code>0 &lt;= i &lt; j &lt; k &lt; nums.length</code></li>
-	<li><code>nums[i]</code>, <code>nums[j]</code>, and <code>nums[k]</code> are <strong>pairwise distinct</strong>.
-	<ul>
-		<li>In other words, <code>nums[i] != nums[j]</code>, <code>nums[i] != nums[k]</code>, and <code>nums[j] != nums[k]</code>.</li>
-	</ul>
-	</li>
-</ul>
+You are given a **0-indexed** array of positive integers `nums`. Find the number of triplets `(i, j, k)` that meet the following conditions:
 
-<p>Return <em>the number of triplets that meet the conditions.</em></p>
+	- `0 &lt;= i < j < k < nums.length`
+	- `nums[i]`, `nums[j]`, and `nums[k]` are **pairwise distinct**.
+	
+		- In other words, `nums[i] != nums[j]`, `nums[i] != nums[k]`, and `nums[j] != nums[k]`.
+	
+	
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Return *the number of triplets that meet the conditions.*
 
-<pre>
-<strong>Input:</strong> nums = [4,4,2,4,3]
-<strong>Output:</strong> 3
-<strong>Explanation:</strong> The following triplets meet the conditions:
+**Example 1:**
+
+```text
+Input: nums = [4,4,2,4,3]
+Output: 3
+Explanation: The following triplets meet the conditions:
 - (0, 2, 4) because 4 != 2 != 3
 - (1, 2, 4) because 4 != 2 != 3
 - (2, 3, 4) because 2 != 4 != 3
 Since there are 3 triplets, we return 3.
-Note that (2, 0, 4) is not a valid triplet because 2 &gt; 0.
-</pre>
+Note that (2, 0, 4) is not a valid triplet because 2 > 0.
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> nums = [1,1,1,1,1]
-<strong>Output:</strong> 0
-<strong>Explanation:</strong> No triplets meet the conditions so we return 0.
-</pre>
+```text
+Input: nums = [1,1,1,1,1]
+Output: 0
+Explanation: No triplets meet the conditions so we return 0.
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>3 &lt;= nums.length &lt;= 100</code></li>
-	<li><code>1 &lt;= nums[i] &lt;= 1000</code></li>
-</ul>
+	- `3 &lt;= nums.length &lt;= 100`
+	- `1 &lt;= nums[i] &lt;= 1000`
 
 **Code:**
 ```php
@@ -1137,65 +1078,62 @@ Note that (2, 0, 4) is not a valid triplet because 2 &gt; 0.
 ### [2490. Circular Sentence](https://leetcode.com/problems/circular-sentence)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>A <strong>sentence</strong> is a list of words that are separated by a<strong> single</strong> space with no leading or trailing spaces.</p>
+**Description:** 
 
-<ul>
-	<li>For example, <code>&quot;Hello World&quot;</code>, <code>&quot;HELLO&quot;</code>, <code>&quot;hello world hello world&quot;</code> are all sentences.</li>
-</ul>
+A **sentence** is a list of words that are separated by a** single** space with no leading or trailing spaces.
 
-<p>Words consist of <strong>only</strong> uppercase and lowercase English letters. Uppercase and lowercase English letters are considered different.</p>
+	- For example, `"Hello World"`, `"HELLO"`, `"hello world hello world"` are all sentences.
 
-<p>A sentence is <strong>circular </strong>if:</p>
+Words consist of **only** uppercase and lowercase English letters. Uppercase and lowercase English letters are considered different.
 
-<ul>
-	<li>The last character of each word in the sentence is equal to the first character of its next word.</li>
-	<li>The last character of the last word is equal to the first character of the first word.</li>
-</ul>
+A sentence is **circular **if:
 
-<p>For example, <code>&quot;leetcode exercises sound delightful&quot;</code>, <code>&quot;eetcode&quot;</code>, <code>&quot;leetcode eats soul&quot; </code>are all circular sentences. However, <code>&quot;Leetcode is cool&quot;</code>, <code>&quot;happy Leetcode&quot;</code>, <code>&quot;Leetcode&quot;</code> and <code>&quot;I like Leetcode&quot;</code> are <strong>not</strong> circular sentences.</p>
+	- The last character of each word in the sentence is equal to the first character of its next word.
+	- The last character of the last word is equal to the first character of the first word.
 
-<p>Given a string <code>sentence</code>, return <code>true</code><em> if it is circular</em>. Otherwise, return <code>false</code>.</p>
+For example, `"leetcode exercises sound delightful"`, `"eetcode"`, `"leetcode eats soul" `are all circular sentences. However, `"Leetcode is cool"`, `"happy Leetcode"`, `"Leetcode"` and `"I like Leetcode"` are **not** circular sentences.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given a string `sentence`, return `true`* if it is circular*. Otherwise, return `false`.
 
-<pre>
-<strong>Input:</strong> sentence = &quot;leetcode exercises sound delightful&quot;
-<strong>Output:</strong> true
-<strong>Explanation:</strong> The words in sentence are [&quot;leetcode&quot;, &quot;exercises&quot;, &quot;sound&quot;, &quot;delightful&quot;].
-- leetcod<u>e</u>&#39;s&nbsp;last character is equal to <u>e</u>xercises&#39;s first character.
-- exercise<u>s</u>&#39;s&nbsp;last character is equal to <u>s</u>ound&#39;s first character.
-- soun<u>d</u>&#39;s&nbsp;last character is equal to <u>d</u>elightful&#39;s first character.
-- delightfu<u>l</u>&#39;s&nbsp;last character is equal to <u>l</u>eetcode&#39;s first character.
-The sentence is circular.</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: sentence = "leetcode exercises sound delightful"
+Output: true
+Explanation: The words in sentence are ["leetcode", "exercises", "sound", "delightful"].
+- leetcod_e_&#39;s last character is equal to _e_xercises&#39;s first character.
+- exercise_s_&#39;s last character is equal to _s_ound&#39;s first character.
+- soun_d_&#39;s last character is equal to _d_elightful&#39;s first character.
+- delightfu_l_&#39;s last character is equal to _l_eetcode&#39;s first character.
+The sentence is circular.
+```
 
-<pre>
-<strong>Input:</strong> sentence = &quot;eetcode&quot;
-<strong>Output:</strong> true
-<strong>Explanation:</strong> The words in sentence are [&quot;eetcode&quot;].
-- eetcod<u>e</u>&#39;s&nbsp;last character is equal to <u>e</u>etcode&#39;s first character.
-The sentence is circular.</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: sentence = "eetcode"
+Output: true
+Explanation: The words in sentence are ["eetcode"].
+- eetcod_e_&#39;s last character is equal to _e_etcode&#39;s first character.
+The sentence is circular.
+```
 
-<pre>
-<strong>Input:</strong> sentence = &quot;Leetcode is cool&quot;
-<strong>Output:</strong> false
-<strong>Explanation:</strong> The words in sentence are [&quot;Leetcode&quot;, &quot;is&quot;, &quot;cool&quot;].
-- Leetcod<u>e</u>&#39;s&nbsp;last character is <strong>not</strong> equal to <u>i</u>s&#39;s first character.
-The sentence is <strong>not</strong> circular.</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: sentence = "Leetcode is cool"
+Output: false
+Explanation: The words in sentence are ["Leetcode", "is", "cool"].
+- Leetcod_e_&#39;s last character is not equal to _i_s&#39;s first character.
+The sentence is not circular.
+```
 
-<ul>
-	<li><code>1 &lt;= sentence.length &lt;= 500</code></li>
-	<li><code>sentence</code> consist of only lowercase and uppercase English letters and spaces.</li>
-	<li>The words in <code>sentence</code> are separated by a single space.</li>
-	<li>There are no leading or trailing spaces.</li>
-</ul>
+**Constraints:**
+
+	- `1 &lt;= sentence.length &lt;= 500`
+	- `sentence` consist of only lowercase and uppercase English letters and spaces.
+	- The words in `sentence` are separated by a single space.
+	- There are no leading or trailing spaces.
 
 **Code:**
 ```php
@@ -1207,50 +1145,45 @@ The sentence is <strong>not</strong> circular.</pre>
 ### [2529. Maximum Count of Positive Integer and Negative Integer](https://leetcode.com/problems/maximum-count-of-positive-integer-and-negative-integer)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given an array <code>nums</code> sorted in <strong>non-decreasing</strong> order, return <em>the maximum between the number of positive integers and the number of negative integers.</em></p>
+**Description:** 
 
-<ul>
-	<li>In other words, if the number of positive integers in <code>nums</code> is <code>pos</code> and the number of negative integers is <code>neg</code>, then return the maximum of <code>pos</code> and <code>neg</code>.</li>
-</ul>
+Given an array `nums` sorted in **non-decreasing** order, return *the maximum between the number of positive integers and the number of negative integers.*
 
-<p><strong>Note</strong> that <code>0</code> is neither positive nor negative.</p>
+	- In other words, if the number of positive integers in `nums` is `pos` and the number of negative integers is `neg`, then return the maximum of `pos` and `neg`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+**Note** that `0` is neither positive nor negative.
 
-<pre>
-<strong>Input:</strong> nums = [-2,-1,-1,1,2,3]
-<strong>Output:</strong> 3
-<strong>Explanation:</strong> There are 3 positive integers and 3 negative integers. The maximum count among them is 3.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: nums = [-2,-1,-1,1,2,3]
+Output: 3
+Explanation: There are 3 positive integers and 3 negative integers. The maximum count among them is 3.
+```
 
-<pre>
-<strong>Input:</strong> nums = [-3,-2,-1,0,0,1,2]
-<strong>Output:</strong> 3
-<strong>Explanation:</strong> There are 2 positive integers and 3 negative integers. The maximum count among them is 3.
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: nums = [-3,-2,-1,0,0,1,2]
+Output: 3
+Explanation: There are 2 positive integers and 3 negative integers. The maximum count among them is 3.
+```
 
-<pre>
-<strong>Input:</strong> nums = [5,20,66,1314]
-<strong>Output:</strong> 4
-<strong>Explanation:</strong> There are 4 positive integers and 0 negative integers. The maximum count among them is 4.
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: nums = [5,20,66,1314]
+Output: 4
+Explanation: There are 4 positive integers and 0 negative integers. The maximum count among them is 4.
+```
 
-<ul>
-	<li><code>1 &lt;= nums.length &lt;= 2000</code></li>
-	<li><code>-2000 &lt;= nums[i] &lt;= 2000</code></li>
-	<li><code>nums</code> is sorted in a <strong>non-decreasing order</strong>.</li>
-</ul>
+**Constraints:**
 
-<p>&nbsp;</p>
-<p><strong>Follow up:</strong> Can you solve the problem in <code>O(log(n))</code> time complexity?</p>
+	- `1 &lt;= nums.length &lt;= 2000`
+	- `-2000 &lt;= nums[i] &lt;= 2000`
+	- `nums` is sorted in a **non-decreasing order**.
+
+**Follow up:** Can you solve the problem in `O(log(n))` time complexity?
 
 **Code:**
 ```php
@@ -1262,51 +1195,44 @@ The sentence is <strong>not</strong> circular.</pre>
 ### [2578. Split With Minimum Sum](https://leetcode.com/problems/split-with-minimum-sum)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given a positive integer <code>num</code>, split it into two non-negative integers <code>num1</code> and <code>num2</code> such that:</p>
+**Description:** 
 
-<ul>
-	<li>The concatenation of <code>num1</code> and <code>num2</code> is a permutation of <code>num</code>.
+Given a positive integer `num`, split it into two non-negative integers `num1` and `num2` such that:
 
-    <ul>
-    	<li>In other words, the sum of the number of occurrences of each digit in <code>num1</code> and <code>num2</code> is equal to the number of occurrences of that digit in <code>num</code>.</li>
-    </ul>
-    </li>
-    <li><code>num1</code> and <code>num2</code> can contain leading zeros.</li>
+	- The concatenation of `num1` and `num2` is a permutation of `num`.
 
-</ul>
+    
+    	- In other words, the sum of the number of occurrences of each digit in `num1` and `num2` is equal to the number of occurrences of that digit in `num`.
+    
+    
+    - `num1` and `num2` can contain leading zeros.
 
-<p>Return <em>the <strong>minimum</strong> possible sum of</em> <code>num1</code> <em>and</em> <code>num2</code>.</p>
+Return *the **minimum** possible sum of* `num1` *and* `num2`.
 
-<p><strong>Notes:</strong></p>
+**Notes:**
 
-<ul>
-	<li>It is guaranteed that <code>num</code> does not contain any leading zeros.</li>
-	<li>The order of occurrence of the digits in <code>num1</code> and <code>num2</code> may differ from the order of occurrence of <code>num</code>.</li>
-</ul>
+	- It is guaranteed that `num` does not contain any leading zeros.
+	- The order of occurrence of the digits in `num1` and `num2` may differ from the order of occurrence of `num`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+**Example 1:**
 
-<pre>
-<strong>Input:</strong> num = 4325
-<strong>Output:</strong> 59
-<strong>Explanation:</strong> We can split 4325 so that <code>num1</code> is 24 and <code>num2</code> is 35, giving a sum of 59. We can prove that 59 is indeed the minimal possible sum.
-</pre>
+```text
+Input: num = 4325
+Output: 59
+Explanation: We can split 4325 so that `num1` is 24 and `num2` is 35, giving a sum of 59. We can prove that 59 is indeed the minimal possible sum.
+```
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> num = 687
-<strong>Output:</strong> 75
-<strong>Explanation:</strong> We can split 687 so that <code>num1</code> is 68 and <code>num2</code> is 7, which would give an optimal sum of 75.
-</pre>
+```text
+Input: num = 687
+Output: 75
+Explanation: We can split 687 so that `num1` is 68 and `num2` is 7, which would give an optimal sum of 75.
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>10 &lt;= num &lt;= 10<sup>9</sup></code></li>
-</ul>
+	- `10 &lt;= num &lt;= 10^9`
 
 **Code:**
 ```php
@@ -1318,42 +1244,38 @@ The sentence is <strong>not</strong> circular.</pre>
 ### [2582. Pass the Pillow](https://leetcode.com/problems/pass-the-pillow)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>There are <code>n</code> people standing in a line labeled from <code>1</code> to <code>n</code>. The first person in the line is holding a pillow initially. Every second, the person holding the pillow passes it to the next person standing in the line. Once the pillow reaches the end of the line, the direction changes, and people continue passing the pillow in the opposite direction.</p>
+**Description:** 
 
-<ul>
-	<li>For example, once the pillow reaches the <code>n<sup>th</sup></code> person they pass it to the <code>n - 1<sup>th</sup></code> person, then to the <code>n - 2<sup>th</sup></code> person and so on.</li>
-</ul>
+There are `n` people standing in a line labeled from `1` to `n`. The first person in the line is holding a pillow initially. Every second, the person holding the pillow passes it to the next person standing in the line. Once the pillow reaches the end of the line, the direction changes, and people continue passing the pillow in the opposite direction.
 
-<p>Given the two positive integers <code>n</code> and <code>time</code>, return <em>the index of the person holding the pillow after </em><code>time</code><em> seconds</em>.</p>
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+	- For example, once the pillow reaches the `n^th` person they pass it to the `n - 1^th` person, then to the `n - 2^th` person and so on.
 
-<pre>
-<strong>Input:</strong> n = 4, time = 5
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> People pass the pillow in the following way: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 3 -&gt; 2.
-After five seconds, the 2<sup>nd</sup> person is holding the pillow.
-</pre>
+Given the two positive integers `n` and `time`, return *the index of the person holding the pillow after *`time`* seconds*.
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 1:**
 
-<pre>
-<strong>Input:</strong> n = 3, time = 2
-<strong>Output:</strong> 3
-<strong>Explanation:</strong> People pass the pillow in the following way: 1 -&gt; 2 -&gt; 3.
-After two seconds, the 3<sup>r</sup><sup>d</sup> person is holding the pillow.
-</pre>
+```text
+Input: n = 4, time = 5
+Output: 2
+Explanation: People pass the pillow in the following way: 1 -> 2 -> 3 -> 4 -> 3 -> 2.
+After five seconds, the 2^nd person is holding the pillow.
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example 2:**
 
-<ul>
-	<li><code>2 &lt;= n &lt;= 1000</code></li>
-	<li><code>1 &lt;= time &lt;= 1000</code></li>
-</ul>
+```text
+Input: n = 3, time = 2
+Output: 3
+Explanation: People pass the pillow in the following way: 1 -> 2 -> 3.
+After two seconds, the 3^r^d person is holding the pillow.
+```
 
-<p>&nbsp;</p>
-<p><strong>Note:</strong> This question is the same as <a href="https://leetcode.com/problems/find-the-child-who-has-the-ball-after-k-seconds/description/" target="_blank"> 3178: Find the Child Who Has the Ball After K Seconds.</a></p>
+**Constraints:**
+
+	- `2 &lt;= n &lt;= 1000`
+	- `1 &lt;= time &lt;= 1000`
+
+**Note:** This question is the same as <a href="https://leetcode.com/problems/find-the-child-who-has-the-ball-after-k-seconds/description/" target="_blank"> 3178: Find the Child Who Has the Ball After K Seconds.</a>
 
 **Code:**
 ```php

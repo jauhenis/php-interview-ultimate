@@ -591,59 +591,44 @@ class Solution {
 ### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given the <code>root</code> of a binary tree, return <em>the inorder traversal of its nodes&#39; values</em>.</p>
+**Description:** 
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given the `root` of a binary tree, return *the inorder traversal of its nodes&#39; values*.
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1,null,2,3]</span></p>
+**Example 1:**
 
-<p><strong>Output:</strong> <span class="example-io">[1,3,2]</span></p>
+**Input:** root = [1,null,2,3]
 
-<p><strong>Explanation:</strong></p>
+**Output:** [1,3,2]
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0000-0099/0094.Binary%20Tree%20Inorder%20Traversal/images/screenshot-2024-08-29-202743.png" style="width: 200px; height: 264px;" /></p>
-</div>
+**Explanation:**
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1,2,3,4,5,null,8,null,null,6,7,9]</span></p>
+**Input:** root = [1,2,3,4,5,null,8,null,null,6,7,9]
 
-<p><strong>Output:</strong> <span class="example-io">[4,2,6,5,7,1,3,9,8]</span></p>
+**Output:** [4,2,6,5,7,1,3,9,8]
 
-<p><strong>Explanation:</strong></p>
+**Explanation:**
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0000-0099/0094.Binary%20Tree%20Inorder%20Traversal/images/tree_2.png" style="width: 350px; height: 286px;" /></p>
-</div>
+**Example 3:**
 
-<p><strong class="example">Example 3:</strong></p>
+**Input:** root = []
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = []</span></p>
+**Output:** []
 
-<p><strong>Output:</strong> <span class="example-io">[]</span></p>
-</div>
+**Example 4:**
 
-<p><strong class="example">Example 4:</strong></p>
+**Input:** root = [1]
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1]</span></p>
+**Output:** [1]
 
-<p><strong>Output:</strong> <span class="example-io">[1]</span></p>
-</div>
+**Constraints:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+	- The number of nodes in the tree is in the range `[0, 100]`.
+	- `-100 &lt;= Node.val &lt;= 100`
 
-<ul>
-	<li>The number of nodes in the tree is in the range <code>[0, 100]</code>.</li>
-	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
-</ul>
-
-<p>&nbsp;</p>
-<strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
 
 **Code:**
 ```php
@@ -655,34 +640,32 @@ class Solution {
 ### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given a binary tree, find its minimum depth.</p>
+**Description:** 
 
-<p>The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.</p>
+Given a binary tree, find its minimum depth.
 
-<p><strong>Note:</strong>&nbsp;A leaf is a node with no children.</p>
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0111.Minimum%20Depth%20of%20Binary%20Tree/images/ex_depth.jpg" style="width: 432px; height: 302px;" />
-<pre>
-<strong>Input:</strong> root = [3,9,20,null,null,15,7]
-<strong>Output:</strong> 2
-</pre>
+**Note:** A leaf is a node with no children.
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 1:**
 
-<pre>
-<strong>Input:</strong> root = [2,null,3,null,4,null,5,null,6]
-<strong>Output:</strong> 5
-</pre>
+```text
+Input: root = [3,9,20,null,null,15,7]
+Output: 2
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example 2:**
 
-<ul>
-	<li>The number of nodes in the tree is in the range <code>[0, 10<sup>5</sup>]</code>.</li>
-	<li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
-</ul>
+```text
+Input: root = [2,null,3,null,4,null,5,null,6]
+Output: 5
+```
+
+**Constraints:**
+
+	- The number of nodes in the tree is in the range `[0, 10^5]`.
+	- `-1000 &lt;= Node.val &lt;= 1000`
 
 **Code:**
 ```php
@@ -694,48 +677,45 @@ class Solution {
 ### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given <code>head</code>, the head of a linked list, determine if the linked list has a cycle in it.</p>
+**Description:** 
 
-<p>There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the&nbsp;<code>next</code>&nbsp;pointer. Internally, <code>pos</code>&nbsp;is used to denote the index of the node that&nbsp;tail&#39;s&nbsp;<code>next</code>&nbsp;pointer is connected to.&nbsp;<strong>Note that&nbsp;<code>pos</code>&nbsp;is not passed as a parameter</strong>.</p>
+Given `head`, the head of a linked list, determine if the linked list has a cycle in it.
 
-<p>Return&nbsp;<code>true</code><em> if there is a cycle in the linked list</em>. Otherwise, return <code>false</code>.</p>
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the `next` pointer. Internally, `pos` is used to denote the index of the node that tail&#39;s `next` pointer is connected to. **Note that `pos` is not passed as a parameter**.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0141.Linked%20List%20Cycle/images/circularlinkedlist.png" style="width: 300px; height: 97px; margin-top: 8px; margin-bottom: 8px;" />
-<pre>
-<strong>Input:</strong> head = [3,2,0,-4], pos = 1
-<strong>Output:</strong> true
-<strong>Explanation:</strong> There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
-</pre>
+Return `true`* if there is a cycle in the linked list*. Otherwise, return `false`.
 
-<p><strong class="example">Example 2:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0141.Linked%20List%20Cycle/images/circularlinkedlist_test2.png" style="width: 141px; height: 74px;" />
-<pre>
-<strong>Input:</strong> head = [1,2], pos = 0
-<strong>Output:</strong> true
-<strong>Explanation:</strong> There is a cycle in the linked list, where the tail connects to the 0th node.
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 3:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0141.Linked%20List%20Cycle/images/circularlinkedlist_test3.png" style="width: 45px; height: 45px;" />
-<pre>
-<strong>Input:</strong> head = [1], pos = -1
-<strong>Output:</strong> false
-<strong>Explanation:</strong> There is no cycle in the linked list.
-</pre>
+```text
+Input: head = [3,2,0,-4], pos = 1
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example 2:**
 
-<ul>
-	<li>The number of the nodes in the list is in the range <code>[0, 10<sup>4</sup>]</code>.</li>
-	<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
-	<li><code>pos</code> is <code>-1</code> or a <strong>valid index</strong> in the linked-list.</li>
-</ul>
+```text
+Input: head = [1,2], pos = 0
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
+```
 
-<p>&nbsp;</p>
-<p><strong>Follow up:</strong> Can you solve it using <code>O(1)</code> (i.e. constant) memory?</p>
+**Example 3:**
+
+```text
+Input: head = [1], pos = -1
+Output: false
+Explanation: There is no cycle in the linked list.
+```
+
+**Constraints:**
+
+	- The number of the nodes in the list is in the range `[0, 10^4]`.
+	- `-10^5 &lt;= Node.val &lt;= 10^5`
+	- `pos` is `-1` or a **valid index** in the linked-list.
+
+**Follow up:** Can you solve it using `O(1)` (i.e. constant) memory?
 
 **Code:**
 ```php
@@ -747,59 +727,44 @@ class Solution {
 ### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given the <code>root</code> of a binary tree, return <em>the preorder traversal of its nodes&#39; values</em>.</p>
+**Description:** 
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given the `root` of a binary tree, return *the preorder traversal of its nodes&#39; values*.
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1,null,2,3]</span></p>
+**Example 1:**
 
-<p><strong>Output:</strong> <span class="example-io">[1,2,3]</span></p>
+**Input:** root = [1,null,2,3]
 
-<p><strong>Explanation:</strong></p>
+**Output:** [1,2,3]
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0144.Binary%20Tree%20Preorder%20Traversal/images/screenshot-2024-08-29-202743.png" style="width: 200px; height: 264px;" /></p>
-</div>
+**Explanation:**
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1,2,3,4,5,null,8,null,null,6,7,9]</span></p>
+**Input:** root = [1,2,3,4,5,null,8,null,null,6,7,9]
 
-<p><strong>Output:</strong> <span class="example-io">[1,2,4,5,6,7,3,8,9]</span></p>
+**Output:** [1,2,4,5,6,7,3,8,9]
 
-<p><strong>Explanation:</strong></p>
+**Explanation:**
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0144.Binary%20Tree%20Preorder%20Traversal/images/tree_2.png" style="width: 350px; height: 286px;" /></p>
-</div>
+**Example 3:**
 
-<p><strong class="example">Example 3:</strong></p>
+**Input:** root = []
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = []</span></p>
+**Output:** []
 
-<p><strong>Output:</strong> <span class="example-io">[]</span></p>
-</div>
+**Example 4:**
 
-<p><strong class="example">Example 4:</strong></p>
+**Input:** root = [1]
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1]</span></p>
+**Output:** [1]
 
-<p><strong>Output:</strong> <span class="example-io">[1]</span></p>
-</div>
+**Constraints:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+	- The number of nodes in the tree is in the range `[0, 100]`.
+	- `-100 &lt;= Node.val &lt;= 100`
 
-<ul>
-	<li>The number of nodes in the tree is in the range <code>[0, 100]</code>.</li>
-	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
-</ul>
-
-<p>&nbsp;</p>
-<p><strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?</p>
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
 
 **Code:**
 ```php
@@ -811,59 +776,44 @@ class Solution {
 ### [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given the <code>root</code> of a&nbsp;binary tree, return <em>the postorder traversal of its nodes&#39; values</em>.</p>
+**Description:** 
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+Given the `root` of a binary tree, return *the postorder traversal of its nodes&#39; values*.
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1,null,2,3]</span></p>
+**Example 1:**
 
-<p><strong>Output:</strong> <span class="example-io">[3,2,1]</span></p>
+**Input:** root = [1,null,2,3]
 
-<p><strong>Explanation:</strong></p>
+**Output:** [3,2,1]
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0145.Binary%20Tree%20Postorder%20Traversal/images/screenshot-2024-08-29-202743.png" style="width: 200px; height: 264px;" /></p>
-</div>
+**Explanation:**
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 2:**
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1,2,3,4,5,null,8,null,null,6,7,9]</span></p>
+**Input:** root = [1,2,3,4,5,null,8,null,null,6,7,9]
 
-<p><strong>Output:</strong> <span class="example-io">[4,6,7,5,2,9,8,3,1]</span></p>
+**Output:** [4,6,7,5,2,9,8,3,1]
 
-<p><strong>Explanation:</strong></p>
+**Explanation:**
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0145.Binary%20Tree%20Postorder%20Traversal/images/tree_2.png" style="width: 350px; height: 286px;" /></p>
-</div>
+**Example 3:**
 
-<p><strong class="example">Example 3:</strong></p>
+**Input:** root = []
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = []</span></p>
+**Output:** []
 
-<p><strong>Output:</strong> <span class="example-io">[]</span></p>
-</div>
+**Example 4:**
 
-<p><strong class="example">Example 4:</strong></p>
+**Input:** root = [1]
 
-<div class="example-block">
-<p><strong>Input:</strong> <span class="example-io">root = [1]</span></p>
+**Output:** [1]
 
-<p><strong>Output:</strong> <span class="example-io">[1]</span></p>
-</div>
+**Constraints:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+	- The number of the nodes in the tree is in the range `[0, 100]`.
+	- `-100 &lt;= Node.val &lt;= 100`
 
-<ul>
-	<li>The number of the nodes in the tree is in the range <code>[0, 100]</code>.</li>
-	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
-</ul>
-
-<p>&nbsp;</p>
-<strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
 
 **Code:**
 ```php
@@ -875,40 +825,37 @@ class Solution {
 ### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given the <code>head</code> of a singly linked list, reverse the list, and return <em>the reversed list</em>.</p>
+**Description:** 
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0206.Reverse%20Linked%20List/images/rev1ex1.jpg" style="width: 542px; height: 222px;" />
-<pre>
-<strong>Input:</strong> head = [1,2,3,4,5]
-<strong>Output:</strong> [5,4,3,2,1]
-</pre>
+Given the `head` of a singly linked list, reverse the list, and return *the reversed list*.
 
-<p><strong class="example">Example 2:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0206.Reverse%20Linked%20List/images/rev1ex2.jpg" style="width: 182px; height: 222px;" />
-<pre>
-<strong>Input:</strong> head = [1,2]
-<strong>Output:</strong> [2,1]
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+```
 
-<pre>
-<strong>Input:</strong> head = []
-<strong>Output:</strong> []
-</pre>
+**Example 2:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: head = [1,2]
+Output: [2,1]
+```
 
-<ul>
-	<li>The number of nodes in the list is the range <code>[0, 5000]</code>.</li>
-	<li><code>-5000 &lt;= Node.val &lt;= 5000</code></li>
-</ul>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Follow up:</strong> A linked list can be reversed either iteratively or recursively. Could you implement both?</p>
+```text
+Input: head = []
+Output: []
+```
+
+**Constraints:**
+
+	- The number of nodes in the list is the range `[0, 5000]`.
+	- `-5000 &lt;= Node.val &lt;= 5000`
+
+**Follow up:** A linked list can be reversed either iteratively or recursively. Could you implement both?
 
 **Code:**
 ```php
@@ -920,42 +867,40 @@ class Solution {
 ### [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given the <code>root</code> of a <strong>complete</strong> binary tree, return the number of the nodes in the tree.</p>
+**Description:** 
 
-<p>According to <strong><a href="http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees" target="_blank">Wikipedia</a></strong>, every level, except possibly the last, is completely filled in a complete binary tree, and all nodes in the last level are as far left as possible. It can have between <code>1</code> and <code>2<sup>h</sup></code> nodes inclusive at the last level <code>h</code>.</p>
+Given the `root` of a **complete** binary tree, return the number of the nodes in the tree.
 
-<p>Design an algorithm that runs in less than&nbsp;<code data-stringify-type="code">O(n)</code>&nbsp;time complexity.</p>
+According to **<a href="http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees" target="_blank">Wikipedia</a>**, every level, except possibly the last, is completely filled in a complete binary tree, and all nodes in the last level are as far left as possible. It can have between `1` and `2^h` nodes inclusive at the last level `h`.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0222.Count%20Complete%20Tree%20Nodes/images/complete.jpg" style="width: 372px; height: 302px;" />
-<pre>
-<strong>Input:</strong> root = [1,2,3,4,5,6]
-<strong>Output:</strong> 6
-</pre>
+Design an algorithm that runs in less than `O(n)` time complexity.
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 1:**
 
-<pre>
-<strong>Input:</strong> root = []
-<strong>Output:</strong> 0
-</pre>
+```text
+Input: root = [1,2,3,4,5,6]
+Output: 6
+```
 
-<p><strong class="example">Example 3:</strong></p>
+**Example 2:**
 
-<pre>
-<strong>Input:</strong> root = [1]
-<strong>Output:</strong> 1
-</pre>
+```text
+Input: root = []
+Output: 0
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example 3:**
 
-<ul>
-	<li>The number of nodes in the tree is in the range <code>[0, 5 * 10<sup>4</sup>]</code>.</li>
-	<li><code>0 &lt;= Node.val &lt;= 5 * 10<sup>4</sup></code></li>
-	<li>The tree is guaranteed to be <strong>complete</strong>.</li>
-</ul>
+```text
+Input: root = [1]
+Output: 1
+```
+
+**Constraints:**
+
+	- The number of nodes in the tree is in the range `[0, 5 * 10^4]`.
+	- `0 &lt;= Node.val &lt;= 5 * 10^4`
+	- The tree is guaranteed to be **complete**.
 
 **Code:**
 ```php
@@ -967,43 +912,40 @@ class Solution {
 ### [231. Power of Two](https://leetcode.com/problems/power-of-two)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given an integer <code>n</code>, return <em><code>true</code> if it is a power of two. Otherwise, return <code>false</code></em>.</p>
+**Description:** 
 
-<p>An integer <code>n</code> is a power of two, if there exists an integer <code>x</code> such that <code>n == 2<sup>x</sup></code>.</p>
+Given an integer `n`, return *`true` if it is a power of two. Otherwise, return `false`*.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+An integer `n` is a power of two, if there exists an integer `x` such that `n == 2^x`.
 
-<pre>
-<strong>Input:</strong> n = 1
-<strong>Output:</strong> true
-<strong>Explanation: </strong>2<sup>0</sup> = 1
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: n = 1
+Output: true
+Explanation: 2^0 = 1
+```
 
-<pre>
-<strong>Input:</strong> n = 16
-<strong>Output:</strong> true
-<strong>Explanation: </strong>2<sup>4</sup> = 16
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: n = 16
+Output: true
+Explanation: 2^4 = 16
+```
 
-<pre>
-<strong>Input:</strong> n = 3
-<strong>Output:</strong> false
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: n = 3
+Output: false
+```
 
-<ul>
-	<li><code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
-</ul>
+**Constraints:**
 
-<p>&nbsp;</p>
-<strong>Follow up:</strong> Could you solve it without loops/recursion?
+	- `-2^31 &lt;= n &lt;= 2^31 - 1`
+
+**Follow up:** Could you solve it without loops/recursion?
 
 **Code:**
 ```php
@@ -1015,31 +957,29 @@ class Solution {
 ### [270. Closest Binary Search Tree Value 🔒](https://leetcode.com/problems/closest-binary-search-tree-value)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given the <code>root</code> of a binary search tree and a <code>target</code> value, return <em>the value in the BST that is closest to the</em> <code>target</code>. If there are multiple answers, print the smallest.</p>
+**Description:** 
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0200-0299/0270.Closest%20Binary%20Search%20Tree%20Value/images/closest1-1-tree.jpg" style="width: 292px; height: 302px;" />
-<pre>
-<strong>Input:</strong> root = [4,2,5,1,3], target = 3.714286
-<strong>Output:</strong> 4
-</pre>
+Given the `root` of a binary search tree and a `target` value, return *the value in the BST that is closest to the* `target`. If there are multiple answers, print the smallest.
 
-<p><strong class="example">Example 2:</strong></p>
+**Example 1:**
 
-<pre>
-<strong>Input:</strong> root = [1], target = 4.428571
-<strong>Output:</strong> 1
-</pre>
+```text
+Input: root = [4,2,5,1,3], target = 3.714286
+Output: 4
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example 2:**
 
-<ul>
-	<li>The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.</li>
-	<li><code>0 &lt;= Node.val &lt;= 10<sup>9</sup></code></li>
-	<li><code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code></li>
-</ul>
+```text
+Input: root = [1], target = 4.428571
+Output: 1
+```
+
+**Constraints:**
+
+	- The number of nodes in the tree is in the range `[1, 10^4]`.
+	- `0 &lt;= Node.val &lt;= 10^9`
+	- `-10^9 &lt;= target &lt;= 10^9`
 
 **Code:**
 ```php
@@ -1051,44 +991,41 @@ class Solution {
 ### [326. Power of Three](https://leetcode.com/problems/power-of-three)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given an integer <code>n</code>, return <em><code>true</code> if it is a power of three. Otherwise, return <code>false</code></em>.</p>
+**Description:** 
 
-<p>An integer <code>n</code> is a power of three, if there exists an integer <code>x</code> such that <code>n == 3<sup>x</sup></code>.</p>
+Given an integer `n`, return *`true` if it is a power of three. Otherwise, return `false`*.
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+An integer `n` is a power of three, if there exists an integer `x` such that `n == 3^x`.
 
-<pre>
-<strong>Input:</strong> n = 27
-<strong>Output:</strong> true
-<strong>Explanation:</strong> 27 = 3<sup>3</sup>
-</pre>
+**Example 1:**
 
-<p><strong class="example">Example 2:</strong></p>
+```text
+Input: n = 27
+Output: true
+Explanation: 27 = 3^3
+```
 
-<pre>
-<strong>Input:</strong> n = 0
-<strong>Output:</strong> false
-<strong>Explanation:</strong> There is no x where 3<sup>x</sup> = 0.
-</pre>
+**Example 2:**
 
-<p><strong class="example">Example 3:</strong></p>
+```text
+Input: n = 0
+Output: false
+Explanation: There is no x where 3^x = 0.
+```
 
-<pre>
-<strong>Input:</strong> n = -1
-<strong>Output:</strong> false
-<strong>Explanation:</strong> There is no x where 3<sup>x</sup> = (-1).
-</pre>
+**Example 3:**
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+```text
+Input: n = -1
+Output: false
+Explanation: There is no x where 3^x = (-1).
+```
 
-<ul>
-	<li><code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
-</ul>
+**Constraints:**
 
-<p>&nbsp;</p>
-<strong>Follow up:</strong> Could you solve it without loops/recursion?
+	- `-2^31 &lt;= n &lt;= 2^31 - 1`
+
+**Follow up:** Could you solve it without loops/recursion?
 
 **Code:**
 ```php
@@ -1100,41 +1037,37 @@ class Solution {
 ### [346. Moving Average from Data Stream 🔒](https://leetcode.com/problems/moving-average-from-data-stream)
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** <p>Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.</p>
+**Description:** 
 
-<p>Implement the&nbsp;<code>MovingAverage</code> class:</p>
+Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
 
-<ul>
-	<li><code>MovingAverage(int size)</code> Initializes&nbsp;the object with the size of the window <code>size</code>.</li>
-	<li><code>double next(int val)</code> Returns the moving average of the last <code>size</code> values of the stream.</li>
-</ul>
+Implement the `MovingAverage` class:
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
+	- `MovingAverage(int size)` Initializes the object with the size of the window `size`.
+	- `double next(int val)` Returns the moving average of the last `size` values of the stream.
 
-<pre>
-<strong>Input</strong>
-[&quot;MovingAverage&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;]
+**Example 1:**
+
+```text
+Input
+["MovingAverage", "next", "next", "next", "next"]
 [[3], [1], [10], [3], [5]]
-<strong>Output</strong>
+Output
 [null, 1.0, 5.5, 4.66667, 6.0]
 
-<strong>Explanation</strong>
+Explanation
 MovingAverage movingAverage = new MovingAverage(3);
 movingAverage.next(1); // return 1.0 = 1 / 1
 movingAverage.next(10); // return 5.5 = (1 + 10) / 2
 movingAverage.next(3); // return 4.66667 = (1 + 10 + 3) / 3
 movingAverage.next(5); // return 6.0 = (10 + 3 + 5) / 3
-</pre>
+```
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Constraints:**
 
-<ul>
-	<li><code>1 &lt;= size &lt;= 1000</code></li>
-	<li><code>-10<sup>5</sup> &lt;= val &lt;= 10<sup>5</sup></code></li>
-	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>next</code>.</li>
-</ul>
+	- `1 &lt;= size &lt;= 1000`
+	- `-10^5 &lt;= val &lt;= 10^5`
+	- At most `10^4` calls will be made to `next`.
 
 **Code:**
 ```php
