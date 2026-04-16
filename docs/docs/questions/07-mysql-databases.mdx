@@ -68,6 +68,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - **TINYINT:** 1 byte (-128 to 127).
 - **SMALLINT:** 2 bytes (-32,768 to 32,767).
 - **INT:** 4 bytes (-2.1B to 2.1B).
@@ -82,6 +83,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - **DATETIME:** 8 bytes. Range: 1000-01-01 to 9999-12-31. Constant across time zones.
 - **TIMESTAMP:** 4 bytes. Range: 1970-01-01 to 2038-01-19. Converted to/from UTC based on the current time zone.
 
@@ -92,6 +94,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - **ENUM:** A string object that can have only one value chosen from a list of permitted values.
 - **SET:** A string object that can have zero or more values chosen from a list of permitted values (up to 64).
 
@@ -137,6 +140,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - **(INNER) JOIN:** Returns records that have matching values in both tables.
 - **LEFT (OUTER) JOIN:** Returns all records from the left table, and the matched records from the right table.
 - **RIGHT (OUTER) JOIN:** Returns all records from the right table, and the matched records from the left table.
@@ -150,6 +154,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - **Implicit Join:** Uses the `FROM` clause to list multiple tables and the `WHERE` clause to specify the join condition (e.g., `SELECT * FROM TableA, TableB WHERE TableA.id = TableB.a_id`).
 - **Explicit Join:** Uses the `JOIN` keyword and the `ON` clause to specify the join condition (e.g., `SELECT * FROM TableA JOIN TableB ON TableA.id = TableB.a_id`). Explicit joins are generally preferred for readability and avoiding accidental Cartesian products.
 
@@ -160,6 +165,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - `CONCAT(str1, str2, ...)`: Joins two or more strings.
 - `CONCAT_WS(separator, str1, str2, ...)`: Joins strings with a separator.
 - `LENGTH(str)` / `CHAR_LENGTH(str)`: Returns the length of a string in bytes/characters.
@@ -182,6 +188,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - `ABS(n)`: Returns the absolute value.
 - `CEIL(n)` / `CEILING(n)`: Rounds up to the nearest integer.
 - `FLOOR(n)`: Rounds down to the nearest integer.
@@ -199,6 +206,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - `NOW()` / `SYSDATE()` / `CURRENT_TIMESTAMP()`: Returns current date and time.
 - `CURDATE()` / `CURRENT_DATE()`: Returns current date.
 - `CURTIME()` / `CURRENT_TIME()`: Returns current time.
@@ -219,6 +227,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
+
 - `IF(expr1, expr2, expr3)`: If `expr1` is true, returns `expr2`, else `expr3`.
 - `IFNULL(expr1, expr2)`: If `expr1` is not NULL, returns `expr1`, else `expr2`.
 - `COALESCE(list)`: Returns the first non-NULL value in the list.
@@ -239,8 +248,9 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
 **Answer:**
-- **`JOIN ... ON`**: Defines how tables are linked together. It is processed *during* the join operation.
-- **`WHERE`**: Filters the resulting rows *after* the join has been logically formed.
+
+- **`JOIN ... ON`**: Defines how tables are linked together. It is processed _during_ the join operation.
+- **`WHERE`**: Filters the resulting rows _after_ the join has been logically formed.
 - **Performance**: For `INNER JOIN`, they are often functionally equivalent as the optimizer can move conditions between them. For `OUTER JOIN` (LEFT/RIGHT), the placement is critical: a condition in `ON` determines which rows are joined (keeping all rows from the "outer" table), while a condition in `WHERE` filters the final result set (potentially turning a LEFT JOIN into an INNER JOIN if it filters out NULLs).
 
 ---
@@ -318,9 +328,10 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:** Use the `CASE` statement or `IF()` function. For example, to apply different interest rates based on a balance:
+
 ```sql
 SELECT name, balance,
-  CASE 
+  CASE
     WHEN balance < 3000 THEN balance * 1.1
     ELSE balance * 1.3
   END AS total
@@ -334,6 +345,7 @@ FROM accounts;
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:**
+
 - **IN:** Checks if a value matches any value in a specified list or subquery.
 - **BETWEEN:** Checks if a value falls within a specified range (inclusive of start and end values).
 
@@ -376,8 +388,9 @@ FROM accounts;
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:**
-- **ANY (or SOME):** Returns true if the comparison is true for *at least one* value in the subquery result.
-- **ALL:** Returns true only if the comparison is true for *all* values in the subquery result.
+
+- **ANY (or SOME):** Returns true if the comparison is true for _at least one_ value in the subquery result.
+- **ALL:** Returns true only if the comparison is true for _all_ values in the subquery result.
 
 ---
 
@@ -386,6 +399,7 @@ FROM accounts;
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:**
+
 - **NOT NULL:** Ensures a column cannot have a NULL value.
 - **UNIQUE:** Ensures all values in a column are different.
 - **PRIMARY KEY:** A combination of NOT NULL and UNIQUE.
@@ -401,6 +415,7 @@ FROM accounts;
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:**
+
 - **CASCADE:** Automatically delete or update rows in the child table when the parent row is deleted/updated.
 - **SET NULL:** Set the foreign key column in the child table to NULL.
 - **RESTRICT / NO ACTION:** Reject the delete or update operation in the parent table if related rows exist in the child table.
@@ -420,6 +435,7 @@ FROM accounts;
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:**
+
 - **LIKE:** Uses simple wildcards (`%` for any string, `_` for any single character).
 - **REGEXP:** Uses powerful regular expressions (`^`, `$`, `.`, `[ ]`, `|`, etc.) for complex pattern matching.
 
@@ -633,9 +649,10 @@ Understanding the exact behavior of isolation levels and locks is crucial for de
 <span className="badge badge--warning margin-bottom--md">Senior</span>
 
 **Answer:**
+
 1.  **Pessimistic Locking**: `SELECT * FROM meetups WHERE id = 1 FOR UPDATE;` to serialize all registrations for that meetup.
 2.  **Denormalization + CHECK Constraint**: Add a `booked_seats` column and `CHECK (booked_seats <= total_seats)`. Update the counter in the same transaction as the registration. This lets the DB enforce the limit.
-[Detailed Guide on SQL Concurrency and Limits](../answers/sql_concurrency.md)
+    [Detailed Guide on SQL Concurrency and Limits](../answers/sql_concurrency.md)
 
 ---
 
@@ -644,6 +661,7 @@ Understanding the exact behavior of isolation levels and locks is crucial for de
 <span className="badge badge--warning margin-bottom--md">Senior</span>
 
 **Answer:** These are hidden system columns used for **MVCC (Multi-Version Concurrency Control)**.
+
 - **PostgreSQL**:
   - `xmin`: Stores the ID of the transaction that inserted the row.
   - `xmax`: Stores the ID of the transaction that deleted or updated the row.
@@ -651,7 +669,7 @@ Understanding the exact behavior of isolation levels and locks is crucial for de
   - `DB_TRX_ID`: Similar to `xmin`, stores the ID of the transaction that created the row version.
   - `DB_ROLL_PTR`: Pointer to the previous version in the **Undo Log** (used to reconstruct older versions).
   - `DB_ROW_ID`: Hidden row ID if no primary key exists.
-Understanding these is key to explaining how different transactions "see" different versions of data simultaneously without blocking each other.
+    Understanding these is key to explaining how different transactions "see" different versions of data simultaneously without blocking each other.
 
 ---
 
@@ -659,7 +677,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 <span className="badge badge--warning margin-bottom--md">Senior</span>
 
-**Answer:** Use Redis for **Rate Limiting**, **Circuit Breakers**, or **Cross-Node Task Synchronization** (e.g., ensuring a cron job runs once). Avoid using Redis for data consistency *inside* the database. SQL features (Unique Indexes, Constraints, Row Locks) are more robust, handle failure scenarios better (no TTL issues), and don't add extra points of failure or overhead to the data layer.
+**Answer:** Use Redis for **Rate Limiting**, **Circuit Breakers**, or **Cross-Node Task Synchronization** (e.g., ensuring a cron job runs once). Avoid using Redis for data consistency _inside_ the database. SQL features (Unique Indexes, Constraints, Row Locks) are more robust, handle failure scenarios better (no TTL issues), and don't add extra points of failure or overhead to the data layer.
 
 ---
 

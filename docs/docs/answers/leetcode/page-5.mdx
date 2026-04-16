@@ -1,20 +1,21 @@
 ---
-title: "LeetCode Solutions - Page 5"
-sidebar_label: "Page 5"
+title: 'LeetCode Solutions - Page 5'
+sidebar_label: 'Page 5'
 ---
 
 # LeetCode Solutions - Page 5
 
 ### [1608. Special Array With X Elements Greater Than or Equal X](https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given an array `nums` of non-negative integers. `nums` is considered **special** if there exists a number `x` such that there are **exactly** `x` numbers in `nums` that are **greater than or equal to** `x`.
 
 Notice that `x` **does not** have to be an element in `nums`.
 
-Return `x` *if the array is **special**, otherwise, return *`-1`. It can be proven that if `nums` is special, the value for `x` is **unique**.
+Return `x` _if the array is **special**, otherwise, return _`-1`. It can be proven that if `nums` is special, the value for `x` is **unique**.
 
 **Example 1:**
 
@@ -46,10 +47,11 @@ Explanation: There are 3 values that are greater than or equal to 3.
 
 **Constraints:**
 
-	- `1 &lt;= nums.length &lt;= 100`
-	- `0 &lt;= nums[i] &lt;= 1000`
+    - `1 &lt;= nums.length &lt;= 100`
+    - `0 &lt;= nums[i] &lt;= 1000`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -57,21 +59,22 @@ Explanation: There are 3 values that are greater than or equal to 3.
 ---
 
 ### [1652. Defuse the Bomb](https://leetcode.com/problems/defuse-the-bomb)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You have a bomb to defuse, and your time is running out! Your informer will provide you with a **circular** array `code` of length of `n` and a key `k`.
 
 To decrypt the code, you must replace every number. All the numbers are replaced **simultaneously**.
 
-	- If `k > 0`, replace the `i^th` number with the sum of the **next** `k` numbers.
-	- If `k < 0`, replace the `i^th` number with the sum of the **previous** -`k` numbers.
-	- If `k == 0`, replace the `i^th` number with `0`.
+    - If `k > 0`, replace the `i^th` number with the sum of the **next** `k` numbers.
+    - If `k < 0`, replace the `i^th` number with the sum of the **previous** -`k` numbers.
+    - If `k == 0`, replace the `i^th` number with `0`.
 
 As `code` is circular, the next element of `code[n-1]` is `code[0]`, and the previous element of `code[0]` is `code[n-1]`.
 
-Given the **circular** array `code` and an integer key `k`, return *the decrypted code to defuse the bomb*!
+Given the **circular** array `code` and an integer key `k`, return _the decrypted code to defuse the bomb_!
 
 **Example 1:**
 
@@ -99,12 +102,13 @@ Explanation: The decrypted code is [3+9, 2+3, 4+2, 9+4]. Notice that the numbers
 
 **Constraints:**
 
-	- `n == code.length`
-	- `1 &lt;= n &lt;= 100`
-	- `1 &lt;= code[i] &lt;= 100`
-	- `-(n - 1) &lt;= k &lt;= n - 1`
+    - `n == code.length`
+    - `1 &lt;= n &lt;= 100`
+    - `1 &lt;= code[i] &lt;= 100`
+    - `-(n - 1) &lt;= k &lt;= n - 1`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -112,11 +116,12 @@ Explanation: The decrypted code is [3+9, 2+3, 4+2, 9+4]. Notice that the numbers
 ---
 
 ### [1662. Check If Two String Arrays are Equivalent](https://leetcode.com/problems/check-if-two-string-arrays-are-equivalent)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
-Given two string arrays `word1` and `word2`, return* *`true`* if the two arrays **represent** the same string, and *`false`* otherwise.*
+Given two string arrays `word1` and `word2`, return\* _`true`_ if the two arrays **represent** the same string, and _`false`_ otherwise.\*
 
 A string is **represented** by an array if the array elements concatenated **in order** forms the string.
 
@@ -147,12 +152,13 @@ Output: true
 
 **Constraints:**
 
-	- `1 &lt;= word1.length, word2.length &lt;= 10^3`
-	- `1 &lt;= word1[i].length, word2[i].length &lt;= 10^3`
-	- `1 &lt;= sum(word1[i].length), sum(word2[i].length) &lt;= 10^3`
-	- `word1[i]` and `word2[i]` consist of lowercase letters.
+    - `1 &lt;= word1.length, word2.length &lt;= 10^3`
+    - `1 &lt;= word1[i].length, word2[i].length &lt;= 10^3`
+    - `1 &lt;= sum(word1[i].length), sum(word2[i].length) &lt;= 10^3`
+    - `word1[i]` and `word2[i]` consist of lowercase letters.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -160,13 +166,14 @@ Output: true
 ---
 
 ### [1678. Goal Parser Interpretation](https://leetcode.com/problems/goal-parser-interpretation)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You own a **Goal Parser** that can interpret a string `command`. The `command` consists of an alphabet of `"G"`, `"()"` and/or `"(al)"` in some order. The Goal Parser will interpret `"G"` as the string `"G"`, `"()"` as the string `"o"`, and `"(al)"` as the string `"al"`. The interpreted strings are then concatenated in the original order.
 
-Given the string `command`, return *the **Goal Parser**&#39;s interpretation of *`command`.
+Given the string `command`, return _the **Goal Parser**&#39;s interpretation of _`command`.
 
 **Example 1:**
 
@@ -196,10 +203,11 @@ Output: "alGalooG"
 
 **Constraints:**
 
-	- `1 &lt;= command.length &lt;= 100`
-	- `command` consists of `"G"`, `"()"`, and/or `"(al)"` in some order.
+    - `1 &lt;= command.length &lt;= 100`
+    - `command` consists of `"G"`, `"()"`, and/or `"(al)"` in some order.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -207,9 +215,10 @@ Output: "alGalooG"
 ---
 
 ### [1684. Count the Number of Consistent Strings](https://leetcode.com/problems/count-the-number-of-consistent-strings)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given a string `allowed` consisting of **distinct** characters and an array of strings `words`. A string is **consistent **if all characters in the string appear in the string `allowed`.
 
@@ -241,13 +250,14 @@ Explanation: Strings "cc", "acd", "ac", and "d" are consistent.
 
 **Constraints:**
 
-	- `1 &lt;= words.length &lt;= 10^4`
-	- `1 &lt;= allowed.length <=^ 26`
-	- `1 &lt;= words[i].length &lt;= 10`
-	- The characters in `allowed` are **distinct**.
-	- `words[i]` and `allowed` contain only lowercase English letters.
+    - `1 &lt;= words.length &lt;= 10^4`
+    - `1 &lt;= allowed.length <=^ 26`
+    - `1 &lt;= words[i].length &lt;= 10`
+    - The characters in `allowed` are **distinct**.
+    - `words[i]` and `allowed` contain only lowercase English letters.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -255,18 +265,19 @@ Explanation: Strings "cc", "acd", "ac", and "d" are consistent.
 ---
 
 ### [1710. Maximum Units on a Truck](https://leetcode.com/problems/maximum-units-on-a-truck)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are assigned to put some amount of boxes onto **one truck**. You are given a 2D array `boxTypes`, where `boxTypes[i] = [numberOfBoxes~i, numberOfUnitsPerBox~i]`:
 
-	- `numberOfBoxes~i` is the number of boxes of type `i`.
-	- `numberOfUnitsPerBox~i`~ is the number of units in each box of the type `i`.
+    - `numberOfBoxes~i` is the number of boxes of type `i`.
+    - `numberOfUnitsPerBox~i`~ is the number of units in each box of the type `i`.
 
 You are also given an integer `truckSize`, which is the **maximum** number of **boxes** that can be put on the truck. You can choose any boxes to put on the truck as long as the number of boxes does not exceed `truckSize`.
 
-Return *the **maximum** total number of **units** that can be put on the truck.*
+Return _the **maximum** total number of **units** that can be put on the truck._
 
 **Example 1:**
 
@@ -290,11 +301,12 @@ Output: 91
 
 **Constraints:**
 
-	- `1 &lt;= boxTypes.length &lt;= 1000`
-	- `1 &lt;= numberOfBoxes~i, numberOfUnitsPerBox~i &lt;= 1000`
-	- `1 &lt;= truckSize &lt;= 10^6`
+    - `1 &lt;= boxTypes.length &lt;= 1000`
+    - `1 &lt;= numberOfBoxes~i, numberOfUnitsPerBox~i &lt;= 1000`
+    - `1 &lt;= truckSize &lt;= 10^6`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -302,15 +314,16 @@ Output: 91
 ---
 
 ### [1716. Calculate Money in Leetcode Bank](https://leetcode.com/problems/calculate-money-in-leetcode-bank)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 Hercy wants to save money for his first car. He puts money in the Leetcode bank **every day**.
 
-He starts by putting in `$1` on Monday, the first day. Every day from Tuesday to Sunday, he will put in `$1` more than the day before. On every subsequent Monday, he will put in `$1` more than the **previous Monday**. 
+He starts by putting in `$1` on Monday, the first day. Every day from Tuesday to Sunday, he will put in `$1` more than the day before. On every subsequent Monday, he will put in `$1` more than the **previous Monday**.
 
-Given `n`, return *the total amount of money he will have in the Leetcode bank at the end of the *`n^th`* day.*
+Given `n`, return _the total amount of money he will have in the Leetcode bank at the end of the _`n^th`_ day._
 
 **Example 1:**
 
@@ -338,9 +351,10 @@ Explanation: After the 20^th day, the total is (1 + 2 + 3 + 4 + 5 + 6 + 7) + (2 
 
 **Constraints:**
 
-	- `1 &lt;= n &lt;= 1000`
+    - `1 &lt;= n &lt;= 1000`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -348,13 +362,14 @@ Explanation: After the 20^th day, the total is (1 + 2 + 3 + 4 + 5 + 6 + 7) + (2 
 ---
 
 ### [1796. Second Largest Digit in a String](https://leetcode.com/problems/second-largest-digit-in-a-string)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
-Given an alphanumeric string `s`, return *the **second largest** numerical digit that appears in *`s`*, or *`-1`* if it does not exist*.
+Given an alphanumeric string `s`, return _the **second largest** numerical digit that appears in _`s`_, or _`-1`_ if it does not exist_.
 
-An **alphanumeric**** **string is a string consisting of lowercase English letters and digits.
+An **alphanumeric\*\*** \*\*string is a string consisting of lowercase English letters and digits.
 
 **Example 1:**
 
@@ -374,10 +389,11 @@ Explanation: The digits that appear in s are [1]. There is no second largest dig
 
 **Constraints:**
 
-	- `1 &lt;= s.length &lt;= 500`
-	- `s` consists of only lowercase English letters and digits.
+    - `1 &lt;= s.length &lt;= 500`
+    - `s` consists of only lowercase English letters and digits.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -385,13 +401,14 @@ Explanation: The digits that appear in s are [1]. There is no second largest dig
 ---
 
 ### [1832. Check if the Sentence Is Pangram](https://leetcode.com/problems/check-if-the-sentence-is-pangram)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 A **pangram** is a sentence where every letter of the English alphabet appears at least once.
 
-Given a string `sentence` containing only lowercase English letters, return* *`true`* if *`sentence`* is a **pangram**, or *`false`* otherwise.*
+Given a string `sentence` containing only lowercase English letters, return\* _`true`_ if _`sentence`_ is a **pangram**, or _`false`_ otherwise.\*
 
 **Example 1:**
 
@@ -410,10 +427,11 @@ Output: false
 
 **Constraints:**
 
-	- `1 &lt;= sentence.length &lt;= 1000`
-	- `sentence` consists of lowercase English letters.
+    - `1 &lt;= sentence.length &lt;= 1000`
+    - `sentence` consists of lowercase English letters.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -421,15 +439,16 @@ Output: false
 ---
 
 ### [1863. Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 The **XOR total** of an array is defined as the bitwise `XOR` of** all its elements**, or `0` if the array is** empty**.
 
-	- For example, the **XOR total** of the array `[2,5,6]` is `2 XOR 5 XOR 6 = 1`.
+    - For example, the **XOR total** of the array `[2,5,6]` is `2 XOR 5 XOR 6 = 1`.
 
-Given an array `nums`, return *the **sum** of all **XOR totals** for every **subset** of *`nums`. 
+Given an array `nums`, return _the **sum** of all **XOR totals** for every **subset** of _`nums`.
 
 **Note:** Subsets with the **same** elements should be counted **multiple** times.
 
@@ -475,10 +494,11 @@ Explanation: The sum of all XOR totals for every subset is 480.
 
 **Constraints:**
 
-	- `1 &lt;= nums.length &lt;= 12`
-	- `1 &lt;= nums[i] &lt;= 20`
+    - `1 &lt;= nums.length &lt;= 12`
+    - `1 &lt;= nums[i] &lt;= 20`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -486,15 +506,16 @@ Explanation: The sum of all XOR totals for every subset is 480.
 ---
 
 ### [1971. Find if Path Exists in Graph](https://leetcode.com/problems/find-if-path-exists-in-graph)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 There is a **bi-directional** graph with `n` vertices, where each vertex is labeled from `0` to `n - 1` (**inclusive**). The edges in the graph are represented as a 2D integer array `edges`, where each `edges[i] = [u~i, v~i]` denotes a bi-directional edge between vertex `u~i` and vertex `v~i`. Every vertex pair is connected by **at most one** edge, and no vertex has an edge to itself.
 
 You want to determine if there is a **valid path** that exists from vertex `source` to vertex `destination`.
 
-Given `edges` and the integers `n`, `source`, and `destination`, return `true`* if there is a **valid path** from *`source`* to *`destination`*, or *`false`* otherwise**.*
+Given `edges` and the integers `n`, `source`, and `destination`, return `true`_ if there is a **valid path** from _`source`_ to _`destination`_, or _`false`_ otherwise\*\*._
 
 **Example 1:**
 
@@ -516,16 +537,17 @@ Explanation: There is no path from vertex 0 to vertex 5.
 
 **Constraints:**
 
-	- `1 &lt;= n &lt;= 2 * 10^5`
-	- `0 &lt;= edges.length &lt;= 2 * 10^5`
-	- `edges[i].length == 2`
-	- `0 &lt;= u~i, v~i &lt;= n - 1`
-	- `u~i != v~i`
-	- `0 &lt;= source, destination &lt;= n - 1`
-	- There are no duplicate edges.
-	- There are no self edges.
+    - `1 &lt;= n &lt;= 2 * 10^5`
+    - `0 &lt;= edges.length &lt;= 2 * 10^5`
+    - `edges[i].length == 2`
+    - `0 &lt;= u~i, v~i &lt;= n - 1`
+    - `u~i != v~i`
+    - `0 &lt;= source, destination &lt;= n - 1`
+    - There are no duplicate edges.
+    - There are no self edges.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -533,9 +555,10 @@ Explanation: There is no path from vertex 0 to vertex 5.
 ---
 
 ### [1978. Employees Whose Manager Left the Company](https://leetcode.com/problems/employees-whose-manager-left-the-company)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 Table: `Employees`
 
@@ -561,7 +584,7 @@ The result format is in the following example.
 **Example 1:**
 
 ```text
-Input:  
+Input:
 Employees table:
 +-------------+-----------+------------+--------+
 | employee_id | name      | manager_id | salary |
@@ -573,20 +596,21 @@ Employees table:
 | 9           | Mikaela   | null       | 50937  |
 | 11          | Joziah    | 6          | 28485  |
 +-------------+-----------+------------+--------+
-Output: 
+Output:
 +-------------+
 | employee_id |
 +-------------+
 | 11          |
 +-------------+
 
-Explanation: 
+Explanation:
 The employees with a salary less than $30000 are 1 (Kalel) and 11 (Joziah).
 Kalel&#39;s manager is employee 11, who is still in the company (Joziah).
 Joziah&#39;s manager is employee 6, who left the company because there is no row for employee 6 as it was deleted.
 ```
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -594,16 +618,17 @@ Joziah&#39;s manager is employee 6, who left the company because there is no row
 ---
 
 ### [2006. Count Number of Pairs With Absolute Difference K](https://leetcode.com/problems/count-number-of-pairs-with-absolute-difference-k)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
-Given an integer array `nums` and an integer `k`, return *the number of pairs* `(i, j)` *where* `i < j` *such that* `|nums[i] - nums[j]| == k`.
+Given an integer array `nums` and an integer `k`, return _the number of pairs_ `(i, j)` _where_ `i < j` _such that_ `|nums[i] - nums[j]| == k`.
 
 The value of `|x|` is defined as:
 
-	- `x` if `x &gt;= 0`.
-	- `-x` if `x < 0`.
+    - `x` if `x &gt;= 0`.
+    - `-x` if `x < 0`.
 
 **Example 1:**
 
@@ -638,11 +663,12 @@ Output: 3
 
 **Constraints:**
 
-	- `1 &lt;= nums.length &lt;= 200`
-	- `1 &lt;= nums[i] &lt;= 100`
-	- `1 &lt;= k &lt;= 99`
+    - `1 &lt;= nums.length &lt;= 200`
+    - `1 &lt;= nums[i] &lt;= 100`
+    - `1 &lt;= k &lt;= 99`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -650,24 +676,25 @@ Output: 3
 ---
 
 ### [2169. Count Operations to Obtain Zero](https://leetcode.com/problems/count-operations-to-obtain-zero)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given two **non-negative** integers `num1` and `num2`.
 
 In one **operation**, if `num1 &gt;= num2`, you must subtract `num2` from `num1`, otherwise subtract `num1` from `num2`.
 
-	- For example, if `num1 = 5` and `num2 = 4`, subtract `num2` from `num1`, thus obtaining `num1 = 1` and `num2 = 4`. However, if `num1 = 4` and `num2 = 5`, after one operation, `num1 = 4` and `num2 = 1`.
+    - For example, if `num1 = 5` and `num2 = 4`, subtract `num2` from `num1`, thus obtaining `num1 = 1` and `num2 = 4`. However, if `num1 = 4` and `num2 = 5`, after one operation, `num1 = 4` and `num2 = 1`.
 
-Return *the **number of operations** required to make either* `num1 = 0` *or* `num2 = 0`.
+Return _the **number of operations** required to make either_ `num1 = 0` _or_ `num2 = 0`.
 
 **Example 1:**
 
 ```text
 Input: num1 = 2, num2 = 3
 Output: 3
-Explanation: 
+Explanation:
 - Operation 1: num1 = 2, num2 = 3. Since num1 < num2, we subtract num1 from num2 and get num1 = 2, num2 = 3 - 2 = 1.
 - Operation 2: num1 = 2, num2 = 1. Since num1 > num2, we subtract num2 from num1.
 - Operation 3: num1 = 1, num2 = 1. Since num1 == num2, we subtract num2 from num1.
@@ -680,7 +707,7 @@ So the total number of operations required is 3.
 ```text
 Input: num1 = 10, num2 = 10
 Output: 1
-Explanation: 
+Explanation:
 - Operation 1: num1 = 10, num2 = 10. Since num1 == num2, we subtract num2 from num1 and get num1 = 10 - 10 = 0.
 Now num1 = 0 and num2 = 10. Since num1 == 0, we are done.
 So the total number of operations required is 1.
@@ -688,9 +715,10 @@ So the total number of operations required is 1.
 
 **Constraints:**
 
-	- `0 &lt;= num1, num2 &lt;= 10^5`
+    - `0 &lt;= num1, num2 &lt;= 10^5`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -698,13 +726,14 @@ So the total number of operations required is 1.
 ---
 
 ### [2200. Find All K-Distant Indices in an Array](https://leetcode.com/problems/find-all-k-distant-indices-in-an-array)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given a **0-indexed** integer array `nums` and two integers `key` and `k`. A **k-distant index** is an index `i` of `nums` for which there exists at least one index `j` such that `|i - j| &lt;= k` and `nums[j] == key`.
 
-Return *a list of all k-distant indices sorted in **increasing order***.
+Return \*a list of all k-distant indices sorted in **increasing order\***.
 
 **Example 1:**
 
@@ -727,18 +756,19 @@ Explanation: Here, `nums[2] == key` and `nums[5] == key.
 ```text
 Input: nums = [2,2,2,2,2], key = 2, k = 2
 Output: [0,1,2,3,4]
-Explanation: For all indices i in nums, there exists some index j such that |i - j| <= k and nums[j] == key, so every index is a k-distant index. 
+Explanation: For all indices i in nums, there exists some index j such that |i - j| <= k and nums[j] == key, so every index is a k-distant index.
 Hence, we return [0,1,2,3,4].
 ```
 
 **Constraints:**
 
-	- `1 &lt;= nums.length &lt;= 1000`
-	- `1 &lt;= nums[i] &lt;= 1000`
-	- `key` is an integer from the array `nums`.
-	- `1 &lt;= k &lt;= nums.length`
+    - `1 &lt;= nums.length &lt;= 1000`
+    - `1 &lt;= nums[i] &lt;= 1000`
+    - `key` is an integer from the array `nums`.
+    - `1 &lt;= k &lt;= nums.length`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -746,21 +776,22 @@ Hence, we return [0,1,2,3,4].
 ---
 
 ### [2269. Find the K-Beauty of a Number](https://leetcode.com/problems/find-the-k-beauty-of-a-number)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 The **k-beauty** of an integer `num` is defined as the number of **substrings** of `num` when it is read as a string that meet the following conditions:
 
-	- It has a length of `k`.
-	- It is a divisor of `num`.
+    - It has a length of `k`.
+    - It is a divisor of `num`.
 
-Given integers `num` and `k`, return *the k-beauty of *`num`.
+Given integers `num` and `k`, return _the k-beauty of _`num`.
 
 Note:
 
-	- **Leading zeros** are allowed.
-	- `0` is not a divisor of any value.
+    - **Leading zeros** are allowed.
+    - `0` is not a divisor of any value.
 
 A **substring** is a contiguous sequence of characters in a string.
 
@@ -791,10 +822,11 @@ Therefore, the k-beauty is 2.
 
 **Constraints:**
 
-	- `1 &lt;= num &lt;= 10^9`
-	- `1 &lt;= k &lt;= num.length` (taking `num` as a string)
+    - `1 &lt;= num &lt;= 10^9`
+    - `1 &lt;= k &lt;= num.length` (taking `num` as a string)
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -802,11 +834,12 @@ Therefore, the k-beauty is 2.
 ---
 
 ### [2309. Greatest English Letter in Upper and Lower Case](https://leetcode.com/problems/greatest-english-letter-in-upper-and-lower-case)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
-Given a string of English letters `s`, return *the **greatest **English letter which occurs as **both** a lowercase and uppercase letter in* `s`. The returned letter should be in **uppercase**. If no such letter exists, return *an empty string*.
+Given a string of English letters `s`, return _the **greatest **English letter which occurs as **both** a lowercase and uppercase letter in_ `s`. The returned letter should be in **uppercase**. If no such letter exists, return _an empty string_.
 
 An English letter `b` is **greater** than another letter `a` if `b` appears **after** `a` in the English alphabet.
 
@@ -840,10 +873,11 @@ There is no letter that appears in both lower and upper case.
 
 **Constraints:**
 
-	- `1 &lt;= s.length &lt;= 1000`
-	- `s` consists of lowercase and uppercase English letters.
+    - `1 &lt;= s.length &lt;= 1000`
+    - `s` consists of lowercase and uppercase English letters.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -851,17 +885,18 @@ There is no letter that appears in both lower and upper case.
 ---
 
 ### [2367. Number of Arithmetic Triplets](https://leetcode.com/problems/number-of-arithmetic-triplets)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given a **0-indexed**, **strictly increasing** integer array `nums` and a positive integer `diff`. A triplet `(i, j, k)` is an **arithmetic triplet** if the following conditions are met:
 
-	- `i < j < k`,
-	- `nums[j] - nums[i] == diff`, and
-	- `nums[k] - nums[j] == diff`.
+    - `i < j < k`,
+    - `nums[j] - nums[i] == diff`, and
+    - `nums[k] - nums[j] == diff`.
 
-Return *the number of unique **arithmetic triplets**.*
+Return _the number of unique **arithmetic triplets**._
 
 **Example 1:**
 
@@ -885,12 +920,13 @@ Explanation:
 
 **Constraints:**
 
-	- `3 &lt;= nums.length &lt;= 200`
-	- `0 &lt;= nums[i] &lt;= 200`
-	- `1 &lt;= diff &lt;= 50`
-	- `nums` is **strictly** increasing.
+    - `3 &lt;= nums.length &lt;= 200`
+    - `0 &lt;= nums[i] &lt;= 200`
+    - `1 &lt;= diff &lt;= 50`
+    - `nums` is **strictly** increasing.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -898,13 +934,14 @@ Explanation:
 ---
 
 ### [2389. Longest Subsequence With Limited Sum](https://leetcode.com/problems/longest-subsequence-with-limited-sum)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given an integer array `nums` of length `n`, and an integer array `queries` of length `m`.
 
-Return *an array *`answer`* of length *`m`* where *`answer[i]`* is the **maximum** size of a **subsequence** that you can take from *`nums`* such that the **sum** of its elements is less than or equal to *`queries[i]`.
+Return _an array _`answer`_ of length _`m`_ where _`answer[i]`_ is the **maximum** size of a **subsequence** that you can take from _`nums`_ such that the **sum** of its elements is less than or equal to _`queries[i]`.
 
 A **subsequence** is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
 
@@ -929,12 +966,13 @@ Explanation: The empty subsequence is the only subsequence that has a sum less t
 
 **Constraints:**
 
-	- `n == nums.length`
-	- `m == queries.length`
-	- `1 &lt;= n, m &lt;= 1000`
-	- `1 &lt;= nums[i], queries[i] &lt;= 10^6`
+    - `n == nums.length`
+    - `m == queries.length`
+    - `1 &lt;= n, m &lt;= 1000`
+    - `1 &lt;= nums[i], queries[i] &lt;= 10^6`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -942,11 +980,12 @@ Explanation: The empty subsequence is the only subsequence that has a sum less t
 ---
 
 ### [2427. Number of Common Factors](https://leetcode.com/problems/number-of-common-factors)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
-Given two positive integers `a` and `b`, return *the number of **common** factors of *`a`* and *`b`.
+Given two positive integers `a` and `b`, return _the number of **common** factors of _`a`_ and _`b`.
 
 An integer `x` is a **common factor** of `a` and `b` if `x` divides both `a` and `b`.
 
@@ -968,9 +1007,10 @@ Explanation: The common factors of 25 and 30 are 1, 5.
 
 **Constraints:**
 
-	- `1 &lt;= a, b &lt;= 1000`
+    - `1 &lt;= a, b &lt;= 1000`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -978,15 +1018,16 @@ Explanation: The common factors of 25 and 30 are 1, 5.
 ---
 
 ### [2437. Number of Valid Clock Times](https://leetcode.com/problems/number-of-valid-clock-times)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given a string of length `5` called `time`, representing the current time on a digital clock in the format `"hh:mm"`. The **earliest** possible time is `"00:00"` and the **latest** possible time is `"23:59"`.
 
 In the string `time`, the digits represented by the `?` symbol are **unknown**, and must be **replaced** with a digit from `0` to `9`.
 
-Return* an integer *`answer`*, the number of valid clock times that can be created by replacing every *`?`* with a digit from *`0`* to *`9`.
+Return* an integer *`answer`_, the number of valid clock times that can be created by replacing every _`?`_ with a digit from _`0`_ to _`9`.
 
 **Example 1:**
 
@@ -1014,12 +1055,13 @@ Explanation: There are 24 possible choices for the hours, and 60 possible choice
 
 **Constraints:**
 
-	- `time` is a valid string of length `5` in the format `"hh:mm"`.
-	- `"00" &lt;= hh &lt;= "23"`
-	- `"00" &lt;= mm &lt;= "59"`
-	- Some of the digits might be replaced with `&#39;?&#39;` and need to be replaced with digits from `0` to `9`.
+    - `time` is a valid string of length `5` in the format `"hh:mm"`.
+    - `"00" &lt;= hh &lt;= "23"`
+    - `"00" &lt;= mm &lt;= "59"`
+    - Some of the digits might be replaced with `&#39;?&#39;` and need to be replaced with digits from `0` to `9`.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -1027,20 +1069,19 @@ Explanation: There are 24 possible choices for the hours, and 60 possible choice
 ---
 
 ### [2475. Number of Unequal Triplets in Array](https://leetcode.com/problems/number-of-unequal-triplets-in-array)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 You are given a **0-indexed** array of positive integers `nums`. Find the number of triplets `(i, j, k)` that meet the following conditions:
 
-	- `0 &lt;= i < j < k < nums.length`
-	- `nums[i]`, `nums[j]`, and `nums[k]` are **pairwise distinct**.
-	
-		- In other words, `nums[i] != nums[j]`, `nums[i] != nums[k]`, and `nums[j] != nums[k]`.
-	
-	
+    - `0 &lt;= i < j < k < nums.length`
+    - `nums[i]`, `nums[j]`, and `nums[k]` are **pairwise distinct**.
 
-Return *the number of triplets that meet the conditions.*
+    	- In other words, `nums[i] != nums[j]`, `nums[i] != nums[k]`, and `nums[j] != nums[k]`.
+
+Return _the number of triplets that meet the conditions._
 
 **Example 1:**
 
@@ -1065,10 +1106,11 @@ Explanation: No triplets meet the conditions so we return 0.
 
 **Constraints:**
 
-	- `3 &lt;= nums.length &lt;= 100`
-	- `1 &lt;= nums[i] &lt;= 1000`
+    - `3 &lt;= nums.length &lt;= 100`
+    - `1 &lt;= nums[i] &lt;= 1000`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -1076,24 +1118,25 @@ Explanation: No triplets meet the conditions so we return 0.
 ---
 
 ### [2490. Circular Sentence](https://leetcode.com/problems/circular-sentence)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 A **sentence** is a list of words that are separated by a** single** space with no leading or trailing spaces.
 
-	- For example, `"Hello World"`, `"HELLO"`, `"hello world hello world"` are all sentences.
+    - For example, `"Hello World"`, `"HELLO"`, `"hello world hello world"` are all sentences.
 
 Words consist of **only** uppercase and lowercase English letters. Uppercase and lowercase English letters are considered different.
 
 A sentence is **circular **if:
 
-	- The last character of each word in the sentence is equal to the first character of its next word.
-	- The last character of the last word is equal to the first character of the first word.
+    - The last character of each word in the sentence is equal to the first character of its next word.
+    - The last character of the last word is equal to the first character of the first word.
 
 For example, `"leetcode exercises sound delightful"`, `"eetcode"`, `"leetcode eats soul" `are all circular sentences. However, `"Leetcode is cool"`, `"happy Leetcode"`, `"Leetcode"` and `"I like Leetcode"` are **not** circular sentences.
 
-Given a string `sentence`, return `true`* if it is circular*. Otherwise, return `false`.
+Given a string `sentence`, return `true`_ if it is circular_. Otherwise, return `false`.
 
 **Example 1:**
 
@@ -1130,12 +1173,13 @@ The sentence is not circular.
 
 **Constraints:**
 
-	- `1 &lt;= sentence.length &lt;= 500`
-	- `sentence` consist of only lowercase and uppercase English letters and spaces.
-	- The words in `sentence` are separated by a single space.
-	- There are no leading or trailing spaces.
+    - `1 &lt;= sentence.length &lt;= 500`
+    - `sentence` consist of only lowercase and uppercase English letters and spaces.
+    - The words in `sentence` are separated by a single space.
+    - There are no leading or trailing spaces.
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -1143,13 +1187,14 @@ The sentence is not circular.
 ---
 
 ### [2529. Maximum Count of Positive Integer and Negative Integer](https://leetcode.com/problems/maximum-count-of-positive-integer-and-negative-integer)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
-Given an array `nums` sorted in **non-decreasing** order, return *the maximum between the number of positive integers and the number of negative integers.*
+Given an array `nums` sorted in **non-decreasing** order, return _the maximum between the number of positive integers and the number of negative integers._
 
-	- In other words, if the number of positive integers in `nums` is `pos` and the number of negative integers is `neg`, then return the maximum of `pos` and `neg`.
+    - In other words, if the number of positive integers in `nums` is `pos` and the number of negative integers is `neg`, then return the maximum of `pos` and `neg`.
 
 **Note** that `0` is neither positive nor negative.
 
@@ -1179,13 +1224,14 @@ Explanation: There are 4 positive integers and 0 negative integers. The maximum 
 
 **Constraints:**
 
-	- `1 &lt;= nums.length &lt;= 2000`
-	- `-2000 &lt;= nums[i] &lt;= 2000`
-	- `nums` is sorted in a **non-decreasing order**.
+    - `1 &lt;= nums.length &lt;= 2000`
+    - `-2000 &lt;= nums[i] &lt;= 2000`
+    - `nums` is sorted in a **non-decreasing order**.
 
 **Follow up:** Can you solve the problem in `O(log(n))` time complexity?
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -1193,26 +1239,27 @@ Explanation: There are 4 positive integers and 0 negative integers. The maximum 
 ---
 
 ### [2578. Split With Minimum Sum](https://leetcode.com/problems/split-with-minimum-sum)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 Given a positive integer `num`, split it into two non-negative integers `num1` and `num2` such that:
 
-	- The concatenation of `num1` and `num2` is a permutation of `num`.
+    - The concatenation of `num1` and `num2` is a permutation of `num`.
 
-    
+
     	- In other words, the sum of the number of occurrences of each digit in `num1` and `num2` is equal to the number of occurrences of that digit in `num`.
-    
-    
+
+
     - `num1` and `num2` can contain leading zeros.
 
-Return *the **minimum** possible sum of* `num1` *and* `num2`.
+Return _the **minimum** possible sum of_ `num1` _and_ `num2`.
 
 **Notes:**
 
-	- It is guaranteed that `num` does not contain any leading zeros.
-	- The order of occurrence of the digits in `num1` and `num2` may differ from the order of occurrence of `num`.
+    - It is guaranteed that `num` does not contain any leading zeros.
+    - The order of occurrence of the digits in `num1` and `num2` may differ from the order of occurrence of `num`.
 
 **Example 1:**
 
@@ -1232,9 +1279,10 @@ Explanation: We can split 687 so that `num1` is 68 and `num2` is 7, which would 
 
 **Constraints:**
 
-	- `10 &lt;= num &lt;= 10^9`
+    - `10 &lt;= num &lt;= 10^9`
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
@@ -1242,15 +1290,16 @@ Explanation: We can split 687 so that `num1` is 68 and `num2` is 7, which would 
 ---
 
 ### [2582. Pass the Pillow](https://leetcode.com/problems/pass-the-pillow)
+
 <span className="badge badge--success margin-bottom--md">Junior</span>
 
-**Description:** 
+**Description:**
 
 There are `n` people standing in a line labeled from `1` to `n`. The first person in the line is holding a pillow initially. Every second, the person holding the pillow passes it to the next person standing in the line. Once the pillow reaches the end of the line, the direction changes, and people continue passing the pillow in the opposite direction.
 
-	- For example, once the pillow reaches the `n^th` person they pass it to the `n - 1^th` person, then to the `n - 2^th` person and so on.
+    - For example, once the pillow reaches the `n^th` person they pass it to the `n - 1^th` person, then to the `n - 2^th` person and so on.
 
-Given the two positive integers `n` and `time`, return *the index of the person holding the pillow after *`time`* seconds*.
+Given the two positive integers `n` and `time`, return _the index of the person holding the pillow after _`time`_ seconds_.
 
 **Example 1:**
 
@@ -1272,15 +1321,15 @@ After two seconds, the 3^r^d person is holding the pillow.
 
 **Constraints:**
 
-	- `2 &lt;= n &lt;= 1000`
-	- `1 &lt;= time &lt;= 1000`
+    - `2 &lt;= n &lt;= 1000`
+    - `1 &lt;= time &lt;= 1000`
 
 **Note:** This question is the same as <a href="https://leetcode.com/problems/find-the-child-who-has-the-ball-after-k-seconds/description/" target="_blank"> 3178: Find the Child Who Has the Ball After K Seconds.</a>
 
 **Code:**
+
 ```php
 // PHP solution for this challenge is currently being updated.
 ```
 
 ---
-

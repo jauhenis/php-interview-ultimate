@@ -12,6 +12,7 @@ Let's implement a simple "User Registration" use case to see how this looks in p
 ---
 
 ## 1. The Domain Layer (Core/Inside)
+
 This is the heart of the application. It contains the business rules and domain entities. It has **no dependencies** on any other layer.
 
 ```php
@@ -44,6 +45,7 @@ class User {
 ---
 
 ## 2. The Ports (Interfaces)
+
 The Domain layer defines **what it needs** from the outside world using interfaces. In Hexagonal terms, these are **Driven Ports**.
 
 ```php
@@ -60,6 +62,7 @@ interface UserRepositoryInterface {
 ---
 
 ## 3. The Application Layer (Use Cases)
+
 This layer coordinates the domain objects to achieve a specific goal. It depends only on the Domain layer (and its interfaces).
 
 ```php
@@ -90,6 +93,7 @@ class RegisterUserUseCase {
 ---
 
 ## 4. The Infrastructure Layer (Adapters)
+
 This layer contains the concrete implementations (Adapters) that interact with external systems (Database, Mail, API).
 
 ```php
@@ -121,6 +125,7 @@ class SqlUserRepository implements UserRepositoryInterface {
 ---
 
 ## 5. The Presentation Layer (Driving Adapters)
+
 How the outside world interacts with our application (HTTP, CLI).
 
 ```php
@@ -151,11 +156,13 @@ class UserController {
 ## How it matches the Architectures:
 
 ### 1. Hexagonal Architecture (Ports & Adapters)
+
 - **Ports**: `UserRepositoryInterface`.
 - **Adapters**: `SqlUserRepository` (Driven) and `UserController` (Driving).
 - **Goal**: You can swap `SqlUserRepository` for `RedisUserRepository` without touching the business logic.
 
 ### 2. Onion Architecture
+
 - **Inner Core**: `App\Domain\Entity`.
 - **Domain Services/Interfaces**: `App\Domain\Repository`.
 - **Application Layer**: `App\Application\UseCase`.
@@ -163,6 +170,7 @@ class UserController {
 - **Goal**: Dependencies always point inward: Infrastructure -> Application -> Domain.
 
 ### 3. Clean Architecture
+
 - **Entities**: `User`.
 - **Use Cases**: `RegisterUserUseCase`.
 - **Interface Adapters**: `SqlUserRepository`, `UserController`.
@@ -171,6 +179,7 @@ class UserController {
 ---
 
 ## Dependency Injection (DI) - Wiring it up
+
 In a real application (using a Service Container), it looks like this:
 
 ```php

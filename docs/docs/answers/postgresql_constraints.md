@@ -30,6 +30,7 @@ CREATE TABLE orders (
 ```
 
 **Actions on Delete/Update:**
+
 - `CASCADE`: Delete/update the referencing rows.
 - `RESTRICT`: Prevent deletion/update of the referenced row.
 - `SET NULL`: Set the referencing column to NULL.
@@ -62,4 +63,5 @@ ALTER TABLE users ALTER COLUMN username SET NOT NULL;
 ```
 
 ---
-*Back to [PostgreSQL](../questions/08-postgresql.mdx)*
+
+_Back to [PostgreSQL](../questions/08-postgresql.mdx)_

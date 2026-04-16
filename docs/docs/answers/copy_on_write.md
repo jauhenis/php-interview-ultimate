@@ -1,6 +1,6 @@
 ---
-title: "Copy-on-Write in PHP"
-sidebar_label: "Copy-on-Write"
+title: 'Copy-on-Write in PHP'
+sidebar_label: 'Copy-on-Write'
 ---
 
 # Copy-on-Write in PHP
@@ -44,6 +44,7 @@ function handle(array $array) {
 ```
 
 ### What triggers a copy?
+
 - Changing an array element.
 - Adding or removing elements (`unset()`).
 - Modifying a character in a string.
@@ -73,7 +74,7 @@ function handleRead(array $array): void
 
 function handleWrite(array $array): void
 {
-    $array[0] = 'changed'; 
+    $array[0] = 'changed';
     printMemory('Peak inside handleWrite');
 }
 
@@ -85,6 +86,7 @@ handleWrite($largeArray);
 ```
 
 **Expected Results (approximate):**
+
 - **Initial Peak**: 16,764 KB
 - **Peak inside handleRead**: 16,764 KB (No copy)
 - **Peak inside handleWrite**: 33,153 KB (Copy created)

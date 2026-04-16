@@ -28,6 +28,7 @@ This file contains a curated list of PHP interview questions and answers, merged
 23. [Basic Algorithms](#23-basic-algorithms)
 24. [HaPHPiness - Best Things in PHP](#24-haphpiness---best-things-in-php)
 25. [LeetCode Solutions](#25-leetcode-solutions)
+26. [Regexp](#26-regexp)
 ---
 
 ## 1. PHP Basics & Language Features
@@ -2143,6 +2144,50 @@ For a full list of solutions organized by pages, please visit the [LeetCode Solu
 - [Page 3](./docs/docs/answers/leetcode/page-3.mdx)
 - [Page 4](./docs/docs/answers/leetcode/page-4.mdx)
 - [Page 5](./docs/docs/answers/leetcode/page-5.mdx)
+
+## 26. Regexp
+
+### Junior
+
+#### What is Regex?
+**Answer:** Regex (Regular Expression) is a powerful tool for text matching, searching, and manipulation. In PHP, it is implemented through the PCRE library.
+[Detailed Regexp Guide](answers/regexp.md#1-advanced-pcre-features)
+
+#### Why is Regex good?
+**Answer:** It is concise, powerful, and extremely efficient when written correctly. It allows complex text patterns to be described in a single line.
+[Detailed Regexp Guide](answers/regexp.md#4-the-elements-of-good-regex-style)
+
+#### How to use Regex in PHP?
+**Answer:** PHP uses `preg_*` functions like `preg_match()`, `preg_match_all()`, and `preg_replace()`. Patterns must be enclosed in delimiters (e.g., `/pattern/`).
+[Detailed Regexp Guide](answers/regexp.md#5-php-regex-functions-in-depth)
+
+#### What is the difference between `preg_match` and `preg_match_all`?
+**Answer:** `preg_match` stops after the first match, while `preg_match_all` finds all occurrences in the string.
+[Detailed Regexp Guide](answers/regexp.md#5-php-regex-functions-in-depth)
+
+### Middle
+
+#### How would you build a complex Regex step-by-step?
+**Answer:** 1. Identify what to ignore (quotes, tags). 2. Identify the target pattern. 3. Combine using the "Best Trick" (`Ignore|Match|(Capture)`). 4. Optimize using AGRA (Anchor, Greed, Repeat, Atomic).
+[Detailed Regexp Guide](answers/regexp.md#3-step-by-step-tutorial-building-a-complex-regex)
+
+#### What is the "Best Regex Trick Ever"?
+**Answer:** It is a technique to match patterns while excluding specific contexts (like quotes or comments) using a simple `Ignore|Match|(Capture)` pattern.
+[Detailed Regexp Guide](answers/regexp.md#2-the-best-regex-trick-ever-exclude-context)
+
+#### What is `preg_filter`?
+**Answer:** It is similar to `preg_replace`, but it only returns the elements that actually matched the pattern, effectively filtering the input array.
+[Detailed Regexp Guide](answers/regexp.md#5-php-regex-functions-in-depth)
+
+### Senior
+
+#### What are Atomic Groups and why use them?
+**Answer:** `(?>...)` groups prevent backtracking. They "lock" a match, preventing the engine from trying alternative paths, which avoids "catastrophic backtracking" and improves performance.
+[Detailed Regexp Guide](answers/regexp.md#atomic-groups)
+
+#### Is ChatGPT good at regex?
+**Answer:** While helpful for drafts, ChatGPT often lacks deep expertise. It can produce "dot-star soup" (inefficient patterns) or make syntax errors. Expert review is always needed.
+[Detailed Regexp Guide](answers/regexp.md#6-is-chatgpt-good-at-regex)
 
 
 

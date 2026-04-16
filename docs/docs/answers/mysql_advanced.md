@@ -98,14 +98,14 @@ These examples assume a table `accounts` with `id` and `balance`.
 
 This occurs when Transaction 2 reads data that Transaction 1 has changed but not yet committed.
 
-| Step | Transaction 1 (T1)                                | Transaction 2 (T2)                                         |
-| :--- | :---                                              | :---                                                       |
-| 1    | `SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;` | `SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;` |
-| 2    | `START TRANSACTION;`                              | `START TRANSACTION;`                                       |
-| 3    | `UPDATE accounts SET balance = 200 WHERE id = 1;` |                                                            |
-| 4    |                                                   | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 200** |
-| 5    | `ROLLBACK;`                                       |                                                            |
-| 6    |                                                   | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 100** |
+| Step | Transaction 1 (T1)                                          | Transaction 2 (T2)                                              |
+| :--- | :---------------------------------------------------------- | :-------------------------------------------------------------- |
+| 1    | `SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;` | `SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;`     |
+| 2    | `START TRANSACTION;`                                        | `START TRANSACTION;`                                            |
+| 3    | `UPDATE accounts SET balance = 200 WHERE id = 1;`           |                                                                 |
+| 4    |                                                             | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 200** |
+| 5    | `ROLLBACK;`                                                 |                                                                 |
+| 6    |                                                             | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 100** |
 
 **Analysis**: T2 made decisions based on $200, but that value "never existed" because T1 rolled back.
 
@@ -113,14 +113,14 @@ This occurs when Transaction 2 reads data that Transaction 1 has changed but not
 
 Transaction 1 reads the same row twice and gets different results because Transaction 2 committed a change in between.
 
-| Step | Transaction 1 (T1)                                | Transaction 2 (T2)                                      |
-| :--- | :---                                              | :---                                                    |
-| 1    | `SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;` | `SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;` |
-| 2    | `START TRANSACTION;`                              | `START TRANSACTION;`                                    |
-| 3    | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 100** |                                                         |
-| 4    |                                                   | `UPDATE accounts SET balance = 150 WHERE id = 1;`       |
-| 5    |                                                   | `COMMIT;`                                               |
-| 6    | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 150** |                                                         |
+| Step | Transaction 1 (T1)                                              | Transaction 2 (T2)                                        |
+| :--- | :-------------------------------------------------------------- | :-------------------------------------------------------- |
+| 1    | `SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;`       | `SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;` |
+| 2    | `START TRANSACTION;`                                            | `START TRANSACTION;`                                      |
+| 3    | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 100** |                                                           |
+| 4    |                                                                 | `UPDATE accounts SET balance = 150 WHERE id = 1;`         |
+| 5    |                                                                 | `COMMIT;`                                                 |
+| 6    | `SELECT balance FROM accounts WHERE id = 1;` -- **Result: 150** |                                                           |
 
 **Analysis**: Even though T1 is still in the same transaction, the data changed. This breaks consistency if T1 was performing a multi-step calculation.
 
@@ -128,14 +128,14 @@ Transaction 1 reads the same row twice and gets different results because Transa
 
 Transaction 1 performs a range query twice and gets a different number of rows because Transaction 2 inserted/deleted a row.
 
-| Step | Transaction 1 (T1)                                | Transaction 2 (T2)                                   |
-| :--- | :---                                              | :---                                                 |
-| 1    | `SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;` | `SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;` |
-| 2    | `START TRANSACTION;`                              | `START TRANSACTION;`                                 |
-| 3    | `SELECT COUNT(*) FROM accounts WHERE balance > 100;` -- **Result: 5** |                                                      |
-| 4    |                                                   | `INSERT INTO accounts (id, balance) VALUES (99, 500);` |
-| 5    |                                                   | `COMMIT;`                                            |
-| 6    | `SELECT COUNT(*) FROM accounts WHERE balance > 100;` -- **Result: 5** |                                                      |
+| Step | Transaction 1 (T1)                                                    | Transaction 2 (T2)                                         |
+| :--- | :-------------------------------------------------------------------- | :--------------------------------------------------------- |
+| 1    | `SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;`            | `SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;` |
+| 2    | `START TRANSACTION;`                                                  | `START TRANSACTION;`                                       |
+| 3    | `SELECT COUNT(*) FROM accounts WHERE balance > 100;` -- **Result: 5** |                                                            |
+| 4    |                                                                       | `INSERT INTO accounts (id, balance) VALUES (99, 500);`     |
+| 5    |                                                                       | `COMMIT;`                                                  |
+| 6    | `SELECT COUNT(*) FROM accounts WHERE balance > 100;` -- **Result: 5** |                                                            |
 
 **Analysis**: In MySQL InnoDB (Repeatable Read), the result is still 5 due to **MVCC (Multi-Version Concurrency Control)**. However, if T1 tried to `UPDATE accounts SET balance = balance WHERE balance > 100`, it might "discover" the new row. To fully prevent this, **Serializable** or explicit locking is needed.
 
@@ -152,36 +152,37 @@ Transaction 1 performs a range query twice and gets a different number of rows b
 
 #### 1. Exclusive Lock Conflict (`FOR UPDATE`)
 
-| Step | Transaction 1 (T1)                               | Transaction 2 (T2)                                          |
-| :--- | :---                                             | :---                                                        |
-| 1    | `BEGIN;`                                         | `BEGIN;`                                                    |
-| 2    | `SELECT * FROM accounts WHERE id = 1 FOR UPDATE;` |                                                             |
-| 3    |                                                  | `SELECT * FROM accounts WHERE id = 1 FOR UPDATE;` -- **BLOCKED** |
-| 4    | `UPDATE accounts SET balance = 300 WHERE id = 1;` |                                                             |
-| 5    | `COMMIT;`                                        |                                                             |
-| 6    |                                                  | T2 now receives the result and can proceed.                 |
+| Step | Transaction 1 (T1)                                | Transaction 2 (T2)                                               |
+| :--- | :------------------------------------------------ | :--------------------------------------------------------------- |
+| 1    | `BEGIN;`                                          | `BEGIN;`                                                         |
+| 2    | `SELECT * FROM accounts WHERE id = 1 FOR UPDATE;` |                                                                  |
+| 3    |                                                   | `SELECT * FROM accounts WHERE id = 1 FOR UPDATE;` -- **BLOCKED** |
+| 4    | `UPDATE accounts SET balance = 300 WHERE id = 1;` |                                                                  |
+| 5    | `COMMIT;`                                         |                                                                  |
+| 6    |                                                   | T2 now receives the result and can proceed.                      |
 
 #### 2. Shared Lock vs Update
 
-| Step | Transaction 1 (T1)                                     | Transaction 2 (T2)                                        |
-| :--- | :---                                                   | :---                                                      |
-| 1    | `BEGIN;`                                               | `BEGIN;`                                                  |
-| 2    | `SELECT * FROM accounts WHERE id = 1 LOCK IN SHARE MODE;` |                                                           |
-| 3    |                                                        | `UPDATE accounts SET balance = 400 WHERE id = 1;` -- **BLOCKED** |
-| 4    | `COMMIT;`                                              |                                                           |
-| 5    |                                                        | T2 now proceeds with the update.                          |
+| Step | Transaction 1 (T1)                                        | Transaction 2 (T2)                                               |
+| :--- | :-------------------------------------------------------- | :--------------------------------------------------------------- |
+| 1    | `BEGIN;`                                                  | `BEGIN;`                                                         |
+| 2    | `SELECT * FROM accounts WHERE id = 1 LOCK IN SHARE MODE;` |                                                                  |
+| 3    |                                                           | `UPDATE accounts SET balance = 400 WHERE id = 1;` -- **BLOCKED** |
+| 4    | `COMMIT;`                                                 |                                                                  |
+| 5    |                                                           | T2 now proceeds with the update.                                 |
 
 #### 3. Deadlock Scenario
 
-| Step | Transaction 1 (T1)                            | Transaction 2 (T2)                            |
-| :--- | :---                                          | :---                                          |
-| 1    | `START TRANSACTION;`                          | `START TRANSACTION;`                          |
-| 2    | `UPDATE accounts SET balance = 10 WHERE id = 1;` |                                               |
-| 3    |                                               | `UPDATE accounts SET balance = 20 WHERE id = 2;` |
-| 4    | `UPDATE accounts SET balance = 30 WHERE id = 2;` -- **WAITING** |                                               |
-| 5    |                                               | `UPDATE accounts SET balance = 40 WHERE id = 1;` -- **DEADLOCK!** |
+| Step | Transaction 1 (T1)                                              | Transaction 2 (T2)                                                |
+| :--- | :-------------------------------------------------------------- | :---------------------------------------------------------------- |
+| 1    | `START TRANSACTION;`                                            | `START TRANSACTION;`                                              |
+| 2    | `UPDATE accounts SET balance = 10 WHERE id = 1;`                |                                                                   |
+| 3    |                                                                 | `UPDATE accounts SET balance = 20 WHERE id = 2;`                  |
+| 4    | `UPDATE accounts SET balance = 30 WHERE id = 2;` -- **WAITING** |                                                                   |
+| 5    |                                                                 | `UPDATE accounts SET balance = 40 WHERE id = 1;` -- **DEADLOCK!** |
 
 **Result**: MySQL detects the cycle (T1 waiting for T2, T2 waiting for T1) and kills one transaction (usually the one that did the least work) with error: `Deadlock found when trying to get lock; try restarting transaction`.
+
 - **Optimistic Locking**: Assumes no conflict; checks if the data has changed since it was read (usually via a version/timestamp column) before updating.
 - **Advisory Locks**: Application-defined locks (e.g., `GET_LOCK('my_lock_name', 10)`) that don't lock database rows but provide a way to synchronize logic across different processes.
 - **Deadlock**: A situation where two or more transactions are waiting for each other to release locks, causing a permanent block. MySQL automatically detects deadlocks and rolls back one of the transactions to break the cycle.

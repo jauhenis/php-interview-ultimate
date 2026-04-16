@@ -45,6 +45,7 @@ The content that was used to learn Design Patterns, Refactoring principles:
 - [Refactoring Guru](https://refactoring.guru/)
 - [Backend Roadmap](https://roadmap.sh/backend)
 - [HaPHPiness](https://haphpiness.com/)
+- [RexEgg](https://www.rexegg.com/)
 - [Metanit](https://metanit.com/)
 - Partially written and organized using [Gemini](https://gemini.google.com/), [Cursor](https://www.cursor.com/), and [JetBrains AI](https://www.jetbrains.com/ai/).
 
@@ -86,8 +87,9 @@ docker compose run --service-ports node npm run dev
 The documentation will be available at `http://localhost:3333`.
 
 ## Key Topics Covered
-- The documentation is now organized into 25 major categories, including:
+- The documentation is now organized into 26 major categories, including:
 - **Core PHP**: Data types, generators, magic constants, PHP features (8.0+), and more.
+- **Regexp**: Comprehensive guide to regular expressions in PHP, including PCRE functions and common tasks.
 - **HaPHPiness**: Modern PHP features and best things in PHP.
 - **LeetCode Solutions**: Solutions to LeetCode challenges in PHP.
 - **Frameworks**: Laravel, Symfony, and Doctrine.

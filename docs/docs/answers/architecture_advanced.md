@@ -69,6 +69,7 @@ A domain model where objects have state (properties) but little or no logic (beh
 An approach to software development that prioritizes the core domain and domain logic.
 
 #### Key Building Blocks:
+
 - **Entity**: An object with a unique identity (ID) that persists even if its attributes change (e.g., a `User`).
 - **Value Object**: An object defined by its attributes, with no identity (e.g., an `Address`, `Money`). They should be immutable. Two value objects with the same attributes are considered identical.
 - **Aggregate**: A cluster of domain objects that can be treated as a single unit. An Aggregate has an **Aggregate Root** (an Entity) through which all access to the aggregate happens.
@@ -83,14 +84,18 @@ An approach to software development that prioritizes the core domain and domain 
 Both aim to decouple the application core (business logic) from external concerns (DB, API, UI).
 
 ### Hexagonal (Ports & Adapters)
+
 Proposed by Alistair Cockburn, it focuses on separating the "inside" (application core) from the "outside" (infrastructure).
+
 - **Application Core**: Contains domain logic and is independent of external tools.
 - **Ports**: Interfaces defined by the core for what it needs (driven ports, e.g., `UserRepositoryInterface`) or what it provides (driving ports, e.g., `UseCaseInterface`).
 - **Adapters**: Concrete implementations that bridge the gap between the core and the outside world (e.g., `DoctrineUserRepository` as a driven adapter, or `UserController` as a driving adapter).
 - **Key Idea**: The application can be used by different "drivers" (UI, CLI, Tests) and can use different "driven" tools (MySQL, MongoDB, In-Memory) without changing the core.
 
 ### Onion Architecture
+
 Proposed by Jeffrey Palermo, it emphasizes concentric layers where dependencies always point inward.
+
 - **Domain Model**: The innermost core (Entities, Value Objects).
 - **Domain Services**: Logic that operates on the domain model.
 - **Application Services**: Use cases that coordinate the domain objects to achieve a goal.
@@ -98,9 +103,10 @@ Proposed by Jeffrey Palermo, it emphasizes concentric layers where dependencies 
 - **Key Idea**: "Dependencies point inwards." This ensures that the core domain is always independent of the implementation details of the outer layers.
 
 ### Comparison
-| Feature | Hexagonal Architecture | Onion Architecture |
-|---------|-----------------------|--------------------|
-| **Primary Focus** | Inside vs Outside (Ports/Adapters) | Concentric Layers (Inward Dependencies) |
-| **Internal Structure** | Doesn't strictly prescribe layers inside the hexagon | Prescribes specific layers (Domain, Application, etc.) |
-| **Analogy** | A hexagon with multiple "sides" (ports) | An onion with multiple "skins" (layers) |
-| **Similarities** | Both use Dependency Inversion to keep the core clean from infrastructure | Both use Dependency Inversion to keep the core clean from infrastructure |
+
+| Feature                | Hexagonal Architecture                                                   | Onion Architecture                                                       |
+| ---------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| **Primary Focus**      | Inside vs Outside (Ports/Adapters)                                       | Concentric Layers (Inward Dependencies)                                  |
+| **Internal Structure** | Doesn't strictly prescribe layers inside the hexagon                     | Prescribes specific layers (Domain, Application, etc.)                   |
+| **Analogy**            | A hexagon with multiple "sides" (ports)                                  | An onion with multiple "skins" (layers)                                  |
+| **Similarities**       | Both use Dependency Inversion to keep the core clean from infrastructure | Both use Dependency Inversion to keep the core clean from infrastructure |

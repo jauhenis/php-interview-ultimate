@@ -26,6 +26,7 @@ INSERT INTO sal_emp VALUES (
 ```
 
 ### Querying Arrays
+
 - Accessing an element: `pay_by_quarter[1]` (PostgreSQL uses 1-based indexing by default).
 - Slicing: `pay_by_quarter[1:2]`.
 
@@ -43,6 +44,7 @@ CREATE TABLE person (
 ```
 
 ### Modifying Enums
+
 ```sql
 ALTER TYPE mood ADD VALUE 'excited' AFTER 'happy';
 ```
@@ -53,4 +55,5 @@ ALTER TYPE mood ADD VALUE 'excited' AFTER 'happy';
 - `jsonb`: Stores data in a decomposed binary format. It is slightly slower to input but significantly faster to process and supports indexing.
 
 ---
-*Back to [PostgreSQL](../questions/08-postgresql.mdx)*
+
+_Back to [PostgreSQL](../questions/08-postgresql.mdx)_
