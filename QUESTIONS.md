@@ -1237,8 +1237,16 @@ CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
 #### What is the difference between `WHERE` and `HAVING` in PostgreSQL?
 **Answer:** `WHERE` filters rows before grouping/aggregation. `HAVING` filters the results after `GROUP BY` has been applied.
 
+#### What is a View and why is it used?
+**Answer:** A **View** is a virtual table created from an SQL query. It doesn't store data itself but displays data from underlying tables. It's used to simplify complex queries, enhance security (by hiding sensitive columns), and provide a consistent interface for users.
+[Detailed Guide on Views](answers/sql_views.md)
+
 #### What are Aggregate Functions in PostgreSQL?
 **Answer:** Functions that compute a single result from a set of input values, such as `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`, and `STRING_AGG()`.
+
+#### What is a Materialized View and how does it differ from a regular View?
+**Answer:** A regular **View** is a virtual table that re-runs its query every time it is accessed. A **Materialized View** stores the actual query results on disk (like a table). This provides significant performance gains for complex queries but requires manual or scheduled refreshes to stay up-to-date.
+[Detailed Guide on Views](answers/sql_views.md)
 
 ### Senior
 
