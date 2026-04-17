@@ -21,6 +21,7 @@ slug: "/answers"
 * [Git: Merge vs Rebase vs Pull vs Fetch](git.md)
 * [Инфраструктура и инструменты (RabbitMQ, Redis, Docker)](infrastructure_extras.md)
 * [Interface vs Abstract Class](interface_vs_abstract.md)
+* [Kafka: высокопроизводительный распределенный стриминг](kafka.md)
 * [Laravel Service Container](laravel_service_container.md)
 * [Официальные плагины и пакеты Laravel](laravel_plugins.md)
 * [Перегрузка методов в PHP](method_overloading.md)

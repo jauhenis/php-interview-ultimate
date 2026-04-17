@@ -1,0 +1,78 @@
+---
+title: '15. Security'
+sidebar_label: '15. Security'
+---
+
+# 15. Security
+
+### What is the difference between Hashing and Encryption?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- **Hashing:** A one-way function that produces a fixed-length string from input. It cannot be reversed (e.g., `password_hash`).
+- **Encryption:** A two-way function where data can be converted to ciphertext and then decrypted back to plaintext with a key.
+
+---
+
+### Why do we use Salting when hashing passwords?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** To prevent attackers from using precomputed tables (like Rainbow Tables) to crack passwords. A unique salt is added to each password before hashing.
+
+---
+
+### What is SQL Injection and how to prevent it?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A vulnerability where an attacker can execute malicious SQL statements. Prevented by using prepared statements and parameterized queries.
+
+---
+
+### What is XSS (Cross-Site Scripting) and how to prevent it?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** An attack where malicious scripts are injected into web pages. Prevented by escaping output (using `htmlspecialchars`) and sanitizing user input.
+
+---
+
+### What is the difference between `htmlspecialchars` and `strip_tags`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- `htmlspecialchars()`: Converts special characters (like `<`, `>`, `&`) to HTML entities (like `&lt;`, `&gt;`, `&amp;`). This prevents the browser from interpreting them as HTML/JS but preserves the original text for display.
+- `strip_tags()`: Removes all HTML and PHP tags from a string. It's more destructive and can be used when you want only plain text input.
+
+---
+
+### What is CSRF (Cross-Site Request Forgery) and how to prevent it?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** An attack that forces an authenticated user to execute unwanted actions on a web application. Prevented by using CSRF tokens.
+
+---
+
+### What is JWT (JSON Web Token)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A compact, URL-safe means of representing claims to be transferred between two parties. Often used for stateless authentication.
+
+---
+
+### What is the OWASP Top 10?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** A standard awareness document for developers and web application security, representing a broad consensus about the most critical security risks to web applications.
+
+---
+
+---

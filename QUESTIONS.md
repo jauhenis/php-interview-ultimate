@@ -14,21 +14,22 @@ This file contains a curated list of PHP interview questions and answers, merged
 9. [Laravel & Symfony](#9-laravel--symfony)
 10. [Tools & Composer](#10-tools--composer)
 11. [Caching & Redis](#11-caching--redis)
-12. [Infrastructure, Docker & DevOps](#12-infrastructure-docker--devops)
-13. [Testing & Quality](#13-testing--quality)
-14. [Security](#14-security)
-15. [Web & API](#15-web--api)
-16. [Highload & Scalability](#16-highload--scalability)
-17. [Clean Code & Best Practices](#17-clean-code--best-practices)
-18. [Elasticsearch](#18-elasticsearch)
-19. [Tricky Questions](#19-tricky-questions)
-20. [Laravel Plugins](#20-laravel-plugins)
-21. [Long-Running (RoadRunner)](#21-long-running-roadrunner)
-22. [PSR & PER Standards](#22-psr--per-standards)
-23. [Basic Algorithms](#23-basic-algorithms)
-24. [HaPHPiness - Best Things in PHP](#24-haphpiness---best-things-in-php)
-25. [LeetCode Solutions](#25-leetcode-solutions)
-26. [Regexp](#26-regexp)
+12. [Kafka](#12-kafka)
+13. [Infrastructure, Docker & DevOps](#13-infrastructure-docker--devops)
+14. [Testing & Quality](#14-testing--quality)
+15. [Security](#15-security)
+16. [Web & API](#16-web--api)
+17. [Highload & Scalability](#17-highload--scalability)
+18. [Clean Code & Best Practices](#18-clean-code--best-practices)
+19. [Elasticsearch](#19-elasticsearch)
+20. [Tricky Questions](#20-tricky-questions)
+21. [Laravel Plugins](#21-laravel-plugins)
+22. [Long-Running (RoadRunner)](#22-long-running-roadrunner)
+23. [PSR & PER Standards](#23-psr--per-standards)
+24. [Basic Algorithms](#24-basic-algorithms)
+25. [HaPHPiness - Best Things in PHP](#25-haphpiness---best-things-in-php)
+26. [LeetCode Solutions](#26-leetcode-solutions)
+27. [Regexp](#27-regexp)
 ---
 
 ## 1. PHP Basics & Language Features
@@ -413,7 +414,7 @@ In distributed systems, idempotency is critical for handling network failures. I
 ---
 
 ## 5. Design Patterns
-Design patterns are strictly related to [Clean Code & Best Practices](#16-clean-code--best-practices).
+Design patterns are strictly related to [Clean Code & Best Practices](#18-clean-code--best-practices).
 
 ### Junior
 #### What are the main categories of Design Patterns?
@@ -833,7 +834,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 #### What is the difference between `DATETIME` and `TIMESTAMP`?
 **Answer:**
-- **DATETIME:** 8 bytes. Range: 1000-01-01 to 9999-12-31. Constant across time zones.
+- **DATETIME:** 8 bytes. Range: 1000-01-01 to 9999-13-31. Constant across time zones.
 - **TIMESTAMP:** 4 bytes. Range: 1970-01-01 to 2038-01-19. Converted to/from UTC based on the current time zone.
 
 #### What are the `ENUM` and `SET` types?
@@ -1369,7 +1370,118 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 12. Infrastructure, Docker & DevOps
+## 12. Kafka
+
+### Middle
+#### How does Kafka ensure exactly-once processing, and what are the challenges involved?
+**Answer:**
+Kafka provides exactly-once semantics (EOS) using:
+- **Idempotent producers**: Ensure retries don’t lead to duplicates.
+- **Transactions**: Group multiple Kafka operations into a single atomic unit.
+- **Consumer offset management**: When using Kafka Streams or transactional consumers, offsets are committed atomically.
+
+**Challenges:**
+- Requires idempotency on the consumer side.
+- Need to enable `acks=all`, `enable.idempotence=true` in producers.
+- Increased latency due to transactional writes.
+
+#### What is the role of the high-water mark (HW) in Kafka, and how does it impact consumers?
+**Answer:**
+- **High-Water Mark (HW)** is the last offset that is considered “committed” and can be read by consumers.
+- If a follower lags behind, it won’t get promoted to a leader because it doesn’t have the HW.
+- Consumers cannot read uncommitted data (behind HW), ensuring consistency.
+
+**Tricky Scenario:** If a broker crashes before HW is updated, some committed messages may disappear temporarily, but they will be recovered after leader election.
+
+#### How does Kafka handle leader failure, and what happens to in-flight messages?
+**Answer:**
+- Kafka uses ZooKeeper/KRaft to elect a new leader from in-sync replicas (ISR).
+- In-flight messages (`ack=1` or `ack=0`) may be lost if they weren’t replicated.
+- If `acks=all`, the message is safe only if the leader had successfully replicated to ISRs before crashing.
+- Uncommitted messages (below HW) may be lost in a failover scenario.
+
+**Edge Case:** If there are no in-sync replicas, Kafka will pause writes to prevent data loss until a follower catches up.
+
+#### Explain log compaction in Kafka. How does it differ from retention policies?
+**Answer:**
+- **Log compaction** retains at least one version of each key, deleting older versions.
+- **Retention policies** (`log.retention.ms`, `log.retention.bytes`) delete messages based on time or size, regardless of key.
+
+**Use Case:**
+- Compaction is useful for changelogs (latest state updates) in databases.
+- Retention is useful for event logs (like user activity tracking).
+
+**Tricky Question:** What happens if a consumer never reads a compacted topic?
+If the consumer was down for too long, it may lose some historical updates because old messages are deleted.
+
+#### How does Kafka prevent duplicate messages in a producer retry scenario?
+**Answer:**
+Kafka uses idempotent producers to prevent duplicates when retries happen:
+- Each message has a sequence number attached.
+- The broker remembers the last acknowledged sequence number per producer.
+- If a producer resends a message, Kafka discards duplicates.
+
+**Tricky Scenario:** If a producer restarts and gets a new producer ID, old sequence tracking resets, and duplicates can appear.
+
+#### How does Kafka handle backpressure when consumers lag behind?
+**Answer:**
+- Consumers lag when they process messages slower than they arrive.
+- Kafka handles backpressure using `pause()`/`resume()` APIs in Kafka Consumer.
+- If consumer lag is too high:
+  - Increase consumer count in a consumer group.
+  - Scale up processing power (e.g., batch processing).
+  - Use rate limiting on the producer side.
+
+#### What is the difference between in-sync replicas (ISR), out-of-sync replicas (OSR), and under-replicated partitions?
+**Answer:**
+- **ISR (In-Sync Replicas)**: Replicas that have caught up with the leader.
+- **OSR (Out-of-Sync Replicas)**: Lagging followers that are behind.
+- **Under-Replicated Partitions (URP)**: Any partition where the ISR count is less than the replication factor.
+
+**Tricky Question:** If a Kafka topic has a replication factor of 3 and ISR = 1, what does that mean?
+Only one broker is in sync (high risk of data loss). If the leader crashes, there may be no safe replicas to promote.
+
+### Senior
+#### Why is unclean leader election dangerous in Kafka?
+**Answer:**
+- When `unclean.leader.election.enable=true`, an out-of-sync follower can be elected as leader, potentially losing committed messages.
+- This can cause data inconsistencies between producers and consumers.
+- In production, always keep this `false` unless availability is more important than consistency.
+
+#### How does Kafka Streams handle stateful processing efficiently?
+**Answer:**
+- Uses **RocksDB** as an embedded database for local state storage.
+- Uses **changelogs topics** to recover state after crashes.
+- Uses `punctuation()` for periodic processing without full reprocessing.
+
+**Tricky Case:** If a Kafka Streams app restarts and changelog topic is deleted, all local state is lost and must be recomputed.
+
+#### How can you monitor and debug consumer lag in Kafka?
+**Answer:**
+- Use `kafka-consumer-groups.sh` to check consumer lag.
+- Monitor JMX metrics (`kafka.consumer:type=ConsumerLag`).
+- Set up lag-based alerting in Prometheus/Grafana/New Relic.
+
+**Tricky Debugging Scenario:**
+If consumer lag is increasing despite multiple instances, check:
+- Rebalance storms due to inefficient partition assignment.
+- Slow deserialization (optimize message size).
+- Consumer GC pauses (tune JVM settings).
+
+#### How to implement distributed logging using Kafka in a PHP application?
+**Answer:**
+Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implement it in PHP:
+- Use `php-rdkafka` as the producer.
+- In your application, instead of writing directly to a file or database, send log events to a Kafka topic (e.g., `app_logs`).
+- Configure the producer to use small batches (`queue.buffering.max.ms`) to avoid high overhead per message.
+- Use log levels (e.g., `ERROR`, `INFO`) as partition keys to group logs efficiently.
+- On the other side, use a Kafka consumer or a tool like Logstash to ingest logs into Elasticsearch.
+
+[Detailed Kafka Guide](answers/kafka.md)
+
+---
+
+## 13. Infrastructure, Docker & DevOps
 
 ### Junior
 #### What is Docker?
@@ -1402,7 +1514,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 13. Testing & Quality
+## 14. Testing & Quality
 
 ### Junior
 #### Why is it important to write tests?
@@ -1450,7 +1562,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 14. Security
+## 15. Security
 
 ### Junior
 #### What is the difference between Hashing and Encryption?
@@ -1480,7 +1592,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 15. Web & API
+## 16. Web & API
 
 ### Junior
 #### What is REST API?
@@ -1531,7 +1643,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 16. Highload & Scalability
+## 17. Highload & Scalability
 
 ### Middle
 #### What is Load Balancing?
@@ -1553,7 +1665,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 17. Clean Code & Best Practices
+## 18. Clean Code & Best Practices
 
 ### Junior
 #### What are DRY and KISS?
@@ -1583,7 +1695,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 18. Elasticsearch
+## 19. Elasticsearch
 
 ### Middle
 #### What is Elasticsearch and its main features?
@@ -1598,7 +1710,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 19. Tricky Questions
+## 20. Tricky Questions
 
 ### Junior
 #### What is the difference between `==` and `===`?
@@ -1635,7 +1747,7 @@ echo $a;
 
 ---
 
-## 20. Laravel Plugins
+## 21. Laravel Plugins
 
 ### Junior
 #### What are some of the most popular official Laravel plugins?
@@ -1694,7 +1806,7 @@ Below is a list of prominent Laravel packages and plugins, their short descripti
 
 ---
 
-## 21. Long-Running (RoadRunner)
+## 22. Long-Running (RoadRunner)
 
 ### Middle
 #### What is RoadRunner and how does it work?
@@ -1762,7 +1874,7 @@ For local development, `pool.debug = true` can be used to allocate a worker only
 
 ---
 
-## 22. PSR & PER Standards
+## 23. PSR & PER Standards
 
 ### Junior
 #### What PSR documentation is covering Basic Coding Standards?
@@ -1778,7 +1890,7 @@ PSR-1 aims to ensure a high degree of technical interoperability between shared 
 
 #### What PSR documentation is covering Extended Coding Standards?
 **Answer: PSR-12**
-PSR-12 is an extension of PSR-2 (which it superseded) and provides a more comprehensive set of coding style rules. **Note:** It has been superseded by the living [PER Coding Style](#21-psr--per-standards) standard.
+PSR-12 is an extension of PSR-2 (which it superseded) and provides a more comprehensive set of coding style rules. **Note:** It has been superseded by the living [PER Coding Style](#23-psr--per-standards) standard.
 - Indentation must be 4 spaces, no tabs.
 - Line length soft limit is 80 characters, hard limit 120.
 - Braces for classes and methods must go on a new line.
@@ -1852,7 +1964,7 @@ The **PHP Evolved Recommendation (PER)** for Coding Style is the modern successo
 
 ---
 
-## 23. Basic Algorithms
+## 24. Basic Algorithms
 
 ### Junior
 
@@ -2010,7 +2122,7 @@ function merge(array $left, array $right): array
 
 ---
 
-## 24. HaPHPiness - Best things in PHP
+## 25. HaPHPiness - Best things in PHP
 
 This section highlights modern PHP features and the overall "happiness" of the ecosystem, as inspired by [haphpiness.com](https://haphpiness.com/).
 
@@ -2132,11 +2244,11 @@ This section highlights modern PHP features and the overall "happiness" of the e
 **Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
 [Detailed HaPHPiness Guide](answers/haphpiness.md#nativephp)
 
-## 25. LeetCode Solutions
+## 26. LeetCode Solutions
 
 This section contains solutions to LeetCode challenges, focusing on PHP implementations.
 
-For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/25-leetcode-solutions.mdx).
+For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/26-leetcode-solutions.mdx).
 
 ### Summary of Solutions
 - [Page 1 (Challenges 1-35)](./docs/docs/answers/leetcode/page-1.mdx)
@@ -2145,7 +2257,7 @@ For a full list of solutions organized by pages, please visit the [LeetCode Solu
 - [Page 4](./docs/docs/answers/leetcode/page-4.mdx)
 - [Page 5](./docs/docs/answers/leetcode/page-5.mdx)
 
-## 26. Regexp
+## 27. Regexp
 
 ### Junior
 

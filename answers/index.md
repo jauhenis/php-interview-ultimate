@@ -21,6 +21,7 @@ This section contains detailed guides and explanations for various PHP-related t
 * [Git: Merge vs Rebase vs Pull vs Fetch](git.md)
 * [Infrastructure & Tools (RabbitMQ, Redis, Docker)](infrastructure_extras.md)
 * [Interface vs Abstract Class](interface_vs_abstract.md)
+* [Kafka: High-Performance Distributed Streaming](kafka.md)
 * [Laravel Service Container](laravel_service_container.md)
 * [Laravel Official Plugins & Packages](laravel_plugins.md)
 * [Method Overloading in PHP](method_overloading.md)
