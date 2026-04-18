@@ -191,35 +191,35 @@ Regex необходим для таких задач, как:
 
 ---
 
-## 4. Использование в коде (примеры на JavaScript) {#4-использование-в-коде-примеры-на-javascript}
+## 4. Использование в коде (примеры на PHP) {#4-использование-в-коде-примеры-на-php}
 
-Хотя большинство языков поддерживают регулярные выражения, синтаксис может немного отличаться. Вот основные реализации в JavaScript:
+Хотя большинство языков поддерживают регулярные выражения, синтаксис может немного отличаться. Вот основные реализации в PHP с использованием расширения PCRE:
 
 ### Создание и поиск
-```javascript
-// Литеральный синтаксис
-/[a-z]/.exec("a"); // Возвращает ["a"]
-/[a-z]/.exec("0"); // Возвращает null
+```php
+// preg_match возвращает 1, если совпадение найдено, и 0, если нет
+preg_match('/[a-z]/', 'apple', $matches); // Возвращает 1, $matches[0] — это "a"
+preg_match('/[a-z]/', '123', $matches);   // Возвращает 0, $matches пуст
 
-// Синтаксис конструктора
-const regex = new RegExp("[a-z]");
+// preg_match_all находит все вхождения
+preg_match_all('/[a-z]/', 'abc', $matches); // Возвращает 3, $matches[0] — это ["a", "b", "c"]
 ```
 
 ### Замена строк
-```javascript
-function youSayHelloISayGoodbye(str) {
+```php
+function youSayHelloISayGoodbye(string $str): string {
   // Находит Hello, hello, Hi, hi, Hey или hey
-  return str.replace(/[Hh]ello|[Hh]i|[Hh]ey/g, "Goodbye");
+  return preg_replace('/[Hh]ello|[Hh]i|[Hh]ey/', 'Goodbye', $str);
 }
 // Строка: "Hello, hi there!" -> Результат: "Goodbye, Goodbye there!"
 ```
 
-### Состояние глобальных флагов (Stateful Global Flags)
-В JavaScript глобальные регулярные выражения (`/g`) имеют **состояние**. Они хранят `lastIndex` из предыдущего совпадения. Чтобы начать поиск заново, его нужно сбросить:
-```javascript
-const regex = /test/g;
-regex.exec(str);
-regex.lastIndex = 0; // Сброс для поиска с начала
+### Глобальный поиск в отличие от JavaScript
+В PHP `preg_match` находит первое вхождение, а `preg_match_all` — все. В отличие от флага `/g` в JavaScript, который привязан к объекту регулярного выражения, в PHP сами функции определяют, является ли поиск глобальным.
+```php
+$str = "test1 test2 test3";
+preg_match_all('/test\d/', $str, $matches);
+// $matches[0] содержит ["test1", "test2", "test3"]
 ```
 
 ---

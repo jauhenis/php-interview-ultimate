@@ -191,35 +191,35 @@ To match characters that have special meaning in regex (like `.`, `*`, `\`), use
 
 ---
 
-## 4. Usage in Code (JavaScript Examples) {#4-usage-in-code-javascript-examples}
+## 4. Usage in Code (PHP Examples) {#4-usage-in-code-php-examples}
 
-While most languages support regex, syntax varies slightly. Here are common JavaScript implementations:
+While most languages support regex, syntax varies slightly. Here are common PHP implementations using the PCRE extension:
 
 ### Creating and Searching
-```javascript
-// Literal syntax
-/[a-z]/.exec("a"); // Returns ["a"]
-/[a-z]/.exec("0"); // Returns null
+```php
+// preg_match returns 1 if match found, 0 if not
+preg_match('/[a-z]/', 'apple', $matches); // Returns 1, $matches[0] is "a"
+preg_match('/[a-z]/', '123', $matches);   // Returns 0, $matches is empty
 
-// Constructor syntax
-const regex = new RegExp("[a-z]");
+// preg_match_all finds all occurrences
+preg_match_all('/[a-z]/', 'abc', $matches); // Returns 3, $matches[0] is ["a", "b", "c"]
 ```
 
 ### Replacing Strings
-```javascript
-function youSayHelloISayGoodbye(str) {
+```php
+function youSayHelloISayGoodbye(string $str): string {
   // Matches Hello, hello, Hi, hi, Hey, or hey
-  return str.replace(/[Hh]ello|[Hh]i|[Hh]ey/g, "Goodbye");
+  return preg_replace('/[Hh]ello|[Hh]i|[Hh]ey/', 'Goodbye', $str);
 }
 // String: "Hello, hi there!" -> Result: "Goodbye, Goodbye there!"
 ```
 
-### Stateful Global Flags
-In JavaScript, global regexes (`/g`) are **stateful**. They store a `lastIndex` from the previous match. To restart a search, you must reset it:
-```javascript
-const regex = /test/g;
-regex.exec(str);
-regex.lastIndex = 0; // Reset to start over
+### Global Search vs. JavaScript
+In PHP, `preg_match` finds the first occurrence, and `preg_match_all` finds all. Unlike JavaScript's `/g` flag on a regex object, PHP functions themselves determine if the search is global.
+```php
+$str = "test1 test2 test3";
+preg_match_all('/test\d/', $str, $matches);
+// $matches[0] contains ["test1", "test2", "test3"]
 ```
 
 ---
