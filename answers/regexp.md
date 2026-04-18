@@ -12,7 +12,7 @@ Regex is essential for tasks like:
 
 ---
 
-## 1. Regex Cheat Sheet
+## 1. Regex Cheat Sheet {#1-regex-cheat-sheet}
 
 ### Quantifiers
 | Token | Description |
@@ -79,7 +79,7 @@ Regex is essential for tasks like:
 
 ---
 
-## 2. Basics: What does a regex look like?
+## 2. Basics: What does a regex look like? {#2-basics-what-does-a-regex-look-like}
 
 In its simplest form, a regex looks like the word you are searching for: `/Test/` matches "Test".
 
@@ -97,7 +97,7 @@ A more readable (but longer) version of the same regex is:
 
 ---
 
-## 3. How to Read and Write Regexes
+## 3. How to Read and Write Regexes {#3-how-to-read-and-write-regexes}
 
 ### Quantifiers
 Quantifiers define how many times a character or group should be searched for:
@@ -191,7 +191,7 @@ To match characters that have special meaning in regex (like `.`, `*`, `\`), use
 
 ---
 
-## 4. Usage in Code (JavaScript Examples)
+## 4. Usage in Code (JavaScript Examples) {#4-usage-in-code-javascript-examples}
 
 While most languages support regex, syntax varies slightly. Here are common JavaScript implementations:
 
@@ -224,7 +224,7 @@ regex.lastIndex = 0; // Reset to start over
 
 ---
 
-## 5. Flags
+## 5. Flags {#5-flags}
 Flags are modifiers appended after the last slash:
 - `g` (Global): Match all occurrences.
 - `i` (Case-insensitive): Ignore case.
@@ -232,7 +232,7 @@ Flags are modifiers appended after the last slash:
 
 ---
 
-## 6. Groups
+## 6. Groups {#6-groups}
 Groups are defined by parentheses and allow you to treat multiple characters as a single unit.
 
 ### Capture vs. Non-capturing Groups
@@ -269,7 +269,7 @@ String: "BA" -> No Match
 
 ---
 
-## 7. Advanced PCRE Features (PHP-Specific)
+## 7. Advanced PCRE Features (PHP-Specific) {#7-advanced-pcre-features}
 
 In PHP, the **PCRE** engine provides even more powerful features.
 
@@ -285,7 +285,7 @@ Allows matching nested structures like balanced parentheses: `/\((?:[^()]+|(?R))
 
 ---
 
-## 8. "The Best Regex Trick Ever" (Exclude Context)
+## 8. "The Best Regex Trick Ever" (Exclude Context) {#8-the-best-regex-trick-ever-exclude-context}
 
 Pattern: `IgnoreThis|IgnoreThat|MatchThis|(CaptureWhatIWant)`
 
@@ -300,7 +300,7 @@ $realMatches = array_filter($matches[1]);
 
 ---
 
-## 9. Step-by-Step Tutorial: Building a Complex Regex
+## 9. Step-by-Step Tutorial: Building a Complex Regex {#9-step-by-step-tutorial-building-a-complex-regex}
 
 **Goal**: Extract valid **E-mail addresses** from HTML, but ignore those inside `<code>` tags or `href="..."` attributes.
 
@@ -310,12 +310,44 @@ $realMatches = array_filter($matches[1]);
 
 ---
 
-## 10. The Elements of Good Regex Style (AGRA)
+## 10. The Elements of Good Regex Style (AGRA) {#10-the-elements-of-good-regex-style}
 
 1. **A - Anchor**: Use `^`, `$`, `\A`, `\z`.
 2. **G - Greed**: Choose `*` vs `*?` carefully.
 3. **R - Repeat**: Avoid `.*`. Be specific (e.g., `[^"]*`).
 4. **A - Atomic**: Use `(?>...)` where backtracking is unnecessary.
+
+---
+
+## 11. PHP Regex Functions in Depth {#11-php-regex-functions-in-depth}
+
+PHP provides several functions for working with regular expressions through the PCRE (Perl Compatible Regular Expressions) extension.
+
+### `preg_match` vs `preg_match_all`
+- **`preg_match($pattern, $subject, &$matches)`**: Searches for a match and returns 1 if found, 0 if not, or false on error. It stops searching after the first match.
+- **`preg_match_all($pattern, $subject, &$matches)`**: Searches for all matches and returns the number of full pattern matches found.
+
+### `preg_replace` and `preg_filter`
+- **`preg_replace($pattern, $replacement, $subject)`**: Replaces all matches with the replacement string.
+- **`preg_filter($pattern, $replacement, $subject)`**: Similar to `preg_replace`, but returns the results only where a match was found. If the input is an array, it effectively filters the array.
+
+### Delimiters
+In PHP, regex patterns must be enclosed in delimiters. While `/` is most common, you can use any non-alphanumeric character (e.g., `#`, `~`, `!`).
+```php
+preg_match('#[a-z]#', 'apple'); // Valid
+```
+
+---
+
+## 12. Is ChatGPT good at Regex? {#12-is-chatgpt-good-at-regex}
+
+While ChatGPT and other LLMs are great for drafting regular expressions, they have significant limitations:
+
+1. **Dot-Star Soup**: They often resort to inefficient patterns like `.*` instead of more specific character classes like `[^"]*`.
+2. **Catastrophic Backtracking**: They may generate patterns that cause exponential search times when faced with non-matching strings.
+3. **Syntax Errors**: They sometimes confuse flavors (e.g., using Python-specific features in a PHP context).
+
+**Verdict**: Use AI for inspiration, but always verify patterns using tools like `regex101.com` and perform code reviews for performance-critical expressions.
 
 ---
 
