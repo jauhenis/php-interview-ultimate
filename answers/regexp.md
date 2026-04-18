@@ -1,123 +1,325 @@
-# Regular Expressions (Regex) in PHP: The Ultimate Guide
+# Regular Expressions (Regex): The Complete Guide
 
-Regular Expressions (Regex) are more than just a search tool; they are a formal language for pattern matching. In PHP, the **PCRE** (Perl Compatible Regular Expressions) engine is one of the most powerful and feature-rich in existence.
+Regular Expressions (Regex) are a powerful syntax that allows you to match strings with specific patterns. Think of it as a suped-up text search shortcut that uses quantifiers, pattern collections, special characters, and capture groups to create extremely advanced search patterns.
+
+Regex is essential for tasks like:
+- Analyzing command line output
+- Parsing user input
+- Examining server or program logs
+- Handling text files with consistent syntax (CSV, etc.)
+- Reading configuration files
+- Searching and refactoring code
 
 ---
 
-## 1. Advanced PCRE Features
+## 1. Regex Cheat Sheet
 
-To move from a beginner to an expert, you must understand these performance and control features.
+### Quantifiers
+| Token | Description |
+| :--- | :--- |
+| `a\|b` | Match either "a" or "b" |
+| `?` | Zero or one |
+| `+` | One or more |
+| `*` | Zero or more |
+| `*?` | Zero or more, but stop after first match |
+| `{N}` | Exactly N number of times |
+| `{N, M}` | From N to M number of times |
+
+### General Tokens
+| Token | Description |
+| :--- | :--- |
+| `.` | Any character |
+| `\n` | Newline character |
+| `\t` | Tab character |
+| `\s` | Any whitespace character (including `\t`, `\n`, etc.) |
+| `\S` | Any non-whitespace character |
+| `\w` | Any word character (Upper/lowercase letters, 0-9, `_`) |
+| `\W` | Any non-word character |
+| `\b` | Word boundary (Matches between characters) |
+| `\B` | Non-word boundary |
+| `^` | The start of a line |
+| `$` | The end of a line |
+| `\\` | The literal character "\" |
+
+### Pattern Collections
+| Token | Description |
+| :--- | :--- |
+| `[A-Z]` | Match any uppercase character from "A" to "Z" |
+| `[a-z]` | Match any lowercase character from "a" to "z" |
+| `[0-9]` | Match any number |
+| `[asdf]` | Match any character that's either "a", "s", "d", or "f" |
+| `[^asdf]` | Match any character that's not any of the following: "a", "s", "d", "f" |
+
+### Flags
+| Token | Description |
+| :--- | :--- |
+| `g` | Global, match more than once |
+| `m` | Force `$` and `^` to match each newline individually |
+| `i` | Make the regex case-insensitive |
+
+### Groups
+| Token | Description |
+| :--- | :--- |
+| `(...)` | Capture group |
+| `(?:...)` | Non-capture group |
+| `(?<name>...)` | Named capture group called "name" |
+
+### Named Back Reference
+| Token | Description |
+| :--- | :--- |
+| `\k<name>` | Reference named capture group "name" in query |
+
+### Lookahead and Lookbehind
+| Token | Description |
+| :--- | :--- |
+| `(?!)` | Negative lookahead |
+| `(?=)` | Positive lookahead |
+| `(?<!)` | Negative lookbehind |
+| `(?<=)` | Positive lookbehind |
+
+---
+
+## 2. Basics: What does a regex look like?
+
+In its simplest form, a regex looks like the word you are searching for: `/Test/` matches "Test".
+
+However, regex can be much more complex. For example, a phone number pattern:
+`^(?:\d{3}-){2}\d{4}$`
+
+```text
+Pattern: ^(?:\d{3}-){2}\d{4}$
+Match: "555-555-5555"
+No Match: "555-abc-5555"
+```
+
+A more readable (but longer) version of the same regex is:
+`^[0-9]{3}-[0-9]{3}-[0-9]{4}$`
+
+---
+
+## 3. How to Read and Write Regexes
+
+### Quantifiers
+Quantifiers define how many times a character or group should be searched for:
+- `a|b`: Match either "a" or "b"
+- `?`: Zero or one
+- `+`: One or more
+- `*`: Zero or more
+- `{N}`: Exactly N times
+- `{N,}`: N or more times
+- `{N,M}`: Between N and M times
+- `*?`: Zero or more, but stop after the first match (lazy matching)
+
+**Example**: `Hello{1,3}`
+```text
+Pattern: Hello{1,3}
+Matches: "Hello", "Helloo", "Hellooo"
+```
+
+**Combined Example**: `He?llo{2}`
+```text
+Pattern: He?llo{2}
+Matches: "Helloo", "Hlloo"
+```
+
+#### Greedy vs. Lazy Matching
+By default, quantifiers are **greedy**—they match as much as possible.
+- `Hi+` matches "Hi" and "Hiiiiii".
+- `Hi+?` (lazy) matches only "Hi" even if more "i"s follow.
+
+Using `.` (any character) with greedy/lazy matching:
+- `H.*llo` (greedy)
+```text
+String: "Hellollollo"
+Match: "Hellollollo"
+```
+
+- `H.*?llo` (lazy)
+```text
+String: "Hellollollo"
+Match: "Hello"
+```
+
+### Pattern Collections
+Collections allow searching for a set of characters:
+- `[A-Z]`: Any uppercase letter
+- `[a-z]`: Any lowercase letter
+- `[0-9]`: Any digit
+- `[asdf]`: Any of "a", "s", "d", "f"
+- `[^asdf]`: Any character *except* "a", "s", "d", "f"
+- `[0-9A-Z]`: Any digit or uppercase letter
+
+**Combining with tokens**: You can include tokens in collections. For example, `[A-Z\s]` matches any uppercase letter or whitespace character.
+
+### General Tokens
+- `.` : Any character
+- `\n` : Newline
+- `\t` : Tab
+- `\s` : Any whitespace (space, tab, newline)
+- `\S` : Any non-whitespace character
+- `\w` : Any word character (A-Z, a-z, 0-9, and `_`)
+- `\W` : Any non-word character
+- `\b` : Word boundary (the edge between `\w` and `\W`). Matches between characters.
+```text
+Pattern: \b\w+\b
+String: "This is a string"
+Matches: "This", "is", "a", "string"
+```
+
+- `\B` : Non-word boundary
+- `^` : Start of a line
+```text
+Pattern: ^\w+
+String: "This is a string"
+Match: "This"
+```
+
+- `$` : End of a line
+```text
+Pattern: \w+$
+String: "This is a string"
+Match: "string"
+```
+
+- `\\` : Literal backslash
+
+**Line Boundaries Example**: `$\s+` can be used to find all whitespace between the end of one line and the start of the next (useful for minification).
+
+### Character Escaping
+To match characters that have special meaning in regex (like `.`, `*`, `\`), use a backslash to escape them:
+- `\\n` matches the literal string "\n" rather than a newline character.
+
+---
+
+## 4. Usage in Code (JavaScript Examples)
+
+While most languages support regex, syntax varies slightly. Here are common JavaScript implementations:
+
+### Creating and Searching
+```javascript
+// Literal syntax
+/[a-z]/.exec("a"); // Returns ["a"]
+/[a-z]/.exec("0"); // Returns null
+
+// Constructor syntax
+const regex = new RegExp("[a-z]");
+```
+
+### Replacing Strings
+```javascript
+function youSayHelloISayGoodbye(str) {
+  // Matches Hello, hello, Hi, hi, Hey, or hey
+  return str.replace(/[Hh]ello|[Hh]i|[Hh]ey/g, "Goodbye");
+}
+// String: "Hello, hi there!" -> Result: "Goodbye, Goodbye there!"
+```
+
+### Stateful Global Flags
+In JavaScript, global regexes (`/g`) are **stateful**. They store a `lastIndex` from the previous match. To restart a search, you must reset it:
+```javascript
+const regex = /test/g;
+regex.exec(str);
+regex.lastIndex = 0; // Reset to start over
+```
+
+---
+
+## 5. Flags
+Flags are modifiers appended after the last slash:
+- `g` (Global): Match all occurrences.
+- `i` (Case-insensitive): Ignore case.
+- `m` (Multiline): `^` and `$` match start/end of each line.
+
+---
+
+## 6. Groups
+Groups are defined by parentheses and allow you to treat multiple characters as a single unit.
+
+### Capture vs. Non-capturing Groups
+- `(...)`: Capture group. Matches the content and remembers it for later use (e.g., `$1` in replacement).
+- `(?:...)`: Non-capturing group. Matches the content but doesn't "remember" it.
+
+### Named Capture Groups
+- `(?<name>...)`: A group named "name".
+- **Example**: `/Testing (?<num>\d{3})/` -> Replace with `Hello $<num>`.
+```text
+String: "Testing 123"
+Result: "Hello 123"
+```
+
+### Backreferences
+- `\k<name>`: Matches whatever was captured in the group named "name".
+- **Example**: `/.*(?<name>James). \k<name>,.*/`
+```text
+Match: "Hello there James. James, how are you doing?"
+No Match: "Hello there James. Frank, how are you doing?"
+```
+
+### Lookahead and Lookbehind
+- `(?=...)`: Positive lookahead (must follow).
+- `(?!...)`: Negative lookahead (must NOT follow).
+- `(?<=...)`: Positive lookbehind (must precede).
+- `(?<!...)`: Negative lookbehind (must NOT precede).
+
+**Example (Lookahead)**: `/B(?!A)/`
+```text
+String: "BC" -> Match: "B"
+String: "BA" -> No Match
+```
+
+---
+
+## 7. Advanced PCRE Features (PHP-Specific)
+
+In PHP, the **PCRE** engine provides even more powerful features.
 
 ### Atomic Groups `(?>...)` {#atomic-groups}
-An atomic group is a non-capturing group that **forbids backtracking**. Once the engine matches something inside the group, it "locks" that match. If the rest of the regex fails, the engine won't try alternative matches within the atomic group.
-- **Why?** It prevents "catastrophic backtracking" and improves performance.
-- **Example**: `/(?>a+)a/` will *never* match `aaaa` because the atomic group consumes all `a`s and won't give them back.
+Forbids backtracking once a match is locked. Prevents "catastrophic backtracking".
 
 ### Backtracking Control: `(*SKIP)(*F)`
-These are "Verbs" in PCRE.
-- `(*F)` or `(*FAIL)`: Forces the engine to fail the current match and backtrack.
-- `(*SKIP)`: Tells the engine not to try matching again from any position before the current one if the match fails later.
-- **Used for**: "Match this, but don't count it, and don't try again." (See "The Best Regex Trick" below).
+- `(*F)`: Forces a failure.
+- `(*SKIP)`: Skips to the current position if a later match fails.
 
 ### Recursion `(?R)` or `(?1)`
-Recursion allows you to match nested structures (like balanced parentheses or nested HTML tags).
-- `(?R)`: Recurses the entire pattern.
-- `(?1)`: Recurses only the first capturing group.
-- **Example (Nested Parentheses)**: `/\((?:[^()]+|(?R))*\)/`
+Allows matching nested structures like balanced parentheses: `/\((?:[^()]+|(?R))*\)/`.
 
 ---
 
-## 2. "The Best Regex Trick Ever" (Exclude Context)
+## 8. "The Best Regex Trick Ever" (Exclude Context)
 
-The most common complex task is: **"Match X, but NOT if it's inside Y (quotes, tags, comments)."**
-
-Instead of using complex lookarounds (which often fail for variable-width contexts), use this pattern:
-`IgnoreThis|IgnoreThat|MatchThis|(CaptureWhatIWant)`
-
-### How it works:
-1. The engine tries to match the "Ignore" parts first.
-2. If it matches an "Ignore" part, it consumes it but doesn't capture it in Group 1.
-3. If those fail, it tries to match the target. If it matches, it **captures it in Group 1**.
-4. In PHP, you just check if `$matches[1]` is set and not empty.
+Pattern: `IgnoreThis|IgnoreThat|MatchThis|(CaptureWhatIWant)`
 
 ### Example: Match `Tarzan` but NOT in double quotes
 ```php
 $regex = '/"[^"]*"|(\bTarzan\b)/';
 $text = 'Tarzan likes Jane. "Tarzan is in quotes". Tarzan is free.';
-
 preg_match_all($regex, $text, $matches);
-// $matches[1] will contain: ["Tarzan", "", "Tarzan"]
 $realMatches = array_filter($matches[1]); 
+// Results: ["Tarzan", "Tarzan"] (excludes the one in quotes)
 ```
 
 ---
 
-## 3. Step-by-Step Tutorial: Building a Complex Regex
+## 9. Step-by-Step Tutorial: Building a Complex Regex
 
-**Goal**: Extract all valid **E-mail addresses** from a text, but ignore those that are inside `<code>` tags or `href="..."` attributes.
+**Goal**: Extract valid **E-mail addresses** from HTML, but ignore those inside `<code>` tags or `href="..."` attributes.
 
-### Step 1: Identify what to IGNORE
-- `<code>.*?<\/code>`: Matches everything inside code tags (use `s` flag for multiline).
-- `href="[^"]*"`: Matches email links in HTML attributes.
-
-### Step 2: Identify what to MATCH (The E-mail)
-A simplified email regex: `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`.
-
-### Step 3: Combine them using the "Best Trick"
-`Ignore1|Ignore2|(MatchTarget)`
-
-```regex
-/<code>.*?<\/code>|href="[^"]*"|([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/si
-```
-
-### Step 4: Refine for Performance (The AGRA Mnemonic)
-- **A**nchor: Can we anchor the search? (Not in this case, we want all occurrences).
-- **G**reed: Should we make `.*?` lazy? Yes, to avoid matching from the first `<code>` to the last `</code>`.
-- **R**epeat: Use `+` instead of `*` where at least one character is required.
-- **A**tomic: Use atomic groups for the email part to fail faster on invalid addresses.
-
-### Final PHP Implementation:
-```php
-$pattern = '/<code>.*?<\/code>|href="[^"]*"|(?>[a-zA-Z0-9._%+-]+)@(?>[a-zA-Z0-9.-]+)\.[a-zA-Z]{2,}/si';
-preg_match_all($pattern, $html, $matches);
-$emails = array_filter($matches[1]);
-```
+1. **Identify IGNORE**: `<code>.*?<\/code>` and `href="[^"]*"`
+2. **Identify MATCH**: `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`
+3. **Combine**: `<code>.*?<\/code>|href="[^"]*"|([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})`
 
 ---
 
-## 4. The Elements of Good Regex Style
+## 10. The Elements of Good Regex Style (AGRA)
 
-As taught by RexEgg, follow the **AGRA** rule to write "Genius" regex that fails early:
-
-1. **A - Anchor**: Whenever possible, use `^`, `$`, `\A`, `\z`, or `\G`. Anchors save the engine from trying the pattern at every single character position.
-2. **G - Greed**: Be conscious of `*` (greedy) vs `*?` (lazy). Greedy takes everything and backtracks. Lazy takes as little as possible and expands.
-3. **R - Repeat**: Avoid "dot-star soup" (`.*`). Be specific: `[^"]*` is much faster than `.*?` when matching within quotes.
-4. **A - Atomic**: Use `(?>...)` to prevent the engine from re-trying paths that you know will never work once a certain point is reached.
+1. **A - Anchor**: Use `^`, `$`, `\A`, `\z`.
+2. **G - Greed**: Choose `*` vs `*?` carefully.
+3. **R - Repeat**: Avoid `.*`. Be specific (e.g., `[^"]*`).
+4. **A - Atomic**: Use `(?>...)` where backtracking is unnecessary.
 
 ---
 
-## 5. PHP Regex Functions In-Depth
-
-- **`preg_match`**: Returns `1`, `0`, or `false`. Best for validation.
-- **`preg_match_all`**: Best for extraction. Use `PREG_SET_ORDER` for easier loop handling.
-- **`preg_replace_callback`**: The ultimate power tool. Allows you to use PHP logic (e.g., database lookups) for every match found.
-- **`preg_filter`**: The "hidden gem". It's like `preg_replace` but returns only the elements of an array that matched the pattern. Great for bulk cleaning data.
-
----
-
-## 6. Is ChatGPT good at regex?
-
-ChatGPT is like a junior developer with a great memory but no intuition.
-- **Overmatching**: It often matches more than you want.
-- **Undermatching**: It misses edge cases like Unicode or special characters.
-- **Efficiency**: It almost always defaults to `.*`, which is slow.
-- **Flavor Confusion**: It might give you Python-specific syntax in a PHP context.
-
-**Expert Advice**: Use ChatGPT to generate the *idea*, then optimize it using the **AGRA** rules and test it on [Regex101.com](https://regex101.com/) (select PCRE2 flavor for PHP).
-
----
-
-### Sources & Further Reading:
+### Sources:
+- [The Complete Guide to Regular Expressions (CoderPad)](https://coderpad.io/blog/development/the-complete-guide-to-regular-expressions-regex/)
 - [RexEgg: The Best Regex Trick Ever](https://www.rexegg.com/regex-best-trick.html)
 - [RexEgg: Regex Style Guide](https://www.rexegg.com/regex-style.php)
-- [PHP Manual: PCRE Verbs](https://www.php.net/manual/en/regexp.reference.backtracking.php)
