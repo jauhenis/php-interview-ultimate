@@ -58,4 +58,4 @@ This page provides a comparison between MySQL and PostgreSQL, two of the most po
 | **Triggers** | Basic support | Advanced support (per-row, per-statement) |
 
 ---
-*Back to [MySQL & Databases](../questions/07-mysql-databases.mdx) or [PostgreSQL](../questions/08-postgresql.mdx)*
+*Back to [MySQL & Databases](../questions/08-mysql-databases.mdx) or [PostgreSQL](../questions/09-postgresql.mdx)*

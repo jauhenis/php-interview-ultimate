@@ -56,4 +56,4 @@ ALTER TYPE mood ADD VALUE 'excited' AFTER 'happy';
 
 ---
 
-_Back to [PostgreSQL](../questions/08-postgresql.mdx)_
+_Back to [PostgreSQL](../questions/09-postgresql.mdx)_

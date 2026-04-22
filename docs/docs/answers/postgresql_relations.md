@@ -45,4 +45,4 @@ Returns rows from the first result set that are not present in the second.
 
 ---
 
-_Back to [PostgreSQL](../questions/08-postgresql.mdx)_
+_Back to [PostgreSQL](../questions/09-postgresql.mdx)_

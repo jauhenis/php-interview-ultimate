@@ -71,4 +71,4 @@ This page provides a comparison between MySQL and PostgreSQL, two of the most po
 
 ---
 
-_Back to [MySQL & Databases](../questions/07-mysql-databases.mdx) or [PostgreSQL](../questions/08-postgresql.mdx)_
+_Back to [MySQL & Databases](../questions/08-mysql-databases.mdx) or [PostgreSQL](../questions/09-postgresql.mdx)_
