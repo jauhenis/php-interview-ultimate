@@ -51,5 +51,4 @@ Creating properties that were not declared in the class is now deprecated, unles
 ## 7. New Functions and Classes
 - `mysqli_execute_query()`
 - `#[SensitiveParameter]` attribute to hide sensitive data in stack traces.
-- `json_validate()` (Wait, this is 8.3)
 - `memory_reset_peak_usage()`

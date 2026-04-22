@@ -1,0 +1,100 @@
+---
+title: '17. Web & API'
+sidebar_label: '17. Web & API'
+---
+
+# 17. Web & API
+
+### What is REST API?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** REST (Representational State Transfer) is an architectural style for designing networked applications. It relies on a stateless, client-server, cacheable communications protocol — and in virtually all cases, the HTTP protocol is used.
+[Read more: What is REST API?](https://www.ibm.com/think/topics/rest-apis)
+
+---
+
+### What are the main HTTP methods used in REST?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- `GET`: Retrieve a resource.
+- `POST`: Create a new resource.
+- `PUT`: Update/replace an existing resource.
+- `PATCH`: Partially update an existing resource.
+- `DELETE`: Delete a resource.
+- `OPTIONS`: Describe the communication options for the target resource.
+- `HEAD`: Same as GET but returns only the headers (no body).
+
+---
+
+### What is the difference between GET and POST?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- `GET`: Data is sent in the URL. Used for retrieving data.
+- `POST`: Data is sent in the request body. Used for submitting data.
+
+---
+
+### What are HTTP Status Codes? Give examples.
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- `200 OK`: Success.
+- `201 Created`: Resource successfully created.
+- `400 Bad Request`: Client error.
+- `401 Unauthorized`: User not authenticated.
+- `403 Forbidden`: User authenticated but not allowed.
+- `404 Not Found`: Resource not found.
+- `500 Internal Server Error`: Server error.
+
+---
+
+### What does "stateless" mean in the context of REST?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Each request from a client to a server must contain all the information necessary to understand and process the request. The server does not store any client context between requests.
+
+---
+
+### SOAP vs REST
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **SOAP:** Protocol-based, uses XML, rigid structure, good for security and ACID compliance.
+- **REST:** Architectural style, uses JSON/XML, flexible, lightweight, and uses standard HTTP.
+
+---
+
+### REST vs JSON-RPC
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **REST:** Resource-oriented, uses HTTP methods (GET, POST, etc.) and status codes.
+- **JSON-RPC:** Method-oriented, usually uses POST to a single endpoint with a JSON payload specifying the method and parameters.
+
+---
+
+### Can you implement your own HTTP method like POSTAWESOME instead of POST? Would it be in compliance with REST?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+Technically, yes, you can define and use custom HTTP methods. The HTTP protocol allows for extension, and most web servers and clients can be configured to handle them.
+However, it would **not** be fully in compliance with the **Uniform Interface** constraint of REST. REST emphasizes a standardized set of methods (the standard HTTP verbs) to ensure interoperability, predictability, and to leverage existing web infrastructure (like caches and proxies) that only understand standard methods. Using `POSTAWESOME` would break these benefits and make your API harder to consume.
+
+---
+
+---

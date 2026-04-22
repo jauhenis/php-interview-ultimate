@@ -4,32 +4,33 @@ This file contains a curated list of PHP interview questions and answers, merged
 
 ## Table of Contents
 1. [PHP Basics & Language Features](#1-php-basics--language-features)
-2. [Object-Oriented Programming (OOP)](#2-object-oriented-programming-oop)
-3. [Software Architecture & Principles](#3-software-architecture--principles)
-4. [System Design Principles (Middle+)](#4-system-design-principles-middle)
-5. [Design Patterns](#5-design-patterns)
-6. [PHP 7/8+ New Features](#6-php-78-new-features)
-7. [MySQL & Databases](#7-mysql--databases)
-8. [PostgreSQL](#8-postgresql)
-9. [Laravel & Symfony](#9-laravel--symfony)
-10. [Tools & Composer](#10-tools--composer)
-11. [Caching & Redis](#11-caching--redis)
-12. [Kafka](#12-kafka)
-13. [Infrastructure, Docker & DevOps](#13-infrastructure-docker--devops)
-14. [Testing & Quality](#14-testing--quality)
-15. [Security](#15-security)
-16. [Web & API](#16-web--api)
-17. [Highload & Scalability](#17-highload--scalability)
-18. [Clean Code & Best Practices](#18-clean-code--best-practices)
-19. [Elasticsearch](#19-elasticsearch)
-20. [Tricky Questions](#20-tricky-questions)
-21. [Laravel Plugins](#21-laravel-plugins)
-22. [Long-Running (RoadRunner)](#22-long-running-roadrunner)
-23. [PSR & PER Standards](#23-psr--per-standards)
-24. [Basic Algorithms](#24-basic-algorithms)
-25. [HaPHPiness - Best Things in PHP](#25-haphpiness---best-things-in-php)
-26. [LeetCode Solutions](#26-leetcode-solutions)
-27. [Regexp](#27-regexp)
+2. [Sessions in PHP](#2-sessions-in-php)
+3. [Object-Oriented Programming (OOP)](#3-object-oriented-programming-oop)
+4. [Software Architecture & Principles](#4-software-architecture--principles)
+5. [System Design Principles (Middle+)](#5-system-design-principles-middle)
+6. [Design Patterns](#6-design-patterns)
+7. [PHP 7/8+ New Features](#7-php-78-new-features)
+8. [MySQL & Databases](#8-mysql--databases)
+9. [PostgreSQL](#9-postgresql)
+10. [Laravel & Symfony](#10-laravel--symfony)
+11. [Tools & Composer](#11-tools--composer)
+12. [Caching & Redis](#12-caching--redis)
+13. [Kafka](#13-kafka)
+14. [Infrastructure, Docker & DevOps](#14-infrastructure-docker--devops)
+15. [Testing & Quality](#15-testing--quality)
+16. [Security](#16-security)
+17. [Web & API](#17-web--api)
+18. [Highload & Scalability](#18-highload--scalability)
+19. [Clean Code & Best Practices](#19-clean-code--best-practices)
+20. [Elasticsearch](#20-elasticsearch)
+21. [Tricky Questions](#21-tricky-questions)
+22. [Laravel Plugins](#22-laravel-plugins)
+23. [Long-Running (RoadRunner)](#23-long-running-roadrunner)
+24. [PSR & PER Standards](#24-psr--per-standards)
+25. [Basic Algorithms](#25-basic-algorithms)
+26. [HaPHPiness - Best Things in PHP](#26-haphpiness---best-things-in-php)
+27. [LeetCode Solutions](#27-leetcode-solutions)
+28. [Regexp](#28-regexp)
 ---
 
 ## 1. PHP Basics & Language Features
@@ -202,7 +203,9 @@ This occurs because floating-point numbers in PHP (and most other languages) fol
 - **Reason:** `DECIMAL` stores numbers as fixed-point values (or strings internally), ensuring that calculations remain exact, which is critical for monetary values. Floating-point types are for approximate scientific values where speed is more important than absolute precision.
 [Detailed Data Types Guide](answers/data_types.md)
 
-## PHP Sessions
+---
+
+## 2. Sessions in PHP
 - https://www.w3schools.com/php/php_sessions.asp
 - https://www.php.net/manual/en/book.session.php
 
@@ -235,9 +238,10 @@ This occurs because floating-point numbers in PHP (and most other languages) fol
 ### What should you store in sessions?
 **Answer:** You should only store essential, non-sensitive data that needs to persist across requests, such as the user's ID (to verify authentication), flash messages, or temporary state like a shopping cart. Avoid storing large objects, sensitive passwords (unhashed), or large amounts of data that could better be stored in a database.
 
+
 ---
 
-## 2. Object-Oriented Programming (OOP)
+## 3. Object-Oriented Programming (OOP)
 
 ### Junior
 #### What is a Class and an Object?
@@ -310,7 +314,7 @@ This occurs because floating-point numbers in PHP (and most other languages) fol
 
 ---
 
-## 3. Software Architecture & Principles
+## 4. Software Architecture & Principles
 
 ### Middle
 #### What are SOLID Principles?
@@ -355,7 +359,7 @@ This occurs because floating-point numbers in PHP (and most other languages) fol
 
 ---
 
-## 4. System Design Principles (Middle+)
+## 5. System Design Principles (Middle+)
 
 ### Middle
 
@@ -446,8 +450,8 @@ In distributed systems, idempotency is critical for handling network failures. I
 
 ---
 
-## 5. Design Patterns
-Design patterns are strictly related to [Clean Code & Best Practices](#18-clean-code--best-practices).
+## 6. Design Patterns
+Design patterns are strictly related to [Clean Code & Best Practices](#19-clean-code--best-practices).
 
 ### Junior
 #### What are the main categories of Design Patterns?
@@ -636,7 +640,7 @@ LSP requires that child classes do not strengthen preconditions (contravariance)
 
 ---
 
-## 6. PHP 7/8+ New Features
+## 7. PHP 7/8+ New Features
 
 ### Junior
 #### What are Named Arguments (introduced in PHP 8.0)?
@@ -810,7 +814,7 @@ public function count(Countable&Iterator $it) { ... }
 #### What is the Pipe Operator (introduced in PHP 8.5)?
 **Answer:** The `|>` operator allows chaining function calls in a more readable way, passing the result of the left side as the first argument to the right side.
 ```php
-$result = "  hello  " |> 'trim' |> 'strtoupper';
+$result = "  hello  " |> trim(...) |> strtoupper(...);
 ```
 
 [PHP 8.0 Features](answers/php80_features.md)
@@ -822,7 +826,7 @@ $result = "  hello  " |> 'trim' |> 'strtoupper';
 
 ---
 
-## 7. MySQL & Databases
+## 8. MySQL & Databases
 
 ### Junior
 #### How to connect to a MySQL database using PHP?
@@ -1197,7 +1201,7 @@ Understanding these is key to explaining how different transactions "see" differ
 
 ---
 
-## 8. PostgreSQL
+## 9. PostgreSQL
 
 ### Junior
 
@@ -1308,7 +1312,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 9. Laravel & Symfony
+## 10. Laravel & Symfony
 
 ### Junior
 #### What is the MVC architecture and how does Laravel implement it?
@@ -1379,7 +1383,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 10. Tools & Composer
+## 11. Tools & Composer
 
 ### Junior
 #### What is Composer?
@@ -1396,7 +1400,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 11. Caching & Redis
+## 12. Caching & Redis
 
 ### Junior
 #### What is Caching?
@@ -1411,7 +1415,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 12. Kafka
+## 13. Kafka
 
 ### Middle
 #### How does Kafka ensure exactly-once processing, and what are the challenges involved?
@@ -1522,7 +1526,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 13. Infrastructure, Docker & DevOps
+## 14. Infrastructure, Docker & DevOps
 
 ### Junior
 #### What is Docker?
@@ -1555,7 +1559,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 14. Testing & Quality
+## 15. Testing & Quality
 
 ### Junior
 #### Why is it important to write tests?
@@ -1603,7 +1607,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 15. Security
+## 16. Security
 
 ### Junior
 #### What is the difference between Hashing and Encryption?
@@ -1633,7 +1637,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 16. Web & API
+## 17. Web & API
 
 ### Junior
 #### What is REST API?
@@ -1684,7 +1688,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 17. Highload & Scalability
+## 18. Highload & Scalability
 
 ### Middle
 #### What is Load Balancing?
@@ -1706,7 +1710,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 18. Clean Code & Best Practices
+## 19. Clean Code & Best Practices
 
 ### Junior
 #### What are DRY and KISS?
@@ -1736,7 +1740,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 19. Elasticsearch
+## 20. Elasticsearch
 
 ### Middle
 #### What is Elasticsearch and its main features?
@@ -1751,7 +1755,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 20. Tricky Questions
+## 21. Tricky Questions
 
 ### Junior
 #### What is the difference between `==` and `===`?
@@ -1788,7 +1792,7 @@ echo $a;
 
 ---
 
-## 21. Laravel Plugins
+## 22. Laravel Plugins
 
 ### Junior
 #### What are some of the most popular official Laravel plugins?
@@ -1847,7 +1851,7 @@ Below is a list of prominent Laravel packages and plugins, their short descripti
 
 ---
 
-## 22. Long-Running (RoadRunner)
+## 23. Long-Running (RoadRunner)
 
 ### Middle
 #### What is RoadRunner and how does it work?
@@ -1915,7 +1919,7 @@ For local development, `pool.debug = true` can be used to allocate a worker only
 
 ---
 
-## 23. PSR & PER Standards
+## 24. PSR & PER Standards
 
 ### Junior
 #### What PSR documentation is covering Basic Coding Standards?
@@ -1931,7 +1935,7 @@ PSR-1 aims to ensure a high degree of technical interoperability between shared 
 
 #### What PSR documentation is covering Extended Coding Standards?
 **Answer: PSR-12**
-PSR-12 is an extension of PSR-2 (which it superseded) and provides a more comprehensive set of coding style rules. **Note:** It has been superseded by the living [PER Coding Style](#23-psr--per-standards) standard.
+PSR-12 is an extension of PSR-2 (which it superseded) and provides a more comprehensive set of coding style rules. **Note:** It has been superseded by the living [PER Coding Style](#24-psr--per-standards) standard.
 - Indentation must be 4 spaces, no tabs.
 - Line length soft limit is 80 characters, hard limit 120.
 - Braces for classes and methods must go on a new line.
@@ -2005,7 +2009,7 @@ The **PHP Evolved Recommendation (PER)** for Coding Style is the modern successo
 
 ---
 
-## 24. Basic Algorithms
+## 25. Basic Algorithms
 
 ### Junior
 
@@ -2163,7 +2167,7 @@ function merge(array $left, array $right): array
 
 ---
 
-## 25. HaPHPiness - Best things in PHP
+## 26. HaPHPiness - Best things in PHP
 
 This section highlights modern PHP features and the overall "happiness" of the ecosystem, as inspired by [haphpiness.com](https://haphpiness.com/).
 
@@ -2285,11 +2289,11 @@ This section highlights modern PHP features and the overall "happiness" of the e
 **Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
 [Detailed HaPHPiness Guide](answers/haphpiness.md#nativephp)
 
-## 26. LeetCode Solutions
+## 27. LeetCode Solutions
 
 This section contains solutions to LeetCode challenges, focusing on PHP implementations.
 
-For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/26-leetcode-solutions.mdx).
+For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/27-leetcode-solutions.mdx).
 
 ### Summary of Solutions
 - [Page 1 (Challenges 1-35)](./docs/docs/answers/leetcode/page-1.mdx)
@@ -2298,7 +2302,7 @@ For a full list of solutions organized by pages, please visit the [LeetCode Solu
 - [Page 4](./docs/docs/answers/leetcode/page-4.mdx)
 - [Page 5](./docs/docs/answers/leetcode/page-5.mdx)
 
-## 27. Regexp
+## 28. Regexp
 
 ### Junior
 

@@ -1,0 +1,258 @@
+---
+title: '26. HaPHPiness - Best things in PHP'
+sidebar_label: '26. HaPHPiness'
+---
+
+# 26. HaPHPiness - Best things in PHP
+
+This section highlights modern PHP features and the overall "happiness" of the ecosystem, as inspired by [haphpiness.com](https://haphpiness.com/).
+
+### What are Named Arguments?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Named arguments (introduced in PHP 8.0) allow you to pass values by parameter name instead of position.
+[See PHP 8.0 Features](../questions/06-php-7-8-new-features.mdx#what-are-named-arguments-introduced-in-php-80)
+
+---
+
+### What are Union Types and Intersection Types?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Union types (8.0) allow multiple types for a parameter; Intersection types (8.1) require a value to satisfy multiple type constraints.
+[See PHP 8.0 Features](../questions/06-php-7-8-new-features.mdx#what-are-union-types-introduced-in-php-80)
+
+---
+
+### What are Enums?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Enumerations (8.1) provide type safety for a fixed set of named constants.
+[See PHP 8.1 Features](../questions/06-php-7-8-new-features.mdx#what-are-enums-introduced-in-php-81)
+
+---
+
+### What are str_contains(), str_starts_with(), and str_ends_with()?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** These are consistent, readable functions for common string operations introduced in PHP 8.0.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#string-functions)
+
+---
+
+### What is Array Unpacking with String Keys?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Introduced in PHP 8.1, the spread operator (`...`) now supports string keys for merging arrays.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#array-unpacking)
+
+---
+
+### What is the Built-in Development Server?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** PHP includes a simple web server for development purposes, started with `php -S localhost:8000`.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#dev-server)
+
+---
+
+### What are Arrow Functions?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Introduced in PHP 7.4, they offer a concise syntax for short closures with automatic variable capture.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#arrow-functions)
+
+---
+
+### What are Match Expressions?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** A safer, stricter alternative to `switch` that returns a value (PHP 8.0).
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#match-expressions)
+
+---
+
+### What is the Null Coalescing Operator?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** The `??` operator (and `??=` assignment) provides a clean way to handle null values and defaults.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#null-coalescing)
+
+---
+
+### What are Numeric Literal Separators?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Using underscores to improve the readability of large numbers (e.g., `1_000_000`).
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#numeric-separators)
+
+---
+
+### What are Fibers?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Lightweight coroutines for non-blocking I/O (PHP 8.1).
+[See PHP 8.1 Features](../questions/06-php-7-8-new-features.mdx#what-are-fibers-introduced-in-php-81)
+
+---
+
+### What are Attributes?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** First-class metadata (annotations) natively supported by the PHP engine since 8.0.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#attributes)
+
+---
+
+### What is the First-class Callable Syntax?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A clean way to create a `Closure` from a function or method using `(...)`.
+[See PHP 8.1 Features](../questions/06-php-7-8-new-features.mdx#what-is-the-first-class-callable-syntax-introduced-in-php-81)
+
+---
+
+### What is the Nullsafe Operator?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** The `?->` operator allows safe method/property access on potentially null values.
+[See PHP 8.0 Features](../questions/06-php-7-8-new-features.mdx#what-is-the-nullsafe-operator-introduced-in-php-80)
+
+---
+
+### What are Property Hooks?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Logic for `get` and `set` defined directly on property declarations (PHP 8.4).
+[See PHP 8.4 Features](../questions/06-php-7-8-new-features.mdx#what-are-property-hooks-introduced-in-php-84)
+
+---
+
+### What is Asymmetric Visibility?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Different visibility for reading and writing a property (e.g., `public private(set)`).
+[See PHP 8.4 Features](../questions/06-php-7-8-new-features.mdx#what-is-asymmetric-visibility-introduced-in-php-84)
+
+---
+
+### What is the Pipe Operator?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A way to chain function calls from left to right using `|>` (PHP 8.5).
+[See PHP 8.5 Features](../questions/06-php-7-8-new-features.mdx#what-is-the-pipe-operator-introduced-in-php-85)
+
+---
+
+### What is array_is_list()?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** A function to check if an array is a sequential list with keys starting from 0.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#array-is-list)
+
+---
+
+### What are WeakMaps?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Maps where keys are objects that don't prevent those objects from being garbage collected.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#weakmap)
+
+---
+
+### What are Named Capture Groups in preg_match?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Using `(?P<name>...)` in regex to get named matches instead of just numeric indices.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#named-capture-groups)
+
+---
+
+### What is the Spaceship Operator?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** The `<=>` operator for three-way comparison, returning -1, 0, or 1.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#spaceship-operator)
+
+---
+
+### What is Array Destructuring with Keys?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Pulling specific values out of an associative array using the `[...]` syntax.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#array-destructuring)
+
+---
+
+### What is #[\NoDiscard]?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** An attribute that warns if a function's return value is ignored (PHP 8.5).
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#nodiscard)
+
+---
+
+### What are Fatal Error Backtraces?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Since PHP 8.5, fatal errors (like timeouts) include a full stack trace for easier debugging.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#fatal-error-backtraces)
+
+---
+
+### What is the URI Extension?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** A built-in, immutable, and standards-compliant URL parsing extension (PHP 8.5).
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#uri-extension)
+
+---
+
+### What is FFI (Foreign Function Interface)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Allows calling C functions and using C data structures directly from PHP (7.4+).
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#ffi)
+
+---
+
+### What are PHPStan and Psalm?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Static analysis tools that provide TypeScript-grade type safety for PHP codebases.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#static-analysis)
+
+---
+
+### What is NativePHP?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
+[Detailed HaPHPiness Guide](../answers/haphpiness.md#nativephp)

@@ -1,0 +1,413 @@
+---
+title: '7. Новые возможности PHP 7/8+'
+sidebar_label: '7. Новые возможности PHP 7/8+'
+---
+
+# 7. Новые возможности PHP 7/8+
+
+### Каковы основные различия между PHP 5.x и PHP 7/8?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:**
+Переход от **PHP 5** к **PHP 7/8** принёс значительные улучшения в производительности, безопасности и удобстве разработки.
+
+**Ключевые улучшения в PHP 7/8:**
+
+- **Производительность:** PHP 7 работает до двух раз быстрее, чем PHP 5.6, а PHP 8 добавил JIT-компиляцию (Just-In-Time) для дополнительного ускорения в определённых сценариях.
+- **Скалярные объявления типов:** PHP 7/8 поддерживает строгую типизацию для `int`, `float`, `bool` и `string`.
+- **Объявления типа возвращаемого значения:** Теперь можно указать тип возвращаемого значения функции.
+- **Оператор объединения с null (`??`):** Сокращённая запись для проверки, установлено ли значение и не равно ли оно null.
+- **Оператор «космический корабль» (`<=>`):** Используется для комбинированных сравнений (меньше, равно или больше).
+- **Анонимные классы:** Поддержка создания классов «на лету».
+- **Улучшенная обработка ошибок:** В PHP 7 многие фатальные ошибки были преобразованы в исключения, а в PHP 8 появилась иерархия классов `Error`.
+- **Выражение match (PHP 8):** Более мощная и строгая версия `switch`.
+- **Именованные аргументы (PHP 8):** Позволяют передавать аргументы по имени.
+- **Перечисления (PHP 8.1):** Поддержка перечислений (Enums).
+- **Свойства readonly (PHP 8.1):** Свойства, которые нельзя изменить после инициализации.
+- **Синтаксис callable первого класса (PHP 8.1):** Упрощённый синтаксис для ссылок на функции.
+- **Классы readonly (PHP 8.2):** Весь класс можно пометить как readonly.
+- **Типы DNF (PHP 8.2):** Комбинирование union- и intersection-типов.
+- **Атрибут #[Override] (PHP 8.3):** Гарантирует, что метод переопределяет метод родительского класса.
+- **Типизированные константы классов (PHP 8.3):** Добавление типов к константам классов.
+- **json_validate() (PHP 8.3):** Проверка, является ли строка валидным JSON, без декодирования.
+- **Хуки свойств (PHP 8.4):** Поддержка вычисляемых свойств с хуками `get` и `set`.
+- **Асимметричная видимость (PHP 8.4):** Различная видимость для чтения и записи свойств.
+- **Новые функции для массивов (PHP 8.4):** `array_find()`, `array_find_key()`, `array_any()` и `array_all()`.
+- **Упрощённое создание экземпляров классов (PHP 8.4):** Создание объекта и вызов метода/свойства без дополнительных скобок: `new User()->name`.
+- **Оператор pipe (PHP 8.5):** Новый оператор (`|>`) для цепочки вызовов функций.
+- **Расширение URI (PHP 8.5):** Новое встроенное расширение для разбора и работы с URI.
+- **array_first() и array_last() (PHP 8.5):** Получение первого и последнего элементов массива.
+- **Атрибут #[\NoDiscard] (PHP 8.5):** Предупреждение, когда возвращаемое значение функции не используется.
+- **PIE (PHP 8.5+):** Официальный установщик расширений PHP, приходящий на замену PECL.
+
+- [Подробнее о возможностях PHP 8.0](../answers/php80_features.md)
+- [Подробнее о возможностях PHP 8.1](../answers/php81_features.md)
+- [Подробнее о возможностях PHP 8.2](../answers/php82_features.md)
+- [Подробнее о возможностях PHP 8.3](../answers/php83_features.md)
+- [Подробнее о возможностях PHP 8.4](../answers/php84_features.md)
+- [Подробнее о возможностях PHP 8.5](../answers/php85_features.md)
+
+---
+
+### Что такое именованные аргументы (Named Arguments) (появились в PHP 8.0)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Именованные аргументы позволяют передавать значения по имени параметра, а не по позиции, что делает код более читаемым и позволяет пропускать необязательные параметры.
+
+```php
+htmlspecialchars($string, double_encode: false);
+```
+
+---
+
+### Что такое Union Types (появились в PHP 8.0)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Union-типы позволяют указывать несколько типов для параметра, свойства или возвращаемого значения вместо одного.
+
+```php
+function sum(int|float $a, int|float $b): int|float {
+    return $a + $b;
+}
+```
+
+---
+
+### Что такое выражения match (появились в PHP 8.0)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Более безопасная и строгая версия `switch`, которая возвращает значение и использует строгое сравнение.
+
+```php
+$text = match($statusCode) {
+    200, 201 => 'Success',
+    404      => 'Not Found',
+    default  => 'Unknown',
+};
+```
+
+---
+
+### Что такое атрибут `#[Override]` (появился в PHP 8.3)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Атрибут `#[Override]` гарантирует, что в родительском классе или интерфейсе существует метод с таким же именем. Это помогает выявлять ошибки при рефакторинге.
+
+```php
+class Child extends ParentClass {
+    #[Override]
+    public function existingMethod() {}
+}
+```
+
+---
+
+### Что такое функция `json_validate()` (появилась в PHP 8.3)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Проверяет, является ли строка валидным JSON, без декодирования, что расходует меньше памяти.
+
+```php
+if (json_validate($jsonString)) {
+    // строка является валидным JSON
+}
+```
+
+---
+
+### Что такое динамическое получение констант класса (появилось в PHP 8.3)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Упрощённый синтаксис для получения констант класса через переменную.
+
+```php
+$name = 'STATUS_ACTIVE';
+echo MyClass::{$name};
+```
+
+---
+
+### Что такое самостоятельные типы `null`, `false` и `true` (появились в PHP 8.2)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Теперь их можно использовать как самостоятельные типы для возвращаемых значений, параметров и свойств.
+
+```php
+public function alwaysFalse(): false { return false; }
+```
+
+---
+
+### Что такое оператор Nullsafe (появился в PHP 8.0)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Оператор `?->` позволяет безопасно обращаться к свойствам или методам потенциально равного null значения без генерации ошибки.
+
+```php
+$country = $session?->user?->getAddress()?->country;
+```
+
+---
+
+### Что такое перечисления Enums (появились в PHP 8.1)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Перечисления позволяют определять набор именованных констант, обеспечивая типобезопасность для фиксированных наборов значений.
+
+```php
+enum Status: string {
+    case Pending = 'pending';
+    case Active = 'active';
+}
+```
+
+---
+
+### Что такое свойства Readonly (появились в PHP 8.1)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Свойства, которые нельзя изменить после инициализации.
+
+```php
+class BlogData {
+    public readonly string $title;
+    public function __construct(string $title) {
+        $this->title = $title;
+    }
+}
+```
+
+---
+
+### Что такое синтаксис callable первого класса (появился в PHP 8.1)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Упрощённый синтаксис для получения ссылки на любую функцию или метод.
+
+```php
+$fn = strlen(...);
+echo $fn('hello'); // 5
+```
+
+---
+
+### Что такое тип возвращаемого значения `never` (появился в PHP 8.1)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Указывает, что функция никогда не завершится нормально (она либо выбросит исключение, либо вызовет `exit()`).
+
+```php
+function redirect(string $url): never {
+    header("Location: $url");
+    exit;
+}
+```
+
+---
+
+### Что такое типизированные константы классов (появились в PHP 8.3)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Константы классов теперь могут иметь объявления типов, аналогично свойствам и параметрам.
+
+```php
+class User {
+    const string ROLE = 'admin';
+}
+```
+
+---
+
+### Что такое продвижение свойств в конструкторе (появилось в PHP 8.0)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Сокращённый синтаксис для определения и инициализации свойств класса непосредственно в конструкторе.
+
+```php
+class User {
+    public function __construct(public string $name, public int $age) {}
+}
+```
+
+---
+
+### Что такое классы Readonly (появились в PHP 8.2)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Пометка класса как `readonly` делает все его свойства readonly и запрещает динамические свойства.
+
+```php
+readonly class Post {
+    public function __construct(public string $title) {}
+}
+```
+
+---
+
+### Что такое типы в дизъюнктивной нормальной форме (DNF) (появились в PHP 8.2)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Позволяют комбинировать union- и intersection-типы. Intersection-типы должны быть сгруппированы в скобках.
+
+```php
+public function process((A&B)|null $entity) { ... }
+```
+
+---
+
+### Что такое Intersection Types (появились в PHP 8.1)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Позволяют объявлять, что параметр или возвращаемое значение должны одновременно реализовывать несколько интерфейсов или классов.
+
+```php
+public function count(Countable&Iterator $it) { ... }
+```
+
+---
+
+### Что такое Fibers (появились в PHP 8.1)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Способ создания легковесных корутин для неблокирующего ввода-вывода и асинхронных задач. Они позволяют приостанавливать и возобновлять выполнение в рамках одного потока.
+
+---
+
+### Что такое хуки свойств (появились в PHP 8.4)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Хуки свойств позволяют определять пользовательскую логику для получения и установки свойств класса непосредственно в объявлении свойства, уменьшая необходимость в явных методах-геттерах и сеттерах.
+
+```php
+class User {
+    public string $name {
+        get => strtoupper($this->name);
+        set => strtolower($value);
+    }
+}
+```
+
+---
+
+### Что такое асимметричная видимость (появилась в PHP 8.4)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Позволяет устанавливать различные уровни видимости для чтения и записи свойства. Обычно используется, чтобы свойство было публично доступно для чтения, но могло быть изменено только изнутри класса (private set).
+
+```php
+class User {
+    public private(set) string $id;
+}
+```
+
+---
+
+### Какие новые функции для работы с массивами появились в PHP 8.4?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** В PHP 8.4 появились четыре новые функции для поиска и проверки элементов массива с помощью callback-функции: `array_find()`, `array_find_key()`, `array_any()` и `array_all()`.
+
+```php
+$firstEven = array_find([1, 2, 3, 4], fn($v) => $v % 2 === 0); // 2
+$anyEven = array_any([1, 3, 5], fn($v) => $v % 2 === 0); // false
+```
+
+---
+
+### Что такое функции `array_first()` и `array_last()` (появились в PHP 8.5)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** В PHP 8.5 добавлены встроенные функции для получения первого и последнего элементов массива без перемещения внутреннего указателя массива.
+
+```php
+$arr = ['a' => 1, 'b' => 2, 'c' => 3];
+$first = array_first($arr); // 1
+$last = array_last($arr);   // 3
+```
+
+---
+
+### Что такое новый синтаксис создания экземпляров классов в PHP 8.4?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** PHP 8.4 позволяет обращаться к свойствам и методам только что созданного объекта без необходимости оборачивать выражение `new` в скобки.
+
+```php
+// До PHP 8.4
+$name = (new User())->getName();
+
+// PHP 8.4
+$name = new User()->getName();
+```
+
+---
+
+### Что такое оператор Pipe (появился в PHP 8.5)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Оператор pipe (`|>`) позволяет передавать результат выражения в качестве первого аргумента функции или метода, упрощая цепочку последовательных преобразований.
+
+```php
+$result = "  hello world  "
+    |> trim(...)
+    |> strtoupper(...)
+    |> (fn($str) => str_replace('WORLD', 'PHP 8.5', $str)); 
+// Результат: "HELLO PHP 8.5"
+```
+
+---
+
+### Что такое атрибут `#[\NoDiscard]` (PHP 8.5)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Это новый встроенный атрибут, указывающий, что возвращаемое значение функции или метода должно быть использовано. Инструменты статического анализа и некоторые IDE будут выдавать предупреждение, если результат такой функции проигнорирован.
+
+```php
+#[\NoDiscard]
+function calculateImportantValue(): int {
+    return 42;
+}
+
+calculateImportantValue(); // Предупреждение статического анализа: возвращаемое значение не используется.
+```
+
+---
+
+### Что такое PIE и как он связан с PECL?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** **PIE (PHP Installer for Extensions)** — это современный официальный инструмент для установки расширений PHP, предназначенный для замены устаревшего **PECL**. Он распространяется в виде PHAR-архива (как Composer) и работает аналогично, используя репозиторий PHP Foundation.
+
+```bash
+# Пример использования
+pie install redis
+```
+
+---

@@ -9,30 +9,60 @@ slug: '/answers/php85_features'
 
 ## 1. Расширение URI
 
-PHP 8.5 вводит новое встроенное расширение для парсинга и манипуляции URI. Оно заменяет множество ручных вызовов `parse_url` и кастомный парсинг URI на основе регулярных выражений более надёжным объектно-ориентированным подходом.
+В PHP 8.5 представлено новое встроенное расширение для парсинга и манипулирования URI, поддерживающее стандарты RFC 3986 и WHATWG URL.
 
+**Пример RFC 3986:**
 ```php
-use URI\URI;
+use Uri\Rfc3986\Uri;
 
-$uri = URI::parse("https://user:pass@example.com:8080/path?query=1#hash");
-echo $uri->getHost(); // example.com
-echo $uri->getPort(); // 8080
+$uri = new Uri('https://thephp.foundation:443/sponsor/');
+echo $uri->getHost(); // thephp.foundation
+echo $uri->getPort(); // 443
 ```
 
-## 2. Оператор pipe (`|>`)
+**Пример WHATWG:**
+```php
+use Uri\WhatWg\Url;
 
-Оператор pipe обеспечивает более читаемый синтаксис при цепочке вызовов функций. Результат левого выражения передаётся в качестве первого аргумента в вызов функции справа.
+$url = new Url('https://example.com/path/../other');
+echo $url->getPathname(); // /other
+```
+
+## 2. Оператор Pipe (`|>`)
+
+Оператор pipe позволяет писать более читаемый код при цепочке вызовов функций. Результат выражения слева передается в качестве первого аргумента в вызываемый объект (callable) справа.
 
 ```php
 $result = "  hello world  "
-    |> 'trim'
-    |> 'strtoupper'
-    |> 'str_replace'('WORLD', 'PHP 8.5', ...); // "HELLO PHP 8.5"
+    |> trim(...)
+    |> strtoupper(...)
+    |> (fn($str) => str_replace('WORLD', 'PHP 8.5', $str)); 
+// Результат: "HELLO PHP 8.5"
 ```
 
-## 3. Атрибут `#[\NoDiscard]`
+## 3. Clone With
 
-Новый встроенный атрибут, который сигнализирует инструментам статического анализа и IDE о том, что возвращаемое значение функции или метода не должно игнорироваться.
+Ключевое слово `clone` теперь поддерживает необязательный массив свойств, которые нужно обновить в процессе клонирования. Это особенно полезно для неизменяемых объектов (immutable) и `readonly` свойств.
+
+```php
+final readonly class Response {
+    public function __construct(
+        public int $statusCode,
+        public string $reasonPhrase,
+    ) {}
+
+    public function withStatus(int $code, string $reasonPhrase = ''): self {
+        return clone ($this, [
+            'statusCode' => $code,
+            'reasonPhrase' => $reasonPhrase,
+        ]);
+    }
+}
+```
+
+## 4. Атрибут `#[\NoDiscard]`
+
+Новый встроенный атрибут, который указывает на то, что возвращаемое значение функции или метода не должно игнорироваться.
 
 ```php
 #[\NoDiscard]
@@ -41,24 +71,29 @@ function validateUser(): bool {
     return true;
 }
 
-// Warning: Return value of validateUser() is ignored.
+// Предупреждение: возвращаемое значение validateUser() игнорируется.
 validateUser();
+
+// Чтобы явно игнорировать, используйте приведение к (void):
+(void) validateUser();
 ```
 
-## 4. Замыкания и First-Class Callable в константных выражениях
+## 5. Замыкания и First-Class Callables в константных выражениях
 
-Замыкания и first-class callable (например, `strlen(...)`) теперь можно использовать в константных выражениях: в объявлениях `const`, константах классов и значениях свойств по умолчанию.
+Статические замыкания и first-class callables (например, `strlen(...)`) теперь можно использовать в константных выражениях, таких как параметры атрибутов и константы классов.
 
 ```php
 class Formatter {
     public const string_formatter = strtoupper(...);
-    private Closure $validator = fn($v) => !empty($v);
+    
+    #[MyAttribute(value: fn() => 'default')]
+    public string $data;
 }
 ```
 
-## 5. Новые функции `array_first()` и `array_last()`
+## 6. Новые функции `array_first()` и `array_last()`
 
-В PHP 8.5 наконец появились нативные функции для получения первого и последнего элементов массива без перемещения внутреннего указателя массива.
+Нативные функции для получения первого и последнего значений массива. Возвращают `null`, если массив пуст.
 
 ```php
 $arr = ['a' => 1, 'b' => 2, 'c' => 3];
@@ -66,35 +101,29 @@ $first = array_first($arr); // 1
 $last = array_last($arr);   // 3
 ```
 
-## 6. cURL: новая функция `curl_multi_get_handles()`
+## 7. Улучшения атрибутов
 
-Новая функция расширения cURL, позволяющая получить все дескрипторы, связанные с мульти-дескриптором.
+- `#[\Override]` теперь может применяться к **свойствам**.
+- `#[\Deprecated]` теперь можно использовать для **трейтов** и **констант**.
+- Атрибуты теперь можно применять к **константам**.
 
-```php
-$multiHandle = curl_multi_init();
-// ... add some handles ...
-$handles = curl_multi_get_handles($multiHandle);
-```
+## 8. Продвижение свойств в конструкторе: `final` свойства
 
-## 7. Filter: исключения при ошибках валидации
-
-Функции `filter_var` и связанные с ними теперь поддерживают выброс исключений при ошибках валидации с помощью нового флага.
+Свойства, объявленные через конструктор, теперь могут быть помечены как `final`.
 
 ```php
-try {
-    filter_var("invalid-email", FILTER_VALIDATE_EMAIL, FILTER_THROW_ON_FAILURE);
-} catch (FilterException $e) {
-    echo $e->getMessage();
+class User {
+    public function __construct(
+        public final string $id,
+        public string $name,
+    ) {}
 }
 ```
 
-## 8. Новая INI-директива `max_memory_limit`
+## 9. Важные изменения и устаревания
 
-Эта директива позволяет задать верхний предел для `memory_limit`, который не может быть превышен вызовами `ini_set()` во время выполнения.
-
-## 9. PIE (PHP Installer for Extensions)
-
-PHP 8.5 знаменует официальный переход от устаревшего **PECL** к **PIE**. PIE — это современный установщик PHP-расширений на основе PHAR, работающий аналогично Composer.
-
-- **GitHub-репозиторий:** [https://github.com/php/pie](https://github.com/php/pie)
-- **Использование:** `pie install <extension-name>`
+- Завершение операторов `case` точкой с запятой (используйте двоеточие `:`).
+- Обратные кавычки (backticks) как псевдоним для `shell_exec()`.
+- Магические методы `__sleep()` and `__wakeup()` (рекомендуется использовать `__serialize()` и `__unserialize()`).
+- Нестандартные имена типов для приведения, такие как `(boolean)` и `(integer)` (используйте `(bool)` и `(int)`).
+- PIE (PHP Installer for Extensions) теперь является рекомендованным инструментом вместо PECL.

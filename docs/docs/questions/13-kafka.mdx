@@ -1,0 +1,166 @@
+---
+title: '13. Kafka'
+sidebar_label: '13. Kafka'
+---
+
+# 13. Kafka
+
+### How does Kafka ensure exactly-once processing, and what are the challenges involved?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+Kafka provides exactly-once semantics (EOS) using:
+- **Idempotent producers**: Ensure retries don’t lead to duplicates.
+- **Transactions**: Group multiple Kafka operations into a single atomic unit.
+- **Consumer offset management**: When using Kafka Streams or transactional consumers, offsets are committed atomically.
+
+**Challenges:**
+- Requires idempotency on the consumer side.
+- Need to enable `acks=all`, `enable.idempotence=true` in producers.
+- Increased latency due to transactional writes.
+
+[Detailed Kafka Guide](../answers/kafka.md)
+
+---
+
+### What is the role of the high-water mark (HW) in Kafka, and how does it impact consumers?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+- **High-Water Mark (HW)** is the last offset that is considered “committed” and can be read by consumers.
+- If a follower lags behind, it won’t get promoted to a leader because it doesn’t have the HW.
+- Consumers cannot read uncommitted data (behind HW), ensuring consistency.
+
+**Tricky Scenario:** If a broker crashes before HW is updated, some committed messages may disappear temporarily, but they will be recovered after leader election.
+
+---
+
+### How does Kafka handle leader failure, and what happens to in-flight messages?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+- Kafka uses ZooKeeper/KRaft to elect a new leader from in-sync replicas (ISR).
+- In-flight messages (`ack=1` or `ack=0`) may be lost if they weren’t replicated.
+- If `acks=all`, the message is safe only if the leader had successfully replicated to ISRs before crashing.
+- Uncommitted messages (below HW) may be lost in a failover scenario.
+
+**Edge Case:** If there are no in-sync replicas, Kafka will pause writes to prevent data loss until a follower catches up.
+
+---
+
+### Explain log compaction in Kafka. How does it differ from retention policies?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+- **Log compaction** retains at least one version of each key, deleting older versions.
+- **Retention policies** (`log.retention.ms`, `log.retention.bytes`) delete messages based on time or size, regardless of key.
+
+**Use Case:**
+- Compaction is useful for changelogs (latest state updates) in databases.
+- Retention is useful for event logs (like user activity tracking).
+
+**Tricky Question:** What happens if a consumer never reads a compacted topic?
+If the consumer was down for too long, it may lose some historical updates because old messages are deleted.
+
+---
+
+### Why is unclean leader election dangerous in Kafka?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** 
+- When `unclean.leader.election.enable=true`, an out-of-sync follower can be elected as leader, potentially losing committed messages.
+- This can cause data inconsistencies between producers and consumers.
+- In production, always keep this `false` unless availability is more important than consistency.
+
+---
+
+### How does Kafka prevent duplicate messages in a producer retry scenario?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+Kafka uses idempotent producers to prevent duplicates when retries happen:
+- Each message has a sequence number attached.
+- The broker remembers the last acknowledged sequence number per producer.
+- If a producer resends a message, Kafka discards duplicates.
+
+**Tricky Scenario:** If a producer restarts and gets a new producer ID, old sequence tracking resets, and duplicates can appear.
+
+---
+
+### How does Kafka handle backpressure when consumers lag behind?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+- Consumers lag when they process messages slower than they arrive.
+- Kafka handles backpressure using `pause()`/`resume()` APIs in Kafka Consumer.
+- If consumer lag is too high:
+  - Increase consumer count in a consumer group.
+  - Scale up processing power (e.g., batch processing).
+  - Use rate limiting on the producer side.
+
+---
+
+### What is the difference between in-sync replicas (ISR), out-of-sync replicas (OSR), and under-replicated partitions?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** 
+- **ISR (In-Sync Replicas)**: Replicas that have caught up with the leader.
+- **OSR (Out-of-Sync Replicas)**: Lagging followers that are behind.
+- **Under-Replicated Partitions (URP)**: Any partition where the ISR count is less than the replication factor.
+
+**Tricky Question:** If a Kafka topic has a replication factor of 3 and ISR = 1, what does that mean?
+Only one broker is in sync (high risk of data loss). If the leader crashes, there may be no safe replicas to promote.
+
+---
+
+### How does Kafka Streams handle stateful processing efficiently?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** 
+- Uses **RocksDB** as an embedded database for local state storage.
+- Uses **changelogs topics** to recover state after crashes.
+- Uses `punctuation()` for periodic processing without full reprocessing.
+
+**Tricky Case:** If a Kafka Streams app restarts and changelog topic is deleted, all local state is lost and must be recomputed.
+
+---
+
+### How can you monitor and debug consumer lag in Kafka?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** 
+- Use `kafka-consumer-groups.sh` to check consumer lag.
+- Monitor JMX metrics (`kafka.consumer:type=ConsumerLag`).
+- Set up lag-based alerting in Prometheus/Grafana/New Relic.
+
+**Tricky Debugging Scenario:**
+If consumer lag is increasing despite multiple instances, check:
+- Rebalance storms due to inefficient partition assignment.
+- Slow deserialization (optimize message size).
+- Consumer GC pauses (tune JVM settings).
+
+---
+
+### How to implement distributed logging using Kafka in a PHP application?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** 
+Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implement it in PHP:
+- Use `php-rdkafka` as the producer.
+- In your application, instead of writing directly to a file or database, send log events to a Kafka topic (e.g., `app_logs`).
+- Configure the producer to use small batches (`queue.buffering.max.ms`) to avoid high overhead per message.
+- Use log levels (e.g., `ERROR`, `INFO`) as partition keys to group logs efficiently.
+- On the other side, use a Kafka consumer or a tool like Logstash to ingest logs into Elasticsearch.
+
+[Detailed Kafka Guide](../answers/kafka.md)

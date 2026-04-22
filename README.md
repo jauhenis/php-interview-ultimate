@@ -87,7 +87,7 @@ docker compose run --service-ports node npm run dev
 The documentation will be available at `http://localhost:3333`.
 
 ## Key Topics Covered
-- The documentation is now organized into 27 major categories, including:
+- The documentation is now organized into 28 major categories, including:
 - **Core PHP**: Data types, generators, magic constants, PHP features (8.0+), and more.
 - **Kafka**: High-performance distributed streaming, EOS, and PHP implementation.
 - **Regexp**: Comprehensive guide to regular expressions in PHP, including PCRE functions and common tasks.

@@ -1,0 +1,166 @@
+---
+title: '10. Laravel и Symfony'
+sidebar_label: '10. Laravel и Symfony'
+---
+
+# 10. Laravel и Symfony
+
+### Что такое архитектура MVC и как Laravel её реализует?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** MVC расшифровывается как Model-View-Controller.
+
+- **Model:** Представляет структуру данных (Eloquent).
+- **View:** Отображает данные (шаблоны Blade).
+- **Controller:** Обрабатывает логику и пользовательский ввод.
+
+---
+
+### Что такое Eloquent ORM?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Встроенный ORM-компонент Laravel, который позволяет взаимодействовать с базой данных через PHP-объекты вместо сырых SQL-запросов.
+
+---
+
+### Что такое Blade?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Blade — это мощный и простой шаблонизатор Laravel, позволяющий использовать обычный PHP в шаблонах с чистым синтаксисом.
+
+---
+
+### Что такое маршрутизация (Routing) в Laravel?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Сопоставление HTTP-запросов (URL) с определёнными действиями контроллеров или замыканиями (closures).
+
+---
+
+### Что такое именованные маршруты (Named Routes)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Присвоение имени маршруту для генерации URL или редиректов по имени вместо указания URL напрямую.
+
+---
+
+### Что такое группы маршрутов (Route Groups)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Способ группировки нескольких маршрутов, имеющих общие атрибуты (например, middleware или префиксы).
+
+---
+
+### Что такое Seeders и Factories?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:**
+
+- **Seeders:** Заполняют базу данных тестовыми/фиктивными данными.
+- **Factories:** Определяют шаблон для генерации фиктивных данных моделей.
+
+---
+
+### Что такое мягкое удаление (Soft Delete)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Пометка записи как удалённой без фактического удаления из базы данных, обычно с использованием столбца `deleted_at`.
+
+---
+
+### Что такое сервис-контейнер (Service Container) в Laravel?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Мощный инструмент для управления зависимостями классов и внедрения зависимостей (Dependency Injection).
+[Подробнее о Service Container](../answers/laravel_service_container.md)
+
+---
+
+### Что такое коллекции (Collections)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Обёртка над PHP-массивами, предоставляющая мощный и удобный интерфейс для манипуляции данными (например, `map`, `filter`, `reduce`).
+
+---
+
+### Что такое Middleware?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Фильтр, который проверяет и обрабатывает HTTP-запросы, поступающие в приложение (например, аутентификация, логирование).
+
+---
+
+### Что такое сервис-провайдеры (Service Providers)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Центральное место инициализации всего приложения Laravel. Они регистрируют сервисы в Service Container.
+
+---
+
+### Что такое миграции (Migrations)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Система контроля версий для базы данных, позволяющая описывать структуру таблиц в PHP-коде.
+
+---
+
+### В чём разница между аутентификацией и авторизацией?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:**
+
+- **Аутентификация:** Проверка _того, кто_ является пользователем (например, вход в систему).
+- **Авторизация:** Проверка _того, что_ пользователю разрешено делать (например, права доступа).
+
+---
+
+### Что такое фасады (Facades) в Laravel?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Предоставляют «статический» интерфейс к классам, доступным в Service Container. Служат классами-«прокси» для доступа к базовым реализациям.
+
+---
+
+### Что такое события и слушатели (Events и Listeners)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Способ ослабления связанности компонентов приложения. Событие генерируется, и один или несколько слушателей реагируют на него.
+
+---
+
+### Что такое контракты (Contracts) в Laravel?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Набор интерфейсов, определяющих основные сервисы фреймворка. Они позволяют подменять базовые реализации.
+
+---
+
+### Какова роль Service Container и Service Provider?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:**
+
+- **Service Container:** Реестр всех зависимостей.
+- **Service Provider:** Классы, которые регистрируют и инициализируют зависимости в контейнере.
+
+---
+
+---

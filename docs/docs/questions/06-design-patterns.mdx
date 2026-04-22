@@ -1,0 +1,3522 @@
+---
+title: '6. Design Patterns'
+sidebar_label: '6. Design Patterns'
+---
+
+# 6. Design Patterns
+
+Design patterns are strictly related to [Clean Code & Best Practices](./18-clean-code-best-practices.mdx).
+
+### What are the main categories of Design Patterns?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Design patterns are generally categorized into three groups:
+
+- **Creational Patterns:** Focus on object creation mechanisms.
+- **Structural Patterns:** Focus on how classes and objects are composed to form larger structures.
+- **Behavioral Patterns:** Focus on communication between objects.
+
+---
+
+### What is the Singleton Pattern?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** A pattern that ensures a class has only one instance and provides a global point of access to it. It is a Creational Pattern.
+
+---
+
+### What is the Factory Method Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Factory Method is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You avoid tight coupling between the creator and the concrete products., Single Responsibility Principle. You can move the product creation code into one place in the program, making the code easier to support., Open/Closed Principle. You can introduce new types of products into the program without breaking existing client code.
+- **Cons:** The code may become more complicated since you need to introduce a lot of new subclasses to implement the pattern. The best case scenario is when you’re introducing the pattern into an existing hierarchy of creator classes.
+
+**Example:**
+
+```php
+<?php
+
+// The creator class declares the factory method that must
+// return an object of a product class. The creator's subclasses
+// usually provide the implementation of this method.
+abstract class Dialog
+{
+    // The creator may also provide some default implementation
+    // of the factory method.
+    abstract protected function createButton(): Button;
+
+    // Note that, despite its name, the creator's primary
+    // responsibility isn't creating products. It usually
+    // contains some core business logic that relies on product
+    // objects returned by the factory method. Subclasses can
+    // indirectly change that business logic by overriding the
+    // factory method and returning a different type of product
+    // from it.
+    public function render(): void
+    {
+        // Call the factory method to create a product object.
+        $okButton = $this->createButton();
+        // Now use the product.
+        $okButton->onClick([$this, 'closeDialog']);
+        $okButton->render();
+    }
+
+    protected function closeDialog(): void
+    {
+        echo "Closing dialog...\n";
+    }
+}
+
+// Concrete creators override the factory method to change the
+// resulting product's type.
+class WindowsDialog extends Dialog
+{
+    protected function createButton(): Button
+    {
+        return new WindowsButton();
+    }
+}
+
+class WebDialog extends Dialog
+{
+    protected function createButton(): Button
+    {
+        return new HTMLButton();
+    }
+}
+
+// The product interface declares the operations that all
+// concrete products must implement.
+interface Button
+{
+    public function render(): void;
+    public function onClick(callable $callback): void;
+}
+
+// Concrete products provide various implementations of the
+// product interface.
+class WindowsButton implements Button
+{
+    public function render(): void
+    {
+        echo "Render a button in Windows style.\n";
+    }
+
+    public function onClick(callable $callback): void
+    {
+        echo "Bind a native OS click event.\n";
+        $callback();
+    }
+}
+
+class HTMLButton implements Button
+{
+    public function render(): void
+    {
+        echo "Return an HTML representation of a button.\n";
+    }
+
+    public function onClick(callable $callback): void
+    {
+        echo "Bind a web browser click event.\n";
+        $callback();
+    }
+}
+
+class Application
+{
+    private Dialog $dialog;
+
+    // The application picks a creator's type depending on the
+    // current configuration or environment settings.
+    public function initialize(string $os): void
+    {
+        if ($os === 'Windows') {
+            $this->dialog = new WindowsDialog();
+        } elseif ($os === 'Web') {
+            $this->dialog = new WebDialog();
+        } else {
+            throw new InvalidArgumentException('Error! Unknown operating system.');
+        }
+    }
+
+    // The client code works with an instance of a concrete
+    // creator, albeit through its base interface. As long as
+    // the client keeps working with the creator via the base
+    // interface, you can pass it any creator's subclass.
+    public function main(string $os): void
+    {
+        $this->initialize($os);
+        $this->dialog->render();
+    }
+}
+
+$app = new Application();
+$app->main('Windows');
+```
+
+---
+
+### What is the Abstract Factory Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Abstract Factory is a creational design pattern that lets you produce families of related objects without specifying their concrete classes.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can be sure that the products you’re getting from a factory are compatible with each other. You avoid tight coupling between concrete products and client code. Single Responsibility Principle. You can extract the product creation code into one place, making the code easier to support. Open/Closed Principle. You can introduce new variants of products without breaking existing client code.
+- **Cons:** The code may become more complicated than it should be, since a lot of new interfaces and classes are introduced along with the pattern.
+
+**Note:** What's the difference between abstract factory and a factory pattern?
+
+**Answer:**
+
+- **Factory Method** defines an interface for creating _one_ product, but subclasses decide which class to instantiate.
+- **Abstract Factory** provides an interface for creating _families_ of related or dependent objects.
+- **Factory Method** relies on inheritance (it's implemented in subclasses), while **Abstract Factory** relies on object composition (the factory is an object passed to the client).
+
+**Example:**
+
+```php
+<?php
+
+// The abstract factory interface declares a set of methods that
+// return different abstract products. These products are called
+// a family and are related by a high-level theme or concept.
+// Products of one family are usually able to collaborate among
+// themselves. A family of products may have several variants,
+// but the products of one variant are incompatible with the
+// products of another variant.
+interface GUIFactory
+{
+    public function createButton(): Button;
+    public function createCheckbox(): Checkbox;
+}
+
+// Concrete factories produce a family of products that belong
+// to a single variant. The factory guarantees that the
+// resulting products are compatible. Signatures of the concrete
+// factory's methods return an abstract product, while inside
+// the method a concrete product is instantiated.
+class WinFactory implements GUIFactory
+{
+    public function createButton(): Button
+    {
+        return new WinButton();
+    }
+
+    public function createCheckbox(): Checkbox
+    {
+        return new WinCheckbox();
+    }
+}
+
+// Each concrete factory has a corresponding product variant.
+class MacFactory implements GUIFactory
+{
+    public function createButton(): Button
+    {
+        return new MacButton();
+    }
+
+    public function createCheckbox(): Checkbox
+    {
+        return new MacCheckbox();
+    }
+}
+
+// Each distinct product of a product family should have a base
+// interface. All variants of the product must implement this
+// interface.
+interface Button
+{
+    public function paint(): void;
+}
+
+// Concrete products are created by corresponding concrete
+// factories.
+class WinButton implements Button
+{
+    public function paint(): void
+    {
+        echo "Render a button in Windows style.\n";
+    }
+}
+
+class MacButton implements Button
+{
+    public function paint(): void
+    {
+        echo "Render a button in macOS style.\n";
+    }
+}
+
+// Here's the base interface of another product. All products
+// can interact with each other, but proper interaction is
+// possible only between products of the same concrete variant.
+interface Checkbox
+{
+    public function paint(): void;
+}
+
+class WinCheckbox implements Checkbox
+{
+    public function paint(): void
+    {
+        echo "Render a checkbox in Windows style.\n";
+    }
+}
+
+class MacCheckbox implements Checkbox
+{
+    public function paint(): void
+    {
+        echo "Render a checkbox in macOS style.\n";
+    }
+}
+
+// The client code works with factories and products only
+// through abstract types: GUIFactory, Button and Checkbox. This
+// lets you pass any factory or product subclass to the client
+// code without breaking it.
+class Application
+{
+    private GUIFactory $factory;
+    private Button $button;
+    private Checkbox $checkbox;
+
+    public function __construct(GUIFactory $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    public function createUI(): void
+    {
+        $this->button = $this->factory->createButton();
+        $this->checkbox = $this->factory->createCheckbox();
+    }
+
+    public function paint(): void
+    {
+        $this->button->paint();
+        $this->checkbox->paint();
+    }
+}
+
+// The application picks the factory type depending on the
+// current configuration or environment settings and creates it
+// at runtime (usually at the initialization stage).
+class ApplicationConfigurator
+{
+    public function main(string $os): void
+    {
+        if ($os === 'Windows') {
+            $factory = new WinFactory();
+        } elseif ($os === 'Mac') {
+            $factory = new MacFactory();
+        } else {
+            throw new InvalidArgumentException('Error! Unknown operating system.');
+        }
+
+        $app = new Application($factory);
+        $app->createUI();
+        $app->paint();
+    }
+}
+
+$configurator = new ApplicationConfigurator();
+$configurator->main('Mac');
+```
+
+---
+
+### What is the Builder Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can construct objects step-by-step, defer construction steps or run steps recursively. You can reuse the same construction code when building various representations of products. Single Responsibility Principle. You can isolate complex construction code from the business logic of the product.
+- **Cons:** The overall complexity of the code increases since the pattern requires creating multiple new classes.
+
+**Example:**
+
+```php
+<?php
+
+// Using the Builder pattern makes sense only when your products
+// are quite complex and require extensive configuration. The
+// following two products are related, although they don't have
+// a common interface.
+class Car
+{
+    public int $seats = 0;
+    public string $engine = '';
+    public bool $tripComputer = false;
+    public bool $gps = false;
+}
+
+class Manual
+{
+    /** @var string[] */
+    public array $instructions = [];
+}
+
+class SportEngine
+{
+    public function __toString(): string
+    {
+        return 'SportEngine';
+    }
+}
+
+// The builder interface specifies methods for creating the
+// different parts of the product objects.
+interface Builder
+{
+    public function reset(): void;
+    public function setSeats(int $count): void;
+    public function setEngine(string $engine): void;
+    public function setTripComputer(bool $enabled): void;
+    public function setGPS(bool $enabled): void;
+}
+
+// The concrete builder classes follow the builder interface and
+// provide specific implementations of the building steps. Your
+// program may have several variations of builders, each
+// implemented differently.
+class CarBuilder implements Builder
+{
+    private Car $car;
+
+    // A fresh builder instance should contain a blank product
+    // object which it uses in further assembly.
+    public function __construct()
+    {
+        $this->reset();
+    }
+
+    // The reset method clears the object being built.
+    public function reset(): void
+    {
+        $this->car = new Car();
+    }
+
+    // All production steps work with the same product instance.
+    public function setSeats(int $count): void
+    {
+        $this->car->seats = $count;
+    }
+
+    public function setEngine(string $engine): void
+    {
+        $this->car->engine = $engine;
+    }
+
+    public function setTripComputer(bool $enabled): void
+    {
+        $this->car->tripComputer = $enabled;
+    }
+
+    public function setGPS(bool $enabled): void
+    {
+        $this->car->gps = $enabled;
+    }
+
+    // Concrete builders are supposed to provide their own
+    // methods for retrieving results. That's because various
+    // types of builders may create entirely different products
+    // that don't all follow the same interface. Therefore such
+    // methods can't be declared in the builder interface (at
+    // least not in a statically-typed programming language).
+    //
+    // Usually, after returning the end result to the client, a
+    // builder instance is expected to be ready to start
+    // producing another product. That's why it's a common
+    // practice to call the reset method at the end of the
+    // `getProduct` method body. However, this behavior isn't
+    // mandatory, and you can make your builder wait for an
+    // explicit reset call from the client code before disposing
+    // of the previous result.
+    public function getProduct(): Car
+    {
+        $product = $this->car;
+        $this->reset();
+
+        return $product;
+    }
+}
+
+// Unlike other creational patterns, builder lets you construct
+// products that don't follow the common interface.
+class CarManualBuilder implements Builder
+{
+    private Manual $manual;
+
+    public function __construct()
+    {
+        $this->reset();
+    }
+
+    public function reset(): void
+    {
+        $this->manual = new Manual();
+    }
+
+    public function setSeats(int $count): void
+    {
+        $this->manual->instructions[] = "Seats: {$count}";
+    }
+
+    public function setEngine(string $engine): void
+    {
+        $this->manual->instructions[] = "Engine: {$engine}";
+    }
+
+    public function setTripComputer(bool $enabled): void
+    {
+        $this->manual->instructions[] = 'Trip computer: ' . ($enabled ? 'enabled' : 'disabled');
+    }
+
+    public function setGPS(bool $enabled): void
+    {
+        $this->manual->instructions[] = 'GPS: ' . ($enabled ? 'enabled' : 'disabled');
+    }
+
+    public function getProduct(): Manual
+    {
+        $product = $this->manual;
+        $this->reset();
+
+        return $product;
+    }
+}
+
+// The director is only responsible for executing the building
+// steps in a particular sequence. It's helpful when producing
+// products according to a specific order or configuration.
+// Strictly speaking, the director class is optional, since the
+// client can control builders directly.
+class Director
+{
+    // The director works with any builder instance that the
+    // client code passes to it. This way, the client code may
+    // alter the final type of the newly assembled product.
+    // The director can construct several product variations
+    // using the same building steps.
+    public function constructSportsCar(Builder $builder): void
+    {
+        $builder->reset();
+        $builder->setSeats(2);
+        $builder->setEngine((string) new SportEngine());
+        $builder->setTripComputer(true);
+        $builder->setGPS(true);
+    }
+
+    public function constructSUV(Builder $builder): void
+    {
+        $builder->reset();
+        $builder->setSeats(5);
+        $builder->setEngine('DieselEngine');
+        $builder->setTripComputer(true);
+        $builder->setGPS(true);
+    }
+}
+
+// The client code creates a builder object, passes it to the
+// director and then initiates the construction process. The end
+// result is retrieved from the builder object.
+class Application
+{
+    public function makeCar(): void
+    {
+        $director = new Director();
+
+        $carBuilder = new CarBuilder();
+        $director->constructSportsCar($carBuilder);
+        $car = $carBuilder->getProduct();
+
+        $manualBuilder = new CarManualBuilder();
+        $director->constructSportsCar($manualBuilder);
+
+        // The final product is often retrieved from a builder
+        // object since the director isn't aware of, and doesn't
+        // depend on, concrete builders and products.
+        $manual = $manualBuilder->getProduct();
+
+        var_dump($car, $manual->instructions);
+    }
+}
+
+$app = new Application();
+$app->makeCar();
+```
+
+---
+
+### What is the Prototype Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Prototype is a creational design pattern that lets you copy existing objects without making your code dependent on their classes.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can clone objects without coupling to their concrete classes. You can get rid of repeated initialization code in favor of cloning pre-built prototypes. You can produce complex objects more conveniently. You get an alternative to inheritance when dealing with configuration presets for complex objects.
+- **Cons:** Cloning complex objects that have circular references might be very tricky.
+
+**Example:**
+
+```php
+<?php
+
+// Base prototype.
+abstract class Shape
+{
+    public int $x = 0;
+    public int $y = 0;
+    public string $color = 'black';
+
+    // The prototype constructor. A fresh object is initialized
+    // with values from the existing object.
+    public function __construct(?Shape $source = null)
+    {
+        if ($source !== null) {
+            $this->x = $source->x;
+            $this->y = $source->y;
+            $this->color = $source->color;
+        }
+    }
+
+    // The clone operation returns one of the Shape subclasses.
+    abstract public function copy(): Shape;
+}
+
+// Concrete prototype. The cloning method creates a new object
+// in one go by calling the constructor of the current class and
+// passing the current object as the constructor's argument.
+// Performing all the actual copying in the constructor helps to
+// keep the result consistent: the constructor will not return a
+// result until the new object is fully built; thus, no object
+// can have a reference to a partially-built clone.
+class Rectangle extends Shape
+{
+    public int $width = 0;
+    public int $height = 0;
+
+    public function __construct(?Rectangle $source = null)
+    {
+        parent::__construct($source);
+
+        if ($source !== null) {
+            $this->width = $source->width;
+            $this->height = $source->height;
+        }
+    }
+
+    public function copy(): Shape
+    {
+        return new Rectangle($this);
+    }
+}
+
+class Circle extends Shape
+{
+    public int $radius = 0;
+
+    public function __construct(?Circle $source = null)
+    {
+        parent::__construct($source);
+
+        if ($source !== null) {
+            $this->radius = $source->radius;
+        }
+    }
+
+    public function copy(): Shape
+    {
+        return new Circle($this);
+    }
+}
+
+// Somewhere in the client code.
+class Application
+{
+    /** @var Shape[] */
+    private array $shapes = [];
+
+    public function __construct()
+    {
+        $circle = new Circle();
+        $circle->x = 10;
+        $circle->y = 10;
+        $circle->radius = 20;
+        $this->shapes[] = $circle;
+
+        $anotherCircle = $circle->copy();
+        $this->shapes[] = $anotherCircle;
+        // The `anotherCircle` variable contains an exact copy
+        // of the `circle` object.
+
+        $rectangle = new Rectangle();
+        $rectangle->width = 10;
+        $rectangle->height = 20;
+        $this->shapes[] = $rectangle;
+    }
+
+    public function businessLogic(): void
+    {
+        // Prototype rocks because it lets you produce a copy of
+        // an object without knowing anything about its type.
+        $shapesCopy = [];
+
+        // For instance, we don't know the exact elements in the
+        // shapes array. All we know is that they are all
+        // shapes. But thanks to polymorphism, when we call the
+        // `copy` method on a shape the program checks its real
+        // class and runs the appropriate copy method defined
+        // in that class. That's why we get proper clones
+        // instead of a set of simple Shape objects.
+        foreach ($this->shapes as $shape) {
+            $shapesCopy[] = $shape->copy();
+        }
+
+        // The `shapesCopy` array contains exact copies of the
+        // `shapes` array's children.
+        var_dump($shapesCopy);
+    }
+}
+
+$app = new Application();
+$app->businessLogic();
+```
+
+---
+
+### What is the Adapter Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Adapter is a structural design pattern that allows objects with incompatible interfaces to collaborate.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Single Responsibility Principle. You can separate the interface or data conversion code from the primary business logic of the program. Open/Closed Principle. You can introduce new types of adapters into the program without breaking the existing client code, as long as they work with the adapters through the client interface.
+- **Cons:** The overall complexity of the code increases because you need to introduce a set of new interfaces and classes. Sometimes it’s simpler just to change the service class so that it matches the rest of your code.
+
+**Example:**
+
+```php
+<?php
+
+// Say you have two classes with compatible interfaces:
+// RoundHole and RoundPeg.
+class RoundHole
+{
+    public function __construct(private float $radius)
+    {
+    }
+
+    public function getRadius(): float
+    {
+        return $this->radius;
+    }
+
+    public function fits(RoundPeg $peg): bool
+    {
+        return $this->getRadius() >= $peg->getRadius();
+    }
+}
+
+class RoundPeg
+{
+    public function __construct(private float $radius)
+    {
+    }
+
+    public function getRadius(): float
+    {
+        return $this->radius;
+    }
+}
+
+// But there's an incompatible class: SquarePeg.
+class SquarePeg
+{
+    public function __construct(private float $width)
+    {
+    }
+
+    public function getWidth(): float
+    {
+        return $this->width;
+    }
+}
+
+// An adapter class lets you fit square pegs into round holes.
+// It extends the RoundPeg class to let the adapter objects act
+// as round pegs.
+class SquarePegAdapter extends RoundPeg
+{
+    // In reality, the adapter contains an instance of the
+    // SquarePeg class.
+    public function __construct(private SquarePeg $peg)
+    {
+        parent::__construct(0);
+    }
+
+    public function getRadius(): float
+    {
+        // The adapter pretends that it's a round peg with a
+        // radius that could fit the square peg that the adapter
+        // actually wraps.
+        return $this->peg->getWidth() * sqrt(2) / 2;
+    }
+}
+
+// Somewhere in client code.
+$hole = new RoundHole(5);
+$rpeg = new RoundPeg(5);
+var_dump($hole->fits($rpeg)); // true
+
+$smallSqPeg = new SquarePeg(5);
+$largeSqPeg = new SquarePeg(10);
+
+$smallSqPegAdapter = new SquarePegAdapter($smallSqPeg);
+$largeSqPegAdapter = new SquarePegAdapter($largeSqPeg);
+var_dump($hole->fits($smallSqPegAdapter)); // true
+var_dump($hole->fits($largeSqPegAdapter)); // false
+```
+
+---
+
+### What is the Bridge Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Bridge is a structural design pattern that lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently of each other.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can create platform-independent classes and apps. The client code works with high-level abstractions. It isn’t exposed to the platform details. Open/Closed Principle. You can introduce new abstractions and implementations independently from each other. Single Responsibility Principle. You can focus on high-level logic in the abstraction and on platform details in the implementation.
+- **Cons:** You might make the code more complicated by applying the pattern to a highly cohesive class.
+
+**Example:**
+
+```php
+<?php
+
+// The "abstraction" defines the interface for the "control"
+// part of the two class hierarchies. It maintains a reference
+// to an object of the "implementation" hierarchy and delegates
+// all of the real work to this object.
+class RemoteControl
+{
+    public function __construct(protected Device $device)
+    {
+    }
+
+    public function togglePower(): void
+    {
+        if ($this->device->isEnabled()) {
+            $this->device->disable();
+        } else {
+            $this->device->enable();
+        }
+    }
+
+    public function volumeDown(): void
+    {
+        $this->device->setVolume($this->device->getVolume() - 10);
+    }
+
+    public function volumeUp(): void
+    {
+        $this->device->setVolume($this->device->getVolume() + 10);
+    }
+
+    public function channelDown(): void
+    {
+        $this->device->setChannel($this->device->getChannel() - 1);
+    }
+
+    public function channelUp(): void
+    {
+        $this->device->setChannel($this->device->getChannel() + 1);
+    }
+}
+
+// You can extend classes from the abstraction hierarchy
+// independently from device classes.
+class AdvancedRemoteControl extends RemoteControl
+{
+    public function mute(): void
+    {
+        $this->device->setVolume(0);
+    }
+}
+
+// The "implementation" interface declares methods common to all
+// concrete implementation classes. It doesn't have to match the
+// abstraction's interface. In fact, the two interfaces can be
+// entirely different. Typically the implementation interface
+// provides only primitive operations, while the abstraction
+// defines higher-level operations based on those primitives.
+interface Device
+{
+    public function isEnabled(): bool;
+    public function enable(): void;
+    public function disable(): void;
+    public function getVolume(): int;
+    public function setVolume(int $percent): void;
+    public function getChannel(): int;
+    public function setChannel(int $channel): void;
+}
+
+abstract class BaseDevice implements Device
+{
+    protected bool $enabled = false;
+    protected int $volume = 30;
+    protected int $channel = 1;
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function enable(): void
+    {
+        $this->enabled = true;
+    }
+
+    public function disable(): void
+    {
+        $this->enabled = false;
+    }
+
+    public function getVolume(): int
+    {
+        return $this->volume;
+    }
+
+    public function setVolume(int $percent): void
+    {
+        $this->volume = max(0, min(100, $percent));
+    }
+
+    public function getChannel(): int
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(int $channel): void
+    {
+        $this->channel = max(1, $channel);
+    }
+}
+
+// All devices follow the same interface.
+class Tv extends BaseDevice
+{
+}
+
+class Radio extends BaseDevice
+{
+}
+
+// Somewhere in client code.
+$tv = new Tv();
+$remote = new RemoteControl($tv);
+$remote->togglePower();
+
+$radio = new Radio();
+$advancedRemote = new AdvancedRemoteControl($radio);
+$advancedRemote->togglePower();
+$advancedRemote->mute();
+```
+
+---
+
+### What is the Composite Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Composite is a structural design pattern that lets you compose objects into tree structures and then work with these structures as if they were individual objects.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can work with complex tree structures more conveniently: use polymorphism and recursion to your advantage. Open/Closed Principle. You can introduce new element types into the app without breaking the existing code, which now works with the object tree.
+- **Cons:** It might be difficult to provide a common interface for classes whose functionality differs too much. In certain scenarios, you’d need to overgeneralize the component interface, making it harder to comprehend.
+
+**Example:**
+
+```php
+<?php
+
+// The component interface declares common operations for both
+// simple and complex objects of a composition.
+interface Graphic
+{
+    public function move(int $x, int $y): void;
+    public function draw(): void;
+}
+
+// The leaf class represents end objects of a composition. A
+// leaf object can't have any sub-objects. Usually, it's leaf
+// objects that do the actual work, while composite objects only
+// delegate to their sub-components.
+class Dot implements Graphic
+{
+    public function __construct(protected int $x, protected int $y)
+    {
+    }
+
+    public function move(int $x, int $y): void
+    {
+        $this->x += $x;
+        $this->y += $y;
+    }
+
+    public function draw(): void
+    {
+        echo "Draw a dot at ({$this->x}, {$this->y}).\n";
+    }
+}
+
+// All component classes can extend other components.
+class Circle extends Dot
+{
+    public function __construct(int $x, int $y, private int $radius)
+    {
+        parent::__construct($x, $y);
+    }
+
+    public function draw(): void
+    {
+        echo "Draw a circle at ({$this->x}, {$this->y}) with radius {$this->radius}.\n";
+    }
+}
+
+// The composite class represents complex components that may
+// have children. Composite objects usually delegate the actual
+// work to their children and then "sum up" the result.
+class CompoundGraphic implements Graphic
+{
+    /** @var Graphic[] */
+    private array $children = [];
+
+    // A composite object can add or remove other components
+    // (both simple or complex) to or from its child list.
+    public function add(Graphic $child): void
+    {
+        $this->children[] = $child;
+    }
+
+    public function remove(Graphic $child): void
+    {
+        foreach ($this->children as $index => $component) {
+            if ($component === $child) {
+                unset($this->children[$index]);
+            }
+        }
+
+        $this->children = array_values($this->children);
+    }
+
+    public function move(int $x, int $y): void
+    {
+        foreach ($this->children as $child) {
+            $child->move($x, $y);
+        }
+    }
+
+    // A composite executes its primary logic in a particular
+    // way. It traverses recursively through all its children,
+    // collecting and summing up their results. Since the
+    // composite's children pass these calls to their own
+    // children and so forth, the whole object tree is traversed
+    // as a result.
+    public function draw(): void
+    {
+        foreach ($this->children as $child) {
+            $child->draw();
+        }
+
+        echo "Draw a dashed bounding rectangle around all child graphics.\n";
+    }
+}
+
+// The client code works with all the components via their base
+// interface. This way the client code can support simple leaf
+// components as well as complex composites.
+class ImageEditor
+{
+    private CompoundGraphic $all;
+
+    public function load(): void
+    {
+        $this->all = new CompoundGraphic();
+        $this->all->add(new Dot(1, 2));
+        $this->all->add(new Circle(5, 3, 10));
+    }
+
+    // Combine selected components into one complex composite
+    // component.
+    public function groupSelected(array $components): void
+    {
+        $group = new CompoundGraphic();
+
+        foreach ($components as $component) {
+            if (!$component instanceof Graphic) {
+                continue;
+            }
+
+            $group->add($component);
+            $this->all->remove($component);
+        }
+
+        $this->all->add($group);
+        // All components will be drawn.
+        $this->all->draw();
+    }
+}
+
+$editor = new ImageEditor();
+$editor->load();
+$editor->groupSelected([new Dot(0, 0)]);
+```
+
+---
+
+### What is the Decorator Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Decorator is a structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can extend an object’s behavior without making a new subclass. You can add or remove responsibilities from an object at runtime. You can combine several behaviors by wrapping an object into multiple decorators. Single Responsibility Principle. You can divide a monolithic class that implements many possible variants of behavior into several smaller classes.
+- **Cons:** It’s hard to remove a specific wrapper from the wrappers stack. It’s hard to implement a decorator in such a way that its behavior doesn’t depend on the order in the decorators stack. The initial configuration code of layers might look pretty ugly.
+
+**Example:**
+
+```php
+<?php
+
+// The component interface defines operations that can be
+// altered by decorators.
+interface DataSource
+{
+    public function writeData(string $data): void;
+    public function readData(): string;
+}
+
+// Concrete components provide default implementations for the
+// operations. There might be several variations of these
+// classes in a program.
+class FileDataSource implements DataSource
+{
+    /** @var array<string, string> */
+    private static array $storage = [];
+
+    public function __construct(private string $filename)
+    {
+    }
+
+    public function writeData(string $data): void
+    {
+        self::$storage[$this->filename] = $data;
+    }
+
+    public function readData(): string
+    {
+        return self::$storage[$this->filename] ?? '';
+    }
+}
+
+// The base decorator class follows the same interface as the
+// other components. The primary purpose of this class is to
+// define the wrapping interface for all concrete decorators.
+// The default implementation of the wrapping code might include
+// a field for storing a wrapped component and the means to
+// initialize it.
+class DataSourceDecorator implements DataSource
+{
+    public function __construct(protected DataSource $wrappee)
+    {
+    }
+
+    // The base decorator simply delegates all work to the
+    // wrapped component. Extra behaviors can be added in
+    // concrete decorators.
+    public function writeData(string $data): void
+    {
+        $this->wrappee->writeData($data);
+    }
+
+    // Concrete decorators may call the parent implementation of
+    // the operation instead of calling the wrapped object
+    // directly. This approach simplifies extension of decorator
+    // classes.
+    public function readData(): string
+    {
+        return $this->wrappee->readData();
+    }
+}
+
+// Concrete decorators must call methods on the wrapped object,
+// but may add something of their own to the result. Decorators
+// can execute the added behavior either before or after the
+// call to a wrapped object.
+class EncryptionDecorator extends DataSourceDecorator
+{
+    public function writeData(string $data): void
+    {
+        parent::writeData(base64_encode($data));
+    }
+
+    public function readData(): string
+    {
+        return (string) base64_decode(parent::readData(), true);
+    }
+}
+
+// You can wrap objects in several layers of decorators.
+class CompressionDecorator extends DataSourceDecorator
+{
+    public function writeData(string $data): void
+    {
+        parent::writeData(base64_encode(gzcompress($data)));
+    }
+
+    public function readData(): string
+    {
+        $decoded = (string) base64_decode(parent::readData(), true);
+        return (string) gzuncompress($decoded);
+    }
+}
+
+// Option 1. A simple example of a decorator assembly.
+class Application
+{
+    public function dumbUsageExample(string $salaryRecords): void
+    {
+        $source = new FileDataSource('somefile.dat');
+        $source->writeData($salaryRecords);
+        // The target file has been written with plain data.
+
+        $source = new CompressionDecorator($source);
+        $source->writeData($salaryRecords);
+        // The target file has been written with compressed
+        // data.
+
+        $source = new EncryptionDecorator($source);
+        // The source variable now contains this:
+        // Encryption > Compression > FileDataSource
+        $source->writeData($salaryRecords);
+        // The file has been written with compressed and
+        // encrypted data.
+    }
+}
+
+// Option 2. Client code that uses an external data source.
+// SalaryManager objects neither know nor care about data
+// storage specifics. They work with a pre-configured data
+// source received from the app configurator.
+class SalaryManager
+{
+    public function __construct(private DataSource $source)
+    {
+    }
+
+    public function load(): string
+    {
+        return $this->source->readData();
+    }
+
+    public function save(string $salaryRecords): void
+    {
+        $this->source->writeData($salaryRecords);
+    }
+}
+
+// The app can assemble different stacks of decorators at
+// runtime, depending on the configuration or environment.
+class ApplicationConfigurator
+{
+    public function configurationExample(bool $enabledEncryption, bool $enabledCompression): string
+    {
+        $source = new FileDataSource('salary.dat');
+        if ($enabledEncryption) {
+            $source = new EncryptionDecorator($source);
+        }
+        if ($enabledCompression) {
+            $source = new CompressionDecorator($source);
+        }
+
+        $manager = new SalaryManager($source);
+        $manager->save('Alice: 5000; Bob: 6000');
+
+        return $manager->load();
+    }
+}
+
+$configurator = new ApplicationConfigurator();
+echo $configurator->configurationExample(true, true);
+```
+
+---
+
+### What is the Facade Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Facade is a structural design pattern that provides a simplified interface to a library, a framework, or any other complex set of classes.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can isolate your code from the complexity of a subsystem.
+- **Cons:** A facade can become a god object coupled to all classes of an app.
+
+**Example:**
+
+```php
+<?php
+
+// These are some of the classes of a complex 3rd-party video
+// conversion framework. We don't control that code, therefore
+// can't simplify it.
+class VideoFile
+{
+    public function __construct(public string $name)
+    {
+    }
+}
+
+class OggCompressionCodec
+{
+}
+
+class MPEG4CompressionCodec
+{
+}
+
+class CodecFactory
+{
+    public function extract(VideoFile $file): object
+    {
+        return str_ends_with($file->name, '.ogg') ? new OggCompressionCodec() : new MPEG4CompressionCodec();
+    }
+}
+
+class BitrateReader
+{
+    public static function read(string $filename, object $codec): string
+    {
+        return "raw({$filename})";
+    }
+
+    public static function convert(string $buffer, object $codec): string
+    {
+        return "converted({$buffer})";
+    }
+}
+
+class AudioMixer
+{
+    public function fix(string $result): string
+    {
+        return "audio-fixed({$result})";
+    }
+}
+
+class ConvertedFile
+{
+    public function __construct(private string $content)
+    {
+    }
+
+    public function save(): void
+    {
+        echo "Saving converted file: {$this->content}\n";
+    }
+}
+
+// We create a facade class to hide the framework's complexity
+// behind a simple interface. It's a trade-off between
+// functionality and simplicity.
+class VideoConverter
+{
+    public function convert(string $filename, string $format): ConvertedFile
+    {
+        $file = new VideoFile($filename);
+        $sourceCodec = (new CodecFactory())->extract($file);
+
+        if ($format === 'mp4') {
+            $destinationCodec = new MPEG4CompressionCodec();
+        } else {
+            $destinationCodec = new OggCompressionCodec();
+        }
+
+        $buffer = BitrateReader::read($filename, $sourceCodec);
+        $result = BitrateReader::convert($buffer, $destinationCodec);
+        $result = (new AudioMixer())->fix($result);
+
+        return new ConvertedFile($result);
+    }
+}
+
+// Application classes don't depend on a billion classes
+// provided by the complex framework. Also, if you decide to
+// switch frameworks, you only need to rewrite the facade class.
+class Application
+{
+    public function main(): void
+    {
+        $converter = new VideoConverter();
+        $mp4 = $converter->convert('funny-cats-video.ogg', 'mp4');
+        $mp4->save();
+    }
+}
+
+$app = new Application();
+$app->main();
+```
+
+---
+
+### What is the Flyweight Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Flyweight is a structural design pattern that lets you fit more objects into the available amount of RAM by sharing common parts of state between multiple objects instead of keeping all of the data in each object.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can save lots of RAM, assuming your program has tons of similar objects.
+- **Cons:** You might be trading RAM over CPU cycles when some of the context data needs to be recalculated each time somebody calls a flyweight method. The code becomes much more complicated. New team members will always be wondering why the state of an entity was separated in such a way.
+
+**Example:**
+
+```php
+<?php
+
+// The flyweight class contains a portion of the state of a
+// tree. These fields store values that are unique for each
+// particular tree. For instance, you won't find here the tree
+// coordinates. But the texture and colors shared between many
+// trees are here. Since this data is usually BIG, you'd waste a
+// lot of memory by keeping it in each tree object. Instead, we
+// can extract texture, color and other repeating data into a
+// separate object which lots of individual tree objects can
+// reference.
+class TreeType
+{
+    public function __construct(
+        private string $name,
+        private string $color,
+        private string $texture
+    ) {
+    }
+
+    public function draw(string $canvas, int $x, int $y): void
+    {
+        echo "Draw {$this->name} ({$this->color}, {$this->texture}) on {$canvas} at ({$x}, {$y}).\n";
+    }
+}
+
+// Flyweight factory decides whether to re-use existing
+// flyweight or to create a new object.
+class TreeFactory
+{
+    /** @var array<string, TreeType> */
+    private static array $treeTypes = [];
+
+    public static function getTreeType(string $name, string $color, string $texture): TreeType
+    {
+        $key = strtolower("{$name}|{$color}|{$texture}");
+
+        if (!isset(self::$treeTypes[$key])) {
+            self::$treeTypes[$key] = new TreeType($name, $color, $texture);
+        }
+
+        return self::$treeTypes[$key];
+    }
+}
+
+// The contextual object contains the extrinsic part of the tree
+// state. An application can create billions of these since they
+// are pretty small: just two integer coordinates and one
+// reference field.
+class Tree
+{
+    public function __construct(private int $x, private int $y, private TreeType $type)
+    {
+    }
+
+    public function draw(string $canvas): void
+    {
+        $this->type->draw($canvas, $this->x, $this->y);
+    }
+}
+
+// The Tree and the Forest classes are the flyweight's clients.
+// You can merge them if you don't plan to develop the Tree
+// class any further.
+class Forest
+{
+    /** @var Tree[] */
+    private array $trees = [];
+
+    public function plantTree(int $x, int $y, string $name, string $color, string $texture): void
+    {
+        $type = TreeFactory::getTreeType($name, $color, $texture);
+        $tree = new Tree($x, $y, $type);
+        $this->trees[] = $tree;
+    }
+
+    public function draw(string $canvas): void
+    {
+        foreach ($this->trees as $tree) {
+            $tree->draw($canvas);
+        }
+    }
+}
+
+$forest = new Forest();
+$forest->plantTree(1, 2, 'Oak', 'Green', 'Rough');
+$forest->plantTree(3, 4, 'Oak', 'Green', 'Rough');
+$forest->plantTree(5, 6, 'Pine', 'Dark Green', 'Needle');
+$forest->draw('MainCanvas');
+```
+
+---
+
+### What is the Proxy Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Proxy is a structural design pattern that lets you provide a substitute or placeholder for another object. A proxy controls access to the original object, allowing you to perform something either before or after the request gets through to the original object.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can control the service object without clients knowing about it. You can manage the lifecycle of the service object when clients don’t care about it. The proxy works even if the service object isn’t ready or is not available. Open/Closed Principle. You can introduce new proxies without changing the service or clients.
+- **Cons:** The code may become more complicated since you need to introduce a lot of new classes. The response from the service might get delayed.
+
+**Example:**
+
+```php
+<?php
+
+// The interface of a remote service.
+interface ThirdPartyYouTubeLib
+{
+    /** @return array<string, string> */
+    public function listVideos(): array;
+    public function getVideoInfo(string $id): string;
+    public function downloadVideo(string $id): string;
+}
+
+// The concrete implementation of a service connector. Methods
+// of this class can request information from YouTube. The speed
+// of the request depends on a user's internet connection as
+// well as YouTube's. The application will slow down if a lot of
+// requests are fired at the same time, even if they all request
+// the same information.
+class ThirdPartyYouTubeClass implements ThirdPartyYouTubeLib
+{
+    public function listVideos(): array
+    {
+        return ['a1' => 'Funny Cats', 'b2' => 'PHP Patterns'];
+    }
+
+    public function getVideoInfo(string $id): string
+    {
+        return "Video info for {$id}";
+    }
+
+    public function downloadVideo(string $id): string
+    {
+        return "Downloading video {$id}";
+    }
+}
+
+// To save some bandwidth, we can cache request results and keep
+// them for some time. But it may be impossible to put such code
+// directly into the service class. For example, it could have
+// been provided as part of a third party library and/or defined
+// as `final`. That's why we put the caching code into a new
+// proxy class which implements the same interface as the
+// service class. It delegates to the service object only when
+// the real requests have to be sent.
+class CachedYouTubeClass implements ThirdPartyYouTubeLib
+{
+    /** @var array<string, string>|null */
+    private ?array $listCache = null;
+
+    /** @var array<string, string> */
+    private array $videoCache = [];
+
+    /** @var array<string, string> */
+    private array $downloadCache = [];
+
+    public bool $needReset = false;
+
+    public function __construct(private ThirdPartyYouTubeLib $service)
+    {
+    }
+
+    public function listVideos(): array
+    {
+        if ($this->listCache === null || $this->needReset) {
+            $this->listCache = $this->service->listVideos();
+            $this->needReset = false;
+        }
+
+        return $this->listCache;
+    }
+
+    public function getVideoInfo(string $id): string
+    {
+        if (!isset($this->videoCache[$id]) || $this->needReset) {
+            $this->videoCache[$id] = $this->service->getVideoInfo($id);
+            $this->needReset = false;
+        }
+
+        return $this->videoCache[$id];
+    }
+
+    public function downloadVideo(string $id): string
+    {
+        if (!isset($this->downloadCache[$id]) || $this->needReset) {
+            $this->downloadCache[$id] = $this->service->downloadVideo($id);
+            $this->needReset = false;
+        }
+
+        return $this->downloadCache[$id];
+    }
+}
+
+// The GUI class, which used to work directly with a service
+// object, stays unchanged as long as it works with the service
+// object through an interface. We can safely pass a proxy
+// object instead of a real service object since they both
+// implement the same interface.
+class YouTubeManager
+{
+    public function __construct(protected ThirdPartyYouTubeLib $service)
+    {
+    }
+
+    public function renderVideoPage(string $id): void
+    {
+        $info = $this->service->getVideoInfo($id);
+        echo "Render page: {$info}\n";
+    }
+
+    public function renderListPanel(): void
+    {
+        $list = $this->service->listVideos();
+        echo 'Render list: ' . implode(', ', $list) . "\n";
+    }
+
+    public function reactOnUserInput(): void
+    {
+        $this->renderVideoPage('a1');
+        $this->renderListPanel();
+    }
+}
+
+// The application can configure proxies on the fly.
+class Application
+{
+    public function init(): void
+    {
+        $youTubeService = new ThirdPartyYouTubeClass();
+        $youTubeProxy = new CachedYouTubeClass($youTubeService);
+        $manager = new YouTubeManager($youTubeProxy);
+        $manager->reactOnUserInput();
+    }
+}
+
+$app = new Application();
+$app->init();
+```
+
+---
+
+### What is the Chain of Responsibility Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Chain of Responsibility is a behavioral design pattern that lets you pass requests along a chain of handlers. Upon receiving a request, each handler decides either to process the request or to pass it to the next handler in the chain.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can control the order of request handling. Single Responsibility Principle. You can decouple classes that invoke operations from classes that perform operations. Open/Closed Principle. You can introduce new handlers into the app without breaking the existing client code.
+- **Cons:** Some requests may end up unhandled.
+
+**Example:**
+
+```php
+<?php
+
+// The handler interface declares a method for executing a
+// request.
+interface ComponentWithContextualHelp
+{
+    public function showHelp(): void;
+}
+
+// The base class for simple components.
+abstract class Component implements ComponentWithContextualHelp
+{
+    public ?string $tooltipText = null;
+
+    // The component's container acts as the next link in the
+    // chain of handlers.
+    protected ?Container $container = null;
+
+    public function setContainer(Container $container): void
+    {
+        $this->container = $container;
+    }
+
+    // The component shows a tooltip if there's help text
+    // assigned to it. Otherwise it forwards the call to the
+    // container, if it exists.
+    public function showHelp(): void
+    {
+        if ($this->tooltipText !== null) {
+            echo "Tooltip: {$this->tooltipText}\n";
+            return;
+        }
+
+        if ($this->container !== null) {
+            $this->container->showHelp();
+        }
+    }
+}
+
+// Containers can contain both simple components and other
+// containers as children. The chain relationships are
+// established here. The class inherits showHelp behavior from
+// its parent.
+abstract class Container extends Component
+{
+    /** @var Component[] */
+    protected array $children = [];
+
+    public function add(Component $child): void
+    {
+        $this->children[] = $child;
+        $child->setContainer($this);
+    }
+}
+
+// Primitive components may be fine with default help
+// implementation...
+class Button extends Component
+{
+    public function __construct(private string $label)
+    {
+    }
+}
+
+// But complex components may override the default
+// implementation. If the help text can't be provided in a new
+// way, the component can always call the base implementation
+// (see Component class).
+class Panel extends Container
+{
+    public ?string $modalHelpText = null;
+
+    public function showHelp(): void
+    {
+        if ($this->modalHelpText !== null) {
+            echo "Modal: {$this->modalHelpText}\n";
+            return;
+        }
+
+        parent::showHelp();
+    }
+}
+
+// ...same as above...
+class Dialog extends Container
+{
+    public ?string $wikiPageURL = null;
+
+    public function __construct(private string $title)
+    {
+    }
+
+    public function showHelp(): void
+    {
+        if ($this->wikiPageURL !== null) {
+            echo "Open wiki page: {$this->wikiPageURL}\n";
+            return;
+        }
+
+        parent::showHelp();
+    }
+}
+
+// Client code.
+class Application
+{
+    private Component $focusedComponent;
+
+    // Every application configures the chain differently.
+    public function createUI(): void
+    {
+        $dialog = new Dialog('Budget Reports');
+        $dialog->wikiPageURL = 'http://help.local/budget-reports';
+
+        $panel = new Panel();
+        $panel->modalHelpText = 'This panel helps you manage budget data.';
+
+        $ok = new Button('OK');
+        $ok->tooltipText = 'This is an OK button that saves changes.';
+        $cancel = new Button('Cancel');
+
+        $panel->add($ok);
+        $panel->add($cancel);
+        $dialog->add($panel);
+
+        $this->focusedComponent = $cancel;
+    }
+
+    // Imagine what happens here.
+    public function onF1KeyPress(): void
+    {
+        $component = $this->getComponentAtMouseCoords();
+        $component->showHelp();
+    }
+
+    private function getComponentAtMouseCoords(): Component
+    {
+        return $this->focusedComponent;
+    }
+}
+
+$app = new Application();
+$app->createUI();
+$app->onF1KeyPress();
+```
+
+---
+
+### What is the Command Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Command is a behavioral design pattern that turns a request into a stand-alone object that contains all information about the request. This transformation lets you pass requests as a method arguments, delay or queue a request’s execution, and support undoable operations.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Single Responsibility Principle. You can decouple classes that invoke operations from classes that perform these operations. Open/Closed Principle. You can introduce new commands into the app without breaking existing client code. You can implement undo/redo. You can implement deferred execution of operations. You can assemble a set of simple commands into a complex one.
+- **Cons:** The code may become more complicated since you’re introducing a whole new layer between senders and receivers.
+
+**Example:**
+
+```php
+<?php
+
+// The base command class defines the common interface for all
+// concrete commands.
+abstract class Command
+{
+    protected string $backup = '';
+
+    public function __construct(protected Application $app, protected Editor $editor)
+    {
+    }
+
+    // Make a backup of the editor's state.
+    protected function saveBackup(): void
+    {
+        $this->backup = $this->editor->text;
+    }
+
+    // Restore the editor's state.
+    public function undo(): void
+    {
+        $this->editor->text = $this->backup;
+    }
+
+    // The execution method is declared abstract to force all
+    // concrete commands to provide their own implementations.
+    // The method must return true or false depending on whether
+    // the command changes the editor's state.
+    abstract public function execute(): bool;
+}
+
+// The concrete commands go here.
+class CopyCommand extends Command
+{
+    // The copy command isn't saved to the history since it
+    // doesn't change the editor's state.
+    public function execute(): bool
+    {
+        $this->app->clipboard = $this->editor->getSelection();
+        return false;
+    }
+}
+
+class CutCommand extends Command
+{
+    // The cut command does change the editor's state, therefore
+    // it must be saved to the history. And it'll be saved as
+    // long as the method returns true.
+    public function execute(): bool
+    {
+        $this->saveBackup();
+        $this->app->clipboard = $this->editor->getSelection();
+        $this->editor->deleteSelection();
+        return true;
+    }
+}
+
+class PasteCommand extends Command
+{
+    public function execute(): bool
+    {
+        $this->saveBackup();
+        $this->editor->replaceSelection($this->app->clipboard);
+        return true;
+    }
+}
+
+// The undo operation is also a command.
+class UndoCommand extends Command
+{
+    public function execute(): bool
+    {
+        $this->app->undo();
+        return false;
+    }
+}
+
+// The global command history is just a stack.
+class CommandHistory
+{
+    /** @var Command[] */
+    private array $history = [];
+
+    // Last in...
+    public function push(Command $command): void
+    {
+        $this->history[] = $command;
+    }
+
+    // ...first out
+    public function pop(): ?Command
+    {
+        return array_pop($this->history);
+    }
+}
+
+// The editor class has actual text editing operations. It plays
+// the role of a receiver: all commands end up delegating
+// execution to the editor's methods.
+class Editor
+{
+    public string $text = '';
+    private int $selectionStart = 0;
+    private int $selectionLength = 0;
+
+    public function setSelection(int $start, int $length): void
+    {
+        $this->selectionStart = max(0, $start);
+        $this->selectionLength = max(0, $length);
+    }
+
+    public function getSelection(): string
+    {
+        return substr($this->text, $this->selectionStart, $this->selectionLength);
+    }
+
+    public function deleteSelection(): void
+    {
+        $this->text = substr_replace($this->text, '', $this->selectionStart, $this->selectionLength);
+        $this->selectionLength = 0;
+    }
+
+    public function replaceSelection(string $text): void
+    {
+        $this->text = substr_replace($this->text, $text, $this->selectionStart, $this->selectionLength);
+        $this->selectionLength = strlen($text);
+    }
+}
+
+// The application class sets up object relations. It acts as a
+// sender: when something needs to be done, it creates a command
+// object and executes it.
+class Application
+{
+    public string $clipboard = '';
+
+    /** @var Editor[] */
+    public array $editors = [];
+
+    public Editor $activeEditor;
+    public CommandHistory $history;
+
+    public function __construct()
+    {
+        $this->history = new CommandHistory();
+    }
+
+    // The code which assigns commands to UI objects may look
+    // like this.
+    public function createUI(): void
+    {
+        $editor = new Editor();
+        $editor->text = 'Hello Design Patterns';
+        $editor->setSelection(6, 6); // "Design"
+        $this->activeEditor = $editor;
+        $this->editors[] = $editor;
+
+        $copy = fn () => $this->executeCommand(new CopyCommand($this, $this->activeEditor));
+        $cut = fn () => $this->executeCommand(new CutCommand($this, $this->activeEditor));
+        $paste = fn () => $this->executeCommand(new PasteCommand($this, $this->activeEditor));
+        $undo = fn () => $this->executeCommand(new UndoCommand($this, $this->activeEditor));
+
+        $copy();
+        $cut();
+        $this->activeEditor->setSelection(0, 0);
+        $paste();
+        $undo();
+
+        echo $this->activeEditor->text . "\n";
+    }
+
+    // Execute a command and check whether it has to be added to
+    // the history.
+    public function executeCommand(Command $command): void
+    {
+        if ($command->execute()) {
+            $this->history->push($command);
+        }
+    }
+
+    // Take the most recent command from the history and run its
+    // undo method. Note that we don't know the class of that
+    // command. But we don't have to, since the command knows
+    // how to undo its own action.
+    public function undo(): void
+    {
+        $command = $this->history->pop();
+        if ($command !== null) {
+            $command->undo();
+        }
+    }
+}
+
+$app = new Application();
+$app->createUI();
+```
+
+---
+
+### What is the Mediator Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Mediator is a behavioral design pattern that lets you reduce chaotic dependencies between objects. The pattern restricts direct communications between the objects and forces them to collaborate only via a mediator object.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Single Responsibility Principle. You can extract the communications between various components into a single place, making it easier to comprehend and maintain. Open/Closed Principle. You can introduce new mediators without having to change the actual components. You can reduce coupling between various components of a program. You can reuse individual components more easily.
+- **Cons:** Over time a mediator can evolve into a God Object.
+
+**Example:**
+
+```php
+<?php
+
+// The mediator interface declares a method used by components
+// to notify the mediator about various events. The mediator may
+// react to these events and pass the execution to other
+// components.
+interface Mediator
+{
+    public function notify(Component $sender, string $event): void;
+}
+
+// The concrete mediator class. The intertwined web of
+// connections between individual components has been untangled
+// and moved into the mediator.
+class AuthenticationDialog implements Mediator
+{
+    private string $title = 'Log in';
+    private Checkbox $loginOrRegisterChkBx;
+    private Textbox $loginUsername;
+    private Textbox $loginPassword;
+    private Textbox $registrationUsername;
+    private Textbox $registrationPassword;
+    private Textbox $registrationEmail;
+    private Button $okBtn;
+    private Button $cancelBtn;
+
+    public function __construct()
+    {
+        // Create all component objects by passing the current
+        // mediator into their constructors to establish links.
+        $this->loginOrRegisterChkBx = new Checkbox($this);
+        $this->loginUsername = new Textbox($this);
+        $this->loginPassword = new Textbox($this);
+        $this->registrationUsername = new Textbox($this);
+        $this->registrationPassword = new Textbox($this);
+        $this->registrationEmail = new Textbox($this);
+        $this->okBtn = new Button($this, 'OK');
+        $this->cancelBtn = new Button($this, 'Cancel');
+    }
+
+    // When something happens with a component, it notifies the
+    // mediator. Upon receiving a notification, the mediator may
+    // do something on its own or pass the request to another
+    // component.
+    public function notify(Component $sender, string $event): void
+    {
+        if ($sender === $this->loginOrRegisterChkBx && $event === 'check') {
+            if ($this->loginOrRegisterChkBx->isChecked()) {
+                $this->title = 'Log in';
+                echo "Show login form; hide registration form.\n";
+            } else {
+                $this->title = 'Register';
+                echo "Show registration form; hide login form.\n";
+            }
+        }
+
+        if ($sender === $this->okBtn && $event === 'click') {
+            if ($this->loginOrRegisterChkBx->isChecked()) {
+                echo "Try to find a user using login credentials.\n";
+            } else {
+                echo "Create a user account and log that user in.\n";
+            }
+        }
+    }
+
+    public function demo(): void
+    {
+        $this->loginOrRegisterChkBx->setChecked(false);
+        $this->loginOrRegisterChkBx->check();
+        $this->okBtn->click();
+    }
+}
+
+// Components communicate with a mediator using the mediator
+// interface. Thanks to that, you can use the same components in
+// other contexts by linking them with different mediator
+// objects.
+abstract class Component
+{
+    public function __construct(protected Mediator $dialog)
+    {
+    }
+
+    public function click(): void
+    {
+        $this->dialog->notify($this, 'click');
+    }
+
+    public function keypress(): void
+    {
+        $this->dialog->notify($this, 'keypress');
+    }
+}
+
+// Concrete components don't talk to each other. They have only
+// one communication channel, which is sending notifications to
+// the mediator.
+class Button extends Component
+{
+    public function __construct(Mediator $dialog, private string $label)
+    {
+        parent::__construct($dialog);
+    }
+}
+
+class Textbox extends Component
+{
+    public string $text = '';
+}
+
+class Checkbox extends Component
+{
+    private bool $checked = true;
+
+    public function setChecked(bool $checked): void
+    {
+        $this->checked = $checked;
+    }
+
+    public function isChecked(): bool
+    {
+        return $this->checked;
+    }
+
+    public function check(): void
+    {
+        $this->dialog->notify($this, 'check');
+    }
+}
+
+$dialog = new AuthenticationDialog();
+$dialog->demo();
+```
+
+---
+
+### What is the Iterator Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Iterator is a behavioral design pattern that lets you traverse elements of a collection without exposing its underlying representation (list, stack, tree, etc.).
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Single Responsibility Principle. You can clean up the client code and the collections by extracting bulky traversal algorithms into separate classes. Open/Closed Principle. You can implement new types of collections and iterators and pass them to existing code without breaking anything. You can iterate over the same collection in parallel because each iterator object contains its own iteration state. For the same reason, you can delay an iteration and continue it when needed.
+- **Cons:** Applying the pattern can be an overkill if your app only works with simple collections. Using an iterator may be less efficient than going through elements of some specialized collections directly.
+
+**Example:**
+
+```php
+<?php
+
+class Profile
+{
+    public function __construct(private string $id, private string $email)
+    {
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+}
+
+// The collection interface must declare a factory method for
+// producing iterators. You can declare several methods if there
+// are different kinds of iteration available in your program.
+interface SocialNetwork
+{
+    public function createFriendsIterator(string $profileId): ProfileIterator;
+    public function createCoworkersIterator(string $profileId): ProfileIterator;
+}
+
+// Each concrete collection is coupled to a set of concrete
+// iterator classes it returns. But the client isn't, since the
+// signature of these methods returns iterator interfaces.
+class Facebook implements SocialNetwork
+{
+    /** @var array<string, array<string, Profile[]>> */
+    private array $graph;
+
+    public function __construct()
+    {
+        $this->graph = [
+            'john' => [
+                'friends' => [new Profile('amy', 'amy@mail.com')],
+                'coworkers' => [new Profile('bob', 'bob@corp.com')],
+            ],
+        ];
+    }
+
+    public function createFriendsIterator(string $profileId): ProfileIterator
+    {
+        return new FacebookIterator($this, $profileId, 'friends');
+    }
+
+    public function createCoworkersIterator(string $profileId): ProfileIterator
+    {
+        return new FacebookIterator($this, $profileId, 'coworkers');
+    }
+
+    /** @return Profile[] */
+    public function socialGraphRequest(string $profileId, string $type): array
+    {
+        return $this->graph[$profileId][$type] ?? [];
+    }
+}
+
+class LinkedIn implements SocialNetwork
+{
+    public function createFriendsIterator(string $profileId): ProfileIterator
+    {
+        return new ArrayProfileIterator([new Profile('li_friend', 'friend@linkedin.com')]);
+    }
+
+    public function createCoworkersIterator(string $profileId): ProfileIterator
+    {
+        return new ArrayProfileIterator([new Profile('li_coworker', 'coworker@linkedin.com')]);
+    }
+}
+
+// The common interface for all iterators.
+interface ProfileIterator
+{
+    public function getNext(): ?Profile;
+    public function hasMore(): bool;
+}
+
+// The concrete iterator class.
+class FacebookIterator implements ProfileIterator
+{
+    // The iterator needs a reference to the collection that it
+    // traverses.
+    private int $currentPosition = 0;
+
+    /** @var Profile[]|null */
+    private ?array $cache = null;
+
+    public function __construct(
+        private Facebook $facebook,
+        private string $profileId,
+        private string $type
+    ) {
+    }
+
+    private function lazyInit(): void
+    {
+        if ($this->cache === null) {
+            $this->cache = $this->facebook->socialGraphRequest($this->profileId, $this->type);
+        }
+    }
+
+    // Each concrete iterator class has its own implementation
+    // of the common iterator interface.
+    public function getNext(): ?Profile
+    {
+        if ($this->hasMore()) {
+            return $this->cache[$this->currentPosition++];
+        }
+
+        return null;
+    }
+
+    public function hasMore(): bool
+    {
+        $this->lazyInit();
+        return $this->currentPosition < count($this->cache);
+    }
+}
+
+class ArrayProfileIterator implements ProfileIterator
+{
+    private int $position = 0;
+
+    /** @param Profile[] $profiles */
+    public function __construct(private array $profiles)
+    {
+    }
+
+    public function getNext(): ?Profile
+    {
+        return $this->hasMore() ? $this->profiles[$this->position++] : null;
+    }
+
+    public function hasMore(): bool
+    {
+        return $this->position < count($this->profiles);
+    }
+}
+
+// Here is another useful trick: you can pass an iterator to a
+// client class instead of giving it access to a whole
+// collection. This way, you don't expose the collection to the
+// client.
+//
+// And there's another benefit: you can change the way the
+// client works with the collection at runtime by passing it a
+// different iterator. This is possible because the client code
+// isn't coupled to concrete iterator classes.
+class SocialSpammer
+{
+    public function send(ProfileIterator $iterator, string $message): void
+    {
+        while ($iterator->hasMore()) {
+            $profile = $iterator->getNext();
+            if ($profile !== null) {
+                echo "Send '{$message}' to {$profile->getEmail()}\n";
+            }
+        }
+    }
+}
+
+// The application class configures collections and iterators
+// and then passes them to the client code.
+class Application
+{
+    private SocialNetwork $network;
+    private SocialSpammer $spammer;
+
+    public function config(bool $useFacebook = true): void
+    {
+        $this->network = $useFacebook ? new Facebook() : new LinkedIn();
+        $this->spammer = new SocialSpammer();
+    }
+
+    public function sendSpamToFriends(Profile $profile): void
+    {
+        $iterator = $this->network->createFriendsIterator($profile->getId());
+        $this->spammer->send($iterator, 'Very important message');
+    }
+
+    public function sendSpamToCoworkers(Profile $profile): void
+    {
+        $iterator = $this->network->createCoworkersIterator($profile->getId());
+        $this->spammer->send($iterator, 'Very important message');
+    }
+}
+
+$app = new Application();
+$app->config(true);
+$profile = new Profile('john', 'john@mail.com');
+$app->sendSpamToFriends($profile);
+$app->sendSpamToCoworkers($profile);
+```
+
+---
+
+### What is the Memento Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Memento is a behavioral design pattern that lets you save and restore the previous state of an object without revealing the details of its implementation.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can produce snapshots of the object’s state without violating its encapsulation. You can simplify the originator’s code by letting the caretaker maintain the history of the originator’s state.
+- **Cons:** The app might consume lots of RAM if clients create mementos too often. Caretakers should track the originator’s lifecycle to be able to destroy obsolete mementos. Most dynamic programming languages, such as PHP, Python and JavaScript, can’t guarantee that the state within the memento stays untouched.
+
+**Example:**
+
+```php
+<?php
+
+// The originator holds some important data that may change over
+// time. It also defines a method for saving its state inside a
+// memento and another method for restoring the state from it.
+class Editor
+{
+    private string $text = '';
+    private int $curX = 0;
+    private int $curY = 0;
+    private int $selectionWidth = 0;
+
+    public function setText(string $text): void
+    {
+        $this->text = $text;
+    }
+
+    public function setCursor(int $x, int $y): void
+    {
+        $this->curX = $x;
+        $this->curY = $y;
+    }
+
+    public function setSelectionWidth(int $width): void
+    {
+        $this->selectionWidth = $width;
+    }
+
+    // Saves the current state inside a memento.
+    public function createSnapshot(): Snapshot
+    {
+        // Memento is an immutable object; that's why the
+        // originator passes its state to the memento's
+        // constructor parameters.
+        return new Snapshot($this, $this->text, $this->curX, $this->curY, $this->selectionWidth);
+    }
+
+    public function dumpState(): string
+    {
+        return sprintf('text="%s", cursor=(%d,%d), selection=%d', $this->text, $this->curX, $this->curY, $this->selectionWidth);
+    }
+}
+
+// The memento class stores the past state of the editor.
+class Snapshot
+{
+    public function __construct(
+        private Editor $editor,
+        private string $text,
+        private int $curX,
+        private int $curY,
+        private int $selectionWidth
+    ) {
+    }
+
+    // At some point, a previous state of the editor can be
+    // restored using a memento object.
+    public function restore(): void
+    {
+        $this->editor->setText($this->text);
+        $this->editor->setCursor($this->curX, $this->curY);
+        $this->editor->setSelectionWidth($this->selectionWidth);
+    }
+}
+
+// A command object can act as a caretaker. In that case, the
+// command gets a memento just before it changes the
+// originator's state. When undo is requested, it restores the
+// originator's state from a memento.
+class Command
+{
+    private ?Snapshot $backup = null;
+
+    public function __construct(private Editor $editor)
+    {
+    }
+
+    public function makeBackup(): void
+    {
+        $this->backup = $this->editor->createSnapshot();
+    }
+
+    public function undo(): void
+    {
+        if ($this->backup !== null) {
+            $this->backup->restore();
+        }
+    }
+}
+
+$editor = new Editor();
+$editor->setText('Hello');
+$editor->setCursor(1, 1);
+$editor->setSelectionWidth(3);
+
+$command = new Command($editor);
+$command->makeBackup();
+
+$editor->setText('Changed');
+$editor->setCursor(5, 5);
+
+$command->undo();
+echo $editor->dumpState();
+```
+
+---
+
+### What is the Observer Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Observer is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Open/Closed Principle. You can introduce new subscriber classes without having to change the publisher’s code (and vice versa if there’s a publisher interface). You can establish relations between objects at runtime.
+- **Cons:** Subscribers are notified in random order.
+
+**Example:**
+
+```php
+<?php
+
+// The base publisher class includes subscription management
+// code and notification methods.
+class EventManager
+{
+    /** @var array<string, EventListener[]> */
+    private array $listeners = [];
+
+    public function subscribe(string $eventType, EventListener $listener): void
+    {
+        $this->listeners[$eventType][] = $listener;
+    }
+
+    public function unsubscribe(string $eventType, EventListener $listener): void
+    {
+        if (!isset($this->listeners[$eventType])) {
+            return;
+        }
+
+        $this->listeners[$eventType] = array_values(
+            array_filter(
+                $this->listeners[$eventType],
+                fn (EventListener $current): bool => $current !== $listener
+            )
+        );
+    }
+
+    public function notify(string $eventType, string $data): void
+    {
+        foreach ($this->listeners[$eventType] ?? [] as $listener) {
+            $listener->update($data);
+        }
+    }
+}
+
+// The concrete publisher contains real business logic that's
+// interesting for some subscribers. We could derive this class
+// from the base publisher, but that isn't always possible in
+// real life because the concrete publisher might already be a
+// subclass. In this case, you can patch the subscription logic
+// in with composition, as we did here.
+class Editor
+{
+    public EventManager $events;
+    private ?string $file = null;
+
+    public function __construct()
+    {
+        $this->events = new EventManager();
+    }
+
+    // Methods of business logic can notify subscribers about
+    // changes.
+    public function openFile(string $path): void
+    {
+        $this->file = $path;
+        $this->events->notify('open', basename($path));
+    }
+
+    public function saveFile(): void
+    {
+        if ($this->file === null) {
+            return;
+        }
+
+        $this->events->notify('save', basename($this->file));
+    }
+}
+
+// Here's the subscriber interface. If your programming language
+// supports functional types, you can replace the whole
+// subscriber hierarchy with a set of functions.
+interface EventListener
+{
+    public function update(string $filename): void;
+}
+
+// Concrete subscribers react to updates issued by the publisher
+// they are attached to.
+class LoggingListener implements EventListener
+{
+    public function __construct(private string $logFilename, private string $message)
+    {
+    }
+
+    public function update(string $filename): void
+    {
+        echo "[{$this->logFilename}] " . sprintf($this->message, $filename) . "\n";
+    }
+}
+
+class EmailAlertsListener implements EventListener
+{
+    public function __construct(private string $email, private string $message)
+    {
+    }
+
+    public function update(string $filename): void
+    {
+        echo "Email to {$this->email}: " . sprintf($this->message, $filename) . "\n";
+    }
+}
+
+// An application can configure publishers and subscribers at
+// runtime.
+class Application
+{
+    public function config(): void
+    {
+        $editor = new Editor();
+
+        $logger = new LoggingListener(
+            '/path/to/log.txt',
+            'Someone has opened the file: %s'
+        );
+        $editor->events->subscribe('open', $logger);
+
+        $emailAlerts = new EmailAlertsListener(
+            'admin@example.com',
+            'Someone has changed the file: %s'
+        );
+        $editor->events->subscribe('save', $emailAlerts);
+
+        $editor->openFile('/tmp/test.txt');
+        $editor->saveFile();
+    }
+}
+
+$app = new Application();
+$app->config();
+```
+
+SplObserver and SplSubject in SPL (Standard PHP Library), and a link [https://www.php.net/manual/en/class.splobserver.php](https://www.php.net/manual/en/class.splobserver.php)
+
+```php
+<?php
+
+/**
+ * SplObserver and SplSubject in SPL (Standard PHP Library)
+ * Real-world example: A User model that notifies a Newsletter system and a Logger when a user registers.
+ */
+
+class User implements SplSubject
+{
+    private string $email;
+    private SplObjectStorage $observers;
+
+    public function __construct(string $email)
+    {
+        $this->email = $email;
+        $this->observers = new SplObjectStorage();
+    }
+
+    public function attach(SplObserver $observer): void
+    {
+        $this->observers->attach($observer);
+    }
+
+    public function detach(SplObserver $observer): void
+    {
+        $this->observers->detach($observer);
+    }
+
+    public function notify(): void
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
+    }
+
+    public function register(): void
+    {
+        echo "User: I am registering {$this->email}.\n";
+        $this->notify();
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+}
+
+class NewsletterSystem implements SplObserver
+{
+    public function update(SplSubject $subject): void
+    {
+        if ($subject instanceof User) {
+            echo "NewsletterSystem: Adding {$subject->getEmail()} to the mailing list.\n";
+        }
+    }
+}
+
+class Logger implements SplObserver
+{
+    public function update(SplSubject $subject): void
+    {
+        if ($subject instanceof User) {
+            echo "Logger: User registration event for {$subject->getEmail()} logged.\n";
+        }
+    }
+}
+
+// Client code
+$user = new User('user@example.com');
+
+$newsletter = new NewsletterSystem();
+$logger = new Logger();
+
+$user->attach($newsletter);
+$user->attach($logger);
+
+$user->register();
+```
+
+---
+
+### What is the State Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** State is a behavioral design pattern that lets an object alter its behavior when its internal state changes. It appears as if the object changed its class.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Single Responsibility Principle. Organize the code related to particular states into separate classes. Open/Closed Principle. Introduce new states without changing existing state classes or the context. Simplify the code of the context by eliminating bulky state machine conditionals.
+- **Cons:** Applying the pattern can be overkill if a state machine has only a few states or rarely changes.
+
+**Example:**
+
+```php
+<?php
+
+// The AudioPlayer class acts as a context. It also maintains a
+// reference to an instance of one of the state classes that
+// represents the current state of the audio player.
+class AudioPlayer
+{
+    private State $state;
+    public bool $playing = false;
+
+    public function __construct()
+    {
+        $this->state = new ReadyState($this);
+    }
+
+    // Other objects must be able to switch the audio player's
+    // active state.
+    public function changeState(State $state): void
+    {
+        $this->state = $state;
+    }
+
+    // UI methods delegate execution to the active state.
+    public function clickLock(): void
+    {
+        $this->state->clickLock();
+    }
+
+    public function clickPlay(): void
+    {
+        $this->state->clickPlay();
+    }
+
+    public function clickNext(): void
+    {
+        $this->state->clickNext();
+    }
+
+    public function clickPrevious(): void
+    {
+        $this->state->clickPrevious();
+    }
+
+    // A state may call some service methods on the context.
+    public function startPlayback(): void
+    {
+        $this->playing = true;
+        echo "Start playback\n";
+    }
+
+    public function stopPlayback(): void
+    {
+        $this->playing = false;
+        echo "Stop playback\n";
+    }
+
+    public function nextSong(): void
+    {
+        echo "Next song\n";
+    }
+
+    public function previousSong(): void
+    {
+        echo "Previous song\n";
+    }
+
+    public function fastForward(int $time): void
+    {
+        echo "Fast forward {$time}s\n";
+    }
+
+    public function rewind(int $time): void
+    {
+        echo "Rewind {$time}s\n";
+    }
+}
+
+// The base state class declares methods that all concrete
+// states should implement and also provides a backreference to
+// the context object associated with the state. States can use
+// the backreference to transition the context to another state.
+abstract class State
+{
+    public function __construct(protected AudioPlayer $player)
+    {
+    }
+
+    abstract public function clickLock(): void;
+    abstract public function clickPlay(): void;
+    abstract public function clickNext(): void;
+    abstract public function clickPrevious(): void;
+}
+
+// Concrete states implement various behaviors associated with a
+// state of the context.
+class LockedState extends State
+{
+    // When you unlock a locked player, it may assume one of two
+    // states.
+    public function clickLock(): void
+    {
+        if ($this->player->playing) {
+            $this->player->changeState(new PlayingState($this->player));
+        } else {
+            $this->player->changeState(new ReadyState($this->player));
+        }
+    }
+
+    public function clickPlay(): void
+    {
+        // Locked, so do nothing.
+    }
+
+    public function clickNext(): void
+    {
+        // Locked, so do nothing.
+    }
+
+    public function clickPrevious(): void
+    {
+        // Locked, so do nothing.
+    }
+}
+
+// They can also trigger state transitions in the context.
+class ReadyState extends State
+{
+    public function clickLock(): void
+    {
+        $this->player->changeState(new LockedState($this->player));
+    }
+
+    public function clickPlay(): void
+    {
+        $this->player->startPlayback();
+        $this->player->changeState(new PlayingState($this->player));
+    }
+
+    public function clickNext(): void
+    {
+        $this->player->nextSong();
+    }
+
+    public function clickPrevious(): void
+    {
+        $this->player->previousSong();
+    }
+}
+
+class PlayingState extends State
+{
+    public function clickLock(): void
+    {
+        $this->player->changeState(new LockedState($this->player));
+    }
+
+    public function clickPlay(): void
+    {
+        $this->player->stopPlayback();
+        $this->player->changeState(new ReadyState($this->player));
+    }
+
+    public function clickNext(): void
+    {
+        $this->player->fastForward(5);
+    }
+
+    public function clickPrevious(): void
+    {
+        $this->player->rewind(5);
+    }
+}
+
+$player = new AudioPlayer();
+$player->clickPlay();
+$player->clickNext();
+$player->clickPlay();
+$player->clickLock();
+```
+
+---
+
+### What is the Strategy Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can swap algorithms used inside an object at runtime. You can isolate the implementation details of an algorithm from the code that uses it. You can replace inheritance with composition. Open/Closed Principle. You can introduce new strategies without having to change the context.
+- **Cons:** If you only have a couple of algorithms and they rarely change, there’s no real reason to overcomplicate the program with new classes and interfaces that come along with the pattern. Clients must be aware of the differences between strategies to be able to select a proper one. A lot of modern programming languages have functional type support that lets you implement different versions of an algorithm inside a set of anonymous functions. Then you could use these functions exactly as you’d have used the strategy objects, but without bloating your code with extra classes and interfaces.
+
+**Example:**
+
+```php
+<?php
+
+// The strategy interface declares operations common to all
+// supported versions of some algorithm. The context uses this
+// interface to call the algorithm defined by the concrete
+// strategies.
+interface Strategy
+{
+    public function execute(int $a, int $b): int;
+}
+
+// Concrete strategies implement the algorithm while following
+// the base strategy interface. The interface makes them
+// interchangeable in the context.
+class ConcreteStrategyAdd implements Strategy
+{
+    public function execute(int $a, int $b): int
+    {
+        return $a + $b;
+    }
+}
+
+class ConcreteStrategySubtract implements Strategy
+{
+    public function execute(int $a, int $b): int
+    {
+        return $a - $b;
+    }
+}
+
+class ConcreteStrategyMultiply implements Strategy
+{
+    public function execute(int $a, int $b): int
+    {
+        return $a * $b;
+    }
+}
+
+// The context defines the interface of interest to clients.
+class Context
+{
+    // The context maintains a reference to one of the strategy
+    // objects. The context doesn't know the concrete class of a
+    // strategy. It should work with all strategies via the
+    // strategy interface.
+    private Strategy $strategy;
+
+    // Usually the context accepts a strategy through the
+    // constructor, and also provides a setter so that the
+    // strategy can be switched at runtime.
+    public function setStrategy(Strategy $strategy): void
+    {
+        $this->strategy = $strategy;
+    }
+
+    // The context delegates some work to the strategy object
+    // instead of implementing multiple versions of the
+    // algorithm on its own.
+    public function executeStrategy(int $a, int $b): int
+    {
+        return $this->strategy->execute($a, $b);
+    }
+}
+
+// The client code picks a concrete strategy and passes it to
+// the context. The client should be aware of the differences
+// between strategies in order to make the right choice.
+class ExampleApplication
+{
+    public function main(int $firstNumber, int $secondNumber, string $action): void
+    {
+        $context = new Context();
+
+        if ($action === 'addition') {
+            $context->setStrategy(new ConcreteStrategyAdd());
+        }
+
+        if ($action === 'subtraction') {
+            $context->setStrategy(new ConcreteStrategySubtract());
+        }
+
+        if ($action === 'multiplication') {
+            $context->setStrategy(new ConcreteStrategyMultiply());
+        }
+
+        $result = $context->executeStrategy($firstNumber, $secondNumber);
+        echo "Result: {$result}\n";
+    }
+}
+
+$app = new ExampleApplication();
+$app->main(10, 5, 'multiplication');
+```
+
+---
+
+### What is the Template Method Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Template Method is a behavioral design pattern that defines the skeleton of an algorithm in the superclass but lets subclasses override specific steps of the algorithm without changing its structure.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** You can let clients override only certain parts of a large algorithm, making them less affected by changes that happen to other parts of the algorithm. You can pull the duplicate code into a superclass.
+- **Cons:** Some clients may be limited by the provided skeleton of an algorithm. You might violate the Liskov Substitution Principle by suppressing a default step implementation via a subclass. Template methods tend to be harder to maintain the more steps they have.
+
+**Example:**
+
+```php
+<?php
+
+// The abstract class defines a template method that contains a
+// skeleton of some algorithm composed of calls, usually to
+// abstract primitive operations. Concrete subclasses implement
+// these operations, but leave the template method itself
+// intact.
+abstract class GameAI
+{
+    /** @var string[] */
+    protected array $builtStructures = [];
+
+    // The template method defines the skeleton of an algorithm.
+    final public function turn(): void
+    {
+        $this->collectResources();
+        $this->buildStructures();
+        $this->buildUnits();
+        $this->attack();
+    }
+
+    // Some of the steps may be implemented right in a base
+    // class.
+    public function collectResources(): void
+    {
+        foreach ($this->builtStructures as $structure) {
+            echo "Collect resources from {$structure}\n";
+        }
+    }
+
+    // And some of them may be defined as abstract.
+    abstract protected function buildStructures(): void;
+    abstract protected function buildUnits(): void;
+
+    // A class can have several template methods.
+    protected function attack(): void
+    {
+        $enemyPosition = $this->closestEnemy();
+
+        if ($enemyPosition === null) {
+            $this->sendScouts('map.center');
+        } else {
+            $this->sendWarriors($enemyPosition);
+        }
+    }
+
+    protected function closestEnemy(): ?string
+    {
+        return null;
+    }
+
+    abstract protected function sendScouts(string $position): void;
+    abstract protected function sendWarriors(string $position): void;
+}
+
+// Concrete classes have to implement all abstract operations of
+// the base class but they must not override the template method
+// itself.
+class OrcsAI extends GameAI
+{
+    protected function buildStructures(): void
+    {
+        echo "Build farms, then barracks, then stronghold.\n";
+        $this->builtStructures = ['Farm', 'Barracks', 'Stronghold'];
+    }
+
+    protected function buildUnits(): void
+    {
+        echo "Build peons and grunts based on available resources.\n";
+    }
+
+    protected function sendScouts(string $position): void
+    {
+        echo "Send scouts to {$position}.\n";
+    }
+
+    protected function sendWarriors(string $position): void
+    {
+        echo "Send warriors to {$position}.\n";
+    }
+}
+
+// Subclasses can also override some operations with a default
+// implementation.
+class MonstersAI extends GameAI
+{
+    public function collectResources(): void
+    {
+        // Monsters don't collect resources.
+    }
+
+    protected function buildStructures(): void
+    {
+        // Monsters don't build structures.
+    }
+
+    protected function buildUnits(): void
+    {
+        // Monsters don't build units.
+    }
+
+    protected function sendScouts(string $position): void
+    {
+        echo "Monsters roam to {$position}.\n";
+    }
+
+    protected function sendWarriors(string $position): void
+    {
+        echo "Monsters attack {$position}.\n";
+    }
+}
+
+$orcs = new OrcsAI();
+$orcs->turn();
+```
+
+---
+
+### What is the Visitor Pattern?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Visitor is a behavioral design pattern that lets you separate algorithms from the objects on which they operate.
+
+**Common Usages / Pros & Cons:**
+
+- **Pros:** Open/Closed Principle. You can introduce a new behavior that can work with objects of different classes without changing these classes. Single Responsibility Principle. You can move multiple versions of the same behavior into the same class. A visitor object can accumulate some useful information while working with various objects. This might be handy when you want to traverse some complex object structure, such as an object tree, and apply the visitor to each object of this structure.
+- **Cons:** You need to update all visitors each time a class gets added to or removed from the element hierarchy. Visitors might lack the necessary access to the private fields and methods of the elements that they’re supposed to work with.
+
+**Example:**
+
+```php
+<?php
+
+// The element interface declares an `accept` method that takes
+// the base visitor interface as an argument.
+interface Shape
+{
+    public function move(int $x, int $y): void;
+    public function draw(): void;
+    public function accept(Visitor $visitor): string;
+}
+
+// Each concrete element class must implement the `accept`
+// method in such a way that it calls the visitor's method that
+// corresponds to the element's class.
+class Dot implements Shape
+{
+    public function __construct(protected int $x, protected int $y, protected int $id)
+    {
+    }
+
+    public function move(int $x, int $y): void
+    {
+        $this->x += $x;
+        $this->y += $y;
+    }
+
+    public function draw(): void
+    {
+        echo "Draw dot #{$this->id}\n";
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getX(): int
+    {
+        return $this->x;
+    }
+
+    public function getY(): int
+    {
+        return $this->y;
+    }
+
+    // Note that we're calling `visitDot`, which matches the
+    // current class name. This way we let the visitor know the
+    // class of the element it works with.
+    public function accept(Visitor $visitor): string
+    {
+        return $visitor->visitDot($this);
+    }
+}
+
+class Circle extends Dot
+{
+    public function __construct(int $x, int $y, int $id, private int $radius)
+    {
+        parent::__construct($x, $y, $id);
+    }
+
+    public function getRadius(): int
+    {
+        return $this->radius;
+    }
+
+    public function accept(Visitor $visitor): string
+    {
+        return $visitor->visitCircle($this);
+    }
+}
+
+class Rectangle implements Shape
+{
+    public function __construct(
+        private int $id,
+        private int $x,
+        private int $y,
+        private int $width,
+        private int $height
+    ) {
+    }
+
+    public function move(int $x, int $y): void
+    {
+        $this->x += $x;
+        $this->y += $y;
+    }
+
+    public function draw(): void
+    {
+        echo "Draw rectangle #{$this->id}\n";
+    }
+
+    public function accept(Visitor $visitor): string
+    {
+        return $visitor->visitRectangle($this);
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getX(): int
+    {
+        return $this->x;
+    }
+
+    public function getY(): int
+    {
+        return $this->y;
+    }
+
+    public function getWidth(): int
+    {
+        return $this->width;
+    }
+
+    public function getHeight(): int
+    {
+        return $this->height;
+    }
+}
+
+class CompoundShape implements Shape
+{
+    /** @param Shape[] $children */
+    public function __construct(private int $id, private array $children = [])
+    {
+    }
+
+    public function add(Shape $shape): void
+    {
+        $this->children[] = $shape;
+    }
+
+    /** @return Shape[] */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function move(int $x, int $y): void
+    {
+        foreach ($this->children as $child) {
+            $child->move($x, $y);
+        }
+    }
+
+    public function draw(): void
+    {
+        foreach ($this->children as $child) {
+            $child->draw();
+        }
+    }
+
+    public function accept(Visitor $visitor): string
+    {
+        return $visitor->visitCompoundShape($this);
+    }
+}
+
+// The Visitor interface declares a set of visiting methods that
+// correspond to element classes. The signature of a visiting
+// method lets the visitor identify the exact class of the
+// element that it's dealing with.
+interface Visitor
+{
+    public function visitDot(Dot $dot): string;
+    public function visitCircle(Circle $circle): string;
+    public function visitRectangle(Rectangle $rectangle): string;
+    public function visitCompoundShape(CompoundShape $compoundShape): string;
+}
+
+// Concrete visitors implement several versions of the same
+// algorithm, which can work with all concrete element classes.
+//
+// You can experience the biggest benefit of the Visitor pattern
+// when using it with a complex object structure such as a
+// Composite tree. In this case, it might be helpful to store
+// some intermediate state of the algorithm while executing the
+// visitor's methods over various objects of the structure.
+class XMLExportVisitor implements Visitor
+{
+    public function visitDot(Dot $dot): string
+    {
+        return sprintf('<dot id="%d" x="%d" y="%d"/>', $dot->getId(), $dot->getX(), $dot->getY());
+    }
+
+    public function visitCircle(Circle $circle): string
+    {
+        return sprintf(
+            '<circle id="%d" x="%d" y="%d" radius="%d"/>',
+            $circle->getId(),
+            $circle->getX(),
+            $circle->getY(),
+            $circle->getRadius()
+        );
+    }
+
+    public function visitRectangle(Rectangle $rectangle): string
+    {
+        return sprintf(
+            '<rectangle id="%d" x="%d" y="%d" width="%d" height="%d"/>',
+            $rectangle->getId(),
+            $rectangle->getX(),
+            $rectangle->getY(),
+            $rectangle->getWidth(),
+            $rectangle->getHeight()
+        );
+    }
+
+    public function visitCompoundShape(CompoundShape $compoundShape): string
+    {
+        $childrenXml = [];
+        foreach ($compoundShape->getChildren() as $child) {
+            $childrenXml[] = $child->accept($this);
+        }
+
+        return sprintf('<compound id="%d">%s</compound>', $compoundShape->getId(), implode('', $childrenXml));
+    }
+}
+
+// The client code can run visitor operations over any set of
+// elements without figuring out their concrete classes. The
+// accept operation directs a call to the appropriate operation
+// in the visitor object.
+class Application
+{
+    /** @var Shape[] */
+    private array $allShapes;
+
+    public function __construct()
+    {
+        $compound = new CompoundShape(10);
+        $compound->add(new Dot(1, 2, 1));
+        $compound->add(new Circle(5, 3, 2, 10));
+
+        $this->allShapes = [
+            new Dot(10, 20, 3),
+            new Rectangle(4, 0, 0, 50, 100),
+            $compound,
+        ];
+    }
+
+    public function export(): void
+    {
+        $exportVisitor = new XMLExportVisitor();
+
+        foreach ($this->allShapes as $shape) {
+            echo $shape->accept($exportVisitor) . "\n";
+        }
+    }
+}
+
+$app = new Application();
+$app->export();
+```
+
+---
+
+### What is Dependency Injection?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** A design pattern where an object receives its dependencies from the outside rather than creating them itself. This promotes loose coupling and easier testing.
+
+---
+
+### What is the difference between Dependency Injection and Dependency Inversion?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+- **Dependency Injection (DI):** A _pattern_ for passing dependencies to an object from the outside (e.g., via constructor or setter).
+- **Dependency Inversion (DIP):** A _principle_ (SOLID) stating that high-level modules should depend on abstractions (interfaces), not concrete implementations (low-level modules). DI is one of the ways to implement DIP.
+
+---
+
+### How does the Liskov Substitution Principle (LSP) apply to PHP's type hinting and return types?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+- **Covariance:** Allows a child class to return a _more specific_ type than the parent (supported in PHP 7.4+).
+- **Contravariance:** Allows a child class to accept a _less specific_ (wider) type than the parent (supported in PHP 7.4+).
+  LSP requires that child classes do not strengthen preconditions (contravariance) and do not weaken postconditions (covariance).
+  [SOLID Principles Guide](../answers/solid_principles.md)
+
+---
+
+### What is the difference between the Factory Pattern and Dependency Injection?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Factory pattern is about _creating_ objects, while Dependency Injection is about _providing_ already created dependencies to an object.
+
+---
+
+### What are the main design patterns used in Symfony and Doctrine?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+- **Symfony:** Front Controller, Dependency Injection, Event Dispatcher.
+- **Doctrine:** Data Mapper, Unit of Work, Repository.
+  [Design Patterns in Symfony & Doctrine](../answers/design_patterns.md)
+
+---
