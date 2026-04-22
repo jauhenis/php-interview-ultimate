@@ -202,6 +202,39 @@ This occurs because floating-point numbers in PHP (and most other languages) fol
 - **Reason:** `DECIMAL` stores numbers as fixed-point values (or strings internally), ensuring that calculations remain exact, which is critical for monetary values. Floating-point types are for approximate scientific values where speed is more important than absolute precision.
 [Detailed Data Types Guide](answers/data_types.md)
 
+## PHP Sessions
+- https://www.w3schools.com/php/php_sessions.asp
+- https://www.php.net/manual/en/book.session.php
+
+### What are sessions in PHP?
+**Answer:** A session is a way to store information (in variables) to be used across multiple pages. Unlike a cookie, the information is not stored on the user's computer; instead, it is stored on the server. Sessions are used to persist user data (like login status, shopping cart items) between different requests during a single visit to a website.
+
+### How do sessions work under the hood?
+**Answer:** When a session starts (`session_start()`), PHP generates a unique session ID. This ID is typically sent to the user's browser as a cookie (named `PHPSESSID` by default). On subsequent requests, the browser sends this cookie back. PHP uses the ID to retrieve the session data from the server's storage (usually files in `/tmp` by default, but can be Redis or a database). The data is serialized internally before being saved.
+
+### What is the lifecycle of a PHP session?
+**Answer:** The lifecycle consists of four main phases: 1) **Request Start** (client sends the session cookie); 2) **Initialization** (`session_start()` locks the session storage, reads data, and populates `$_SESSION`); 3) **Execution** (the script modifies the session data); 4) **Commit/Shutdown** (PHP serializes `$_SESSION`, writes it back to storage, and releases the lock).
+[Detailed Session Lifecycle](answers/php_sessions.md#1-the-internal-lifecycle)
+
+### How do sessions work in RoadRunner, and are there limitations?
+**Answer:** In long-running environments like RoadRunner, the standard `$_SESSION` global and `session_start()` should be avoided because they rely on global state and file-based storage that doesn't scale well in persistent worker processes. Instead, you should use a centralized, non-blocking storage like Redis or a database, and manage session state via PSR-7 middleware or framework-specific session handlers (e.g., Laravel's session drivers) that don't depend on the traditional `php-fpm` session lifecycle.
+
+### How are sessions treated nowadays?
+**Answer:** Modern PHP development (especially with frameworks like Laravel or Symfony) treats sessions as an abstraction. Instead of manual `$_SESSION` manipulation, developers use Session services. For scalability, session data is rarely stored in files on the server anymore; instead, distributed stores like Redis, Memcached, or even the Database are used. For stateless APIs, sessions are often replaced by JWT (JSON Web Tokens).
+
+### What is the role of cookies in sessions?
+**Answer:** Cookies are primarily used to store the **Session ID** on the client side. The session data itself remains on the server, but the cookie acts as a "key" that the browser presents to the server so it can identify which session data belongs to the current user.
+
+### Cookie vs Sessions: What is the key difference?
+**Answer:** 
+- **Storage:** Cookies are stored on the client (browser); Sessions are stored on the server.
+- **Security:** Sessions are more secure as the actual data isn't exposed to the user.
+- **Capacity:** Cookies have a size limit (typically 4KB); Sessions can store much larger amounts of data.
+- **Expiration:** Cookies can persist for a long time; Sessions typically expire when the browser is closed or after a period of inactivity.
+
+### What should you store in sessions?
+**Answer:** You should only store essential, non-sensitive data that needs to persist across requests, such as the user's ID (to verify authentication), flash messages, or temporary state like a shopping cart. Avoid storing large objects, sensitive passwords (unhashed), or large amounts of data that could better be stored in a database.
+
 ---
 
 ## 2. Object-Oriented Programming (OOP)
