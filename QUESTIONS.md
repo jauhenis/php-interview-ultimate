@@ -12,37 +12,35 @@ This file contains a curated list of PHP interview questions and answers, merged
 7. [PHP 7/8+ New Features](#7-php-78-new-features)
 8. [MySQL & Databases](#8-mysql--databases)
 9. [PostgreSQL](#9-postgresql)
-10. [Laravel & Symfony](#10-laravel--symfony)
-11. [Tools & Composer](#11-tools--composer)
-12. [Caching & Redis](#12-caching--redis)
-13. [Kafka](#13-kafka)
-14. [Infrastructure, Docker & DevOps](#14-infrastructure-docker--devops)
-15. [Testing & Quality](#15-testing--quality)
-16. [Security](#16-security)
-17. [Web & API](#17-web--api)
-18. [Highload & Scalability](#18-highload--scalability)
-19. [Clean Code & Best Practices](#19-clean-code--best-practices)
-20. [Elasticsearch](#20-elasticsearch)
-21. [Tricky Questions](#21-tricky-questions)
-22. [Laravel Plugins](#22-laravel-plugins)
-23. [Long-Running (RoadRunner)](#23-long-running-roadrunner)
-24. [PSR & PER Standards](#24-psr--per-standards)
-25. [Basic Algorithms](#25-basic-algorithms)
-26. [HaPHPiness - Best Things in PHP](#26-haphpiness---best-things-in-php)
-27. [LeetCode Solutions](#27-leetcode-solutions)
-28. [Regexp](#28-regexp)
+10. [Laravel](#10-laravel)
+11. [Symfony](#11-symfony)
+12. [Tools & Composer](#12-tools--composer)
+13. [Caching & Redis](#13-caching--redis)
+14. [Kafka](#14-kafka)
+15. [Infrastructure, Docker & DevOps](#15-infrastructure-docker--devops)
+16. [Testing & Quality](#16-testing--quality)
+17. [Security](#17-security)
+18. [Web & API](#18-web--api)
+19. [Highload & Scalability](#19-highload--scalability)
+20. [Clean Code & Best Practices](#20-clean-code--best-practices)
+21. [Elasticsearch](#21-elasticsearch)
+22. [Tricky Questions](#22-tricky-questions)
+23. [Laravel Plugins](#23-laravel-plugins)
+24. [Long-Running (RoadRunner)](#24-long-running-roadrunner)
+25. [PSR & PER Standards](#25-psr--per-standards)
+26. [Basic Algorithms](#26-basic-algorithms)
+27. [HaPHPiness - Best Things in PHP](#27-haphpiness---best-things-in-php)
+28. [LeetCode Solutions](#28-leetcode-solutions)
+29. [Regexp](#29-regexp)
 ---
 
 ## 1. PHP Basics & Language Features
 
-## Floating point numbers (float)
-- https://www.php.net/manual/en/language.types.float.php
-
-### Why are floating-point numbers often inaccurate in PHP?
+### Junior
+#### Why are floating-point numbers often inaccurate in PHP?
 **Answer:** Floating-point numbers have limited precision and are stored in binary format (IEEE 754). This means that some decimal fractions (like 0.1 or 0.2) cannot be represented exactly.
 [Detailed Floating Point Explained](answers/floating_point_numbers.md)
 
-### Junior
 #### What does PHP stand for and what is its main purpose?
 **Answer:** PHP originally stood for "Personal Home Page," but it now stands for "PHP: Hypertext Preprocessor." It is a server-side scripting language designed for web development. Its main purpose is to generate dynamic web content, handle form data, interact with databases, manage sessions, and more.
 
@@ -209,34 +207,36 @@ This occurs because floating-point numbers in PHP (and most other languages) fol
 - https://www.w3schools.com/php/php_sessions.asp
 - https://www.php.net/manual/en/book.session.php
 
-### What are sessions in PHP?
+### Junior
+#### What are sessions in PHP?
 **Answer:** A session is a way to store information (in variables) to be used across multiple pages. Unlike a cookie, the information is not stored on the user's computer; instead, it is stored on the server. Sessions are used to persist user data (like login status, shopping cart items) between different requests during a single visit to a website.
 
-### How do sessions work under the hood?
-**Answer:** When a session starts (`session_start()`), PHP generates a unique session ID. This ID is typically sent to the user's browser as a cookie (named `PHPSESSID` by default). On subsequent requests, the browser sends this cookie back. PHP uses the ID to retrieve the session data from the server's storage (usually files in `/tmp` by default, but can be Redis or a database). The data is serialized internally before being saved.
-
-### What is the lifecycle of a PHP session?
-**Answer:** The lifecycle consists of four main phases: 1) **Request Start** (client sends the session cookie); 2) **Initialization** (`session_start()` locks the session storage, reads data, and populates `$_SESSION`); 3) **Execution** (the script modifies the session data); 4) **Commit/Shutdown** (PHP serializes `$_SESSION`, writes it back to storage, and releases the lock).
-[Detailed Session Lifecycle](answers/php_sessions.md#1-the-internal-lifecycle)
-
-### How do sessions work in RoadRunner, and are there limitations?
-**Answer:** In long-running environments like RoadRunner, the standard `$_SESSION` global and `session_start()` should be avoided because they rely on global state and file-based storage that doesn't scale well in persistent worker processes. Instead, you should use a centralized, non-blocking storage like Redis or a database, and manage session state via PSR-7 middleware or framework-specific session handlers (e.g., Laravel's session drivers) that don't depend on the traditional `php-fpm` session lifecycle.
-
-### How are sessions treated nowadays?
-**Answer:** Modern PHP development (especially with frameworks like Laravel or Symfony) treats sessions as an abstraction. Instead of manual `$_SESSION` manipulation, developers use Session services. For scalability, session data is rarely stored in files on the server anymore; instead, distributed stores like Redis, Memcached, or even the Database are used. For stateless APIs, sessions are often replaced by JWT (JSON Web Tokens).
-
-### What is the role of cookies in sessions?
+#### What is the role of cookies in sessions?
 **Answer:** Cookies are primarily used to store the **Session ID** on the client side. The session data itself remains on the server, but the cookie acts as a "key" that the browser presents to the server so it can identify which session data belongs to the current user.
 
-### Cookie vs Sessions: What is the key difference?
+#### Cookie vs Sessions: What is the key difference?
 **Answer:** 
 - **Storage:** Cookies are stored on the client (browser); Sessions are stored on the server.
 - **Security:** Sessions are more secure as the actual data isn't exposed to the user.
 - **Capacity:** Cookies have a size limit (typically 4KB); Sessions can store much larger amounts of data.
 - **Expiration:** Cookies can persist for a long time; Sessions typically expire when the browser is closed or after a period of inactivity.
 
-### What should you store in sessions?
+#### What should you store in sessions?
 **Answer:** You should only store essential, non-sensitive data that needs to persist across requests, such as the user's ID (to verify authentication), flash messages, or temporary state like a shopping cart. Avoid storing large objects, sensitive passwords (unhashed), or large amounts of data that could better be stored in a database.
+
+### Middle
+#### How do sessions work under the hood?
+**Answer:** When a session starts (`session_start()`), PHP generates a unique session ID. This ID is typically sent to the user's browser as a cookie (named `PHPSESSID` by default). On subsequent requests, the browser sends this cookie back. PHP uses the ID to retrieve the session data from the server's storage (usually files in `/tmp` by default, but can be Redis or a database). The data is serialized internally before being saved.
+
+#### What is the lifecycle of a PHP session?
+**Answer:** The lifecycle consists of four main phases: 1) **Request Start** (client sends the session cookie); 2) **Initialization** (`session_start()` locks the session storage, reads data, and populates `$_SESSION`); 3) **Execution** (the script modifies the session data); 4) **Commit/Shutdown** (PHP serializes `$_SESSION`, writes it back to storage, and releases the lock).
+[Detailed Session Lifecycle](answers/php_sessions.md#1-the-internal-lifecycle)
+
+#### How do sessions work in RoadRunner, and are there limitations?
+**Answer:** In long-running environments like RoadRunner, the standard `$_SESSION` global and `session_start()` should be avoided because they rely on global state and file-based storage that doesn't scale well in persistent worker processes. Instead, you should use a centralized, non-blocking storage like Redis or a database, and manage session state via PSR-7 middleware or framework-specific session handlers (e.g., Laravel's session drivers) that don't depend on the traditional `php-fpm` session lifecycle.
+
+#### How are sessions treated nowadays?
+**Answer:** Modern PHP development (especially with frameworks like Laravel or Symfony) treats sessions as an abstraction. Instead of manual `$_SESSION` manipulation, developers use Session services. For scalability, session data is rarely stored in files on the server anymore; instead, distributed stores like Redis, Memcached, or even the Database are used. For stateless APIs, sessions are often replaced by JWT (JSON Web Tokens).
 
 
 ---
@@ -451,7 +451,7 @@ In distributed systems, idempotency is critical for handling network failures. I
 ---
 
 ## 6. Design Patterns
-Design patterns are strictly related to [Clean Code & Best Practices](#19-clean-code--best-practices).
+Design patterns are strictly related to [Clean Code & Best Practices](#20-clean-code--best-practices).
 
 ### Junior
 #### What are the main categories of Design Patterns?
@@ -836,17 +836,7 @@ $result = "  hello  " |> trim(...) |> strtoupper(...);
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 ```
 
-#### What is the `EXPLAIN` statement and how to read its output?
-
-<span className="badge badge--primary margin-bottom--md">Middle</span>
-
-**Answer:** The `EXPLAIN` statement provides information about how MySQL executes a query. It shows which indexes are used, how tables are joined, and the estimated number of rows examined. Key columns include `type` (join type, where `const` and `ref` are good, while `ALL` is a full table scan), `key` (the actual index used), and `Extra` (additional info like `Using filesort` or `Using temporary`, which often indicate performance issues).
-
-[Detailed Guide on EXPLAIN](answers/mysql_explain.md)
-
----
-
-### What is the difference between `mysqli` and `PDO`?
+#### What is the difference between `mysqli` and `PDO`?
 **Answer:** 
 - `mysqli` is specific to MySQL, while `PDO` supports multiple database systems (PostgreSQL, SQLite, etc.).
 - `PDO` supports named placeholders in prepared statements.
@@ -1005,6 +995,11 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 #### What is InnoDB?
 **Answer:** A storage engine for MySQL that supports transactions, foreign keys, and row-level locking. It is the default engine.
+
+#### What is the `EXPLAIN` statement and how to read its output?
+**Answer:** The `EXPLAIN` statement provides information about how MySQL executes a query. It shows which indexes are used, how tables are joined, and the estimated number of rows examined. Key columns include `type` (join type, where `const` and `ref` are good, while `ALL` is a full table scan), `key` (the actual index used), and `Extra` (additional info like `Using filesort` or `Using temporary`, which often indicate performance issues).
+
+[Detailed Guide on EXPLAIN](answers/mysql_explain.md)
 
 #### What is an Index and why is it used?
 **Answer:** An index is a data structure used to quickly locate records in a table. It improves query speed but can slow down inserts/updates.
@@ -1312,7 +1307,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 10. Laravel & Symfony
+## 10. Laravel
 
 ### Junior
 #### What is the MVC architecture and how does Laravel implement it?
@@ -1382,8 +1377,57 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 - **Service Provider:** The classes that register and boot those dependencies into the container.
 
 ---
+---
 
-## 11. Tools & Composer
+## 11. Symfony
+
+### Junior
+#### What is the Symfony framework and its main philosophy?
+**Answer:** Symfony is a set of reusable PHP components and a web framework for building high-performance applications. Its philosophy is based on **reusability**, **standardization** (following PSRs), and **decoupling**. It promotes best practices like Dependency Injection and the use of the Service Container.
+
+#### What are Bundles in Symfony?
+**Answer:** A bundle is similar to a plugin in other software. In Symfony, everything is a bundle, including the core framework functionality (FrameworkBundle, SecurityBundle). Bundles are used to share code and features across different applications.
+
+#### How to install a new package in Symfony using Flex?
+**Answer:** Symfony Flex is a Composer plugin that automates the configuration of packages. You install a package using `composer require <package-name>`, and Flex uses "recipes" to automatically update configuration files for you.
+
+#### What is the Service Container?
+**Answer:** The Service Container (or Dependency Injection Container) is a central registry that manages the instantiation and lifecycle of objects (services) in your application. It allows for loose coupling and easy testing by injecting dependencies where they are needed.
+
+#### What is the HttpFoundation component?
+**Answer:** The HttpFoundation component provides an object-oriented layer for the HTTP specification. It defines the `Request`, `Response`, `Session`, and `Cookie` objects, replacing PHP's superglobals with a cleaner, more testable API.
+
+### Middle
+#### How do you access the session in Symfony (v5-8)?
+**Answer:** In Symfony 5.3+, the session should be accessed via the `RequestStack` service. In a controller, you can also get it directly from the `Request` object using `$request->getSession()`.
+
+#### What is Autowiring and Autoconfiguration?
+**Answer:**
+- **Autowiring:** Automatically injects services into your classes based on type-hints in the constructor or methods.
+- **Autoconfiguration:** Automatically tags services based on the interfaces they implement.
+
+#### Explain Dependency Injection types in Symfony.
+**Answer:**
+1. **Constructor Injection:** (Preferred) Dependencies are passed via the `__construct` method.
+2. **Setter Injection:** Dependencies are passed via setter methods (useful for optional dependencies).
+3. **Property Injection:** Dependencies are injected directly into public properties (rarely used).
+
+#### What are the must-have Symfony bundles for a modern app?
+**Answer:** FrameworkBundle, DoctrineBundle, SecurityBundle, TwigBundle, MakerBundle, MonologBundle, DebugBundle, WebProfilerBundle, and LexikJWTAuthenticationBundle.
+
+### Senior
+#### How does Symfony integration with RoadRunner and FrankenPHP work?
+**Answer:** Symfony uses the **Runtime Component** to decouple the application from the server environment. This allows servers like **RoadRunner** and **FrankenPHP** to keep the application in memory between requests (Worker Mode), significantly improving performance.
+
+#### What are the key changes in Symfony 8.0 compared to 7.x?
+**Answer:** Symfony 8.0 requires PHP 8.4 and focuses on features like **AssetMapper** (build-free frontend), **ObjectMapper**, and enhanced **Scheduler/Webhooks** support.
+
+#### How to optimize a Symfony application for high performance?
+**Answer:** Use OPcache & JIT, optimize the autoloader, precompute configuration, use modern servers like RoadRunner/FrankenPHP in worker mode, and optimize Doctrine queries.
+
+---
+
+## 12. Tools & Composer
 
 ### Junior
 #### What is Composer?
@@ -1398,9 +1442,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 #### What is Autoloading and how does Composer handle it?
 **Answer:** Autoloading automatically loads class files when they are needed. Composer uses PSR-4 (and others) to map namespaces to directories.
 
----
-
-## 12. Caching & Redis
+## 13. Caching & Redis
 
 ### Junior
 #### What is Caching?
@@ -1415,7 +1457,7 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 
 ---
 
-## 13. Kafka
+## 14. Kafka
 
 ### Middle
 #### How does Kafka ensure exactly-once processing, and what are the challenges involved?
@@ -1526,7 +1568,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 14. Infrastructure, Docker & DevOps
+## 15. Infrastructure, Docker & DevOps
 
 ### Junior
 #### What is Docker?
@@ -1559,7 +1601,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 15. Testing & Quality
+## 16. Testing & Quality
 
 ### Junior
 #### Why is it important to write tests?
@@ -1607,7 +1649,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 16. Security
+## 17. Security
 
 ### Junior
 #### What is the difference between Hashing and Encryption?
@@ -1637,7 +1679,7 @@ Kafka is an excellent buffer for high-volume logs (ELK/Graylog stack). To implem
 
 ---
 
-## 17. Web & API
+## 18. Web & API
 
 ### Junior
 #### What is REST API?
@@ -1688,7 +1730,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 18. Highload & Scalability
+## 19. Highload & Scalability
 
 ### Middle
 #### What is Load Balancing?
@@ -1710,7 +1752,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 19. Clean Code & Best Practices
+## 20. Clean Code & Best Practices
 
 ### Junior
 #### What are DRY and KISS?
@@ -1740,7 +1782,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 20. Elasticsearch
+## 21. Elasticsearch
 
 ### Middle
 #### What is Elasticsearch and its main features?
@@ -1755,7 +1797,7 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ---
 
-## 21. Tricky Questions
+## 22. Tricky Questions
 
 ### Junior
 #### What is the difference between `==` and `===`?
@@ -1792,7 +1834,7 @@ echo $a;
 
 ---
 
-## 22. Laravel Plugins
+## 23. Laravel Plugins
 
 ### Junior
 #### What are some of the most popular official Laravel plugins?
@@ -1851,7 +1893,7 @@ Below is a list of prominent Laravel packages and plugins, their short descripti
 
 ---
 
-## 23. Long-Running (RoadRunner)
+## 24. Long-Running (RoadRunner)
 
 ### Middle
 #### What is RoadRunner and how does it work?
@@ -1919,7 +1961,7 @@ For local development, `pool.debug = true` can be used to allocate a worker only
 
 ---
 
-## 24. PSR & PER Standards
+## 25. PSR & PER Standards
 
 ### Junior
 #### What PSR documentation is covering Basic Coding Standards?
@@ -1935,7 +1977,7 @@ PSR-1 aims to ensure a high degree of technical interoperability between shared 
 
 #### What PSR documentation is covering Extended Coding Standards?
 **Answer: PSR-12**
-PSR-12 is an extension of PSR-2 (which it superseded) and provides a more comprehensive set of coding style rules. **Note:** It has been superseded by the living [PER Coding Style](#24-psr--per-standards) standard.
+PSR-12 is an extension of PSR-2 (which it superseded) and provides a more comprehensive set of coding style rules. **Note:** It has been superseded by the living [PER Coding Style](#25-psr--per-standards) standard.
 - Indentation must be 4 spaces, no tabs.
 - Line length soft limit is 80 characters, hard limit 120.
 - Braces for classes and methods must go on a new line.
@@ -2009,7 +2051,7 @@ The **PHP Evolved Recommendation (PER)** for Coding Style is the modern successo
 
 ---
 
-## 25. Basic Algorithms
+## 26. Basic Algorithms
 
 ### Junior
 
@@ -2167,7 +2209,7 @@ function merge(array $left, array $right): array
 
 ---
 
-## 26. HaPHPiness - Best things in PHP
+## 27. HaPHPiness - Best things in PHP
 
 This section highlights modern PHP features and the overall "happiness" of the ecosystem, as inspired by [haphpiness.com](https://haphpiness.com/).
 
@@ -2289,11 +2331,11 @@ This section highlights modern PHP features and the overall "happiness" of the e
 **Answer:** A framework for building native desktop and mobile applications using PHP and Laravel.
 [Detailed HaPHPiness Guide](answers/haphpiness.md#nativephp)
 
-## 27. LeetCode Solutions
+## 28. LeetCode Solutions
 
 This section contains solutions to LeetCode challenges, focusing on PHP implementations.
 
-For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/27-leetcode-solutions.mdx).
+For a full list of solutions organized by pages, please visit the [LeetCode Solutions Documentation](./docs/docs/questions/28-leetcode-solutions.mdx).
 
 ### Summary of Solutions
 - [Page 1 (Challenges 1-35)](./docs/docs/answers/leetcode/page-1.mdx)
@@ -2302,7 +2344,7 @@ For a full list of solutions organized by pages, please visit the [LeetCode Solu
 - [Page 4](./docs/docs/answers/leetcode/page-4.mdx)
 - [Page 5](./docs/docs/answers/leetcode/page-5.mdx)
 
-## 28. Regexp
+## 29. Regexp
 
 ### Junior
 

@@ -1,0 +1,46 @@
+---
+title: '12. Tools & Composer'
+sidebar_label: '12. Tools & Composer'
+---
+
+# 12. Tools & Composer
+
+### What is Composer?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** A dependency manager for PHP that allows you to declare the libraries your project depends on and manages (install/update) them for you.
+
+---
+
+### What is the difference between `composer.json` and `composer.lock`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- `composer.json`: Lists the required dependencies and their version constraints.
+- `composer.lock`: Stores the exact versions of the packages that were installed.
+
+---
+
+### What is the difference between `composer install` and `composer update`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- `composer install`: Checks for `composer.lock` file. If it exists, it installs the exact versions listed there. If not, it reads `composer.json`, installs the latest compatible versions, and creates the lock file.
+- `composer update`: Ignores `composer.lock` and tries to update all packages to the latest versions allowed by the constraints in `composer.json`, then updates the lock file.
+
+---
+
+### What is Autoloading and how does Composer handle it?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Autoloading automatically loads class files when they are needed. Composer uses PSR-4 (and others) to map namespaces to directories.
+
+---
+
+---

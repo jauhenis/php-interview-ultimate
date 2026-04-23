@@ -5,51 +5,6 @@ sidebar_label: '7. PHP 7/8+ New Features'
 
 # 7. PHP 7/8+ New Features
 
-### What are the main differences between PHP 5.x and PHP 7/8?
-
-<span className="badge badge--primary margin-bottom--md">Middle</span>
-
-**Answer:**
-The transition from **PHP 5** to **PHP 7/8** brought significant improvements in performance, security, and developer experience.
-
-**Key Improvements in PHP 7/8:**
-
-- **Performance:** PHP 7 is up to twice as fast as PHP 5.6, and PHP 8 introduced JIT (Just-In-Time) compilation for further speed gains in certain workloads.
-- **Scalar Type Declarations:** PHP 7/8 supports strict typing for `int`, `float`, `bool`, and `string`.
-- **Return Type Declarations:** You can now specify the return type of a function.
-- **Null Coalescing Operator (`??`):** Provides a shorthand for checking if a value is set and not null.
-- **Spaceship Operator (`<=>`):** Used for combined comparisons (less than, equal to, or greater than).
-- **Anonymous Classes:** Support for creating classes on the fly.
-- **Improved Error Handling:** Many fatal errors were converted to exceptions in PHP 7, and PHP 8 introduced the `Error` class hierarchy.
-- **Match Expressions (PHP 8):** A more powerful and strict version of `switch`.
-- **Named Arguments (PHP 8):** Allows passing arguments by name.
-- **Enums (PHP 8.1):** Support for enumerations.
-- **Readonly Properties (PHP 8.1):** Properties that cannot be modified after initialization.
-- **First-class Callable Syntax (PHP 8.1):** Simplified syntax for function references.
-- **Readonly Classes (PHP 8.2):** Entire classes can be marked as readonly.
-- **DNF Types (PHP 8.2):** Combine union and intersection types.
-- **#[Override] Attribute (PHP 8.3):** Ensure a method overrides a parent method.
-- **Typed Class Constants (PHP 8.3):** Add type hints to class constants.
-- **json_validate() (PHP 8.3):** Check if a string is valid JSON without decoding.
-- **Property Hooks (PHP 8.4):** Support for computed properties with `get` and `set` hooks.
-- **Asymmetric Visibility (PHP 8.4):** Different visibility for reading and writing properties.
-- **New Array Functions (PHP 8.4):** `array_find()`, `array_find_key()`, `array_any()`, and `array_all()`.
-- **Simplified Class Instantiation (PHP 8.4):** Create class and call method/property without extra parentheses: `new User()->name`.
-- **Pipe Operator (PHP 8.5):** New operator (`|>`) for chaining function calls.
-- **URI Extension (PHP 8.5):** A new built-in extension for URI parsing and manipulation.
-- **array_first() and array_last() (PHP 8.5):** Get first and last elements of an array.
-- **#[\NoDiscard] Attribute (PHP 8.5):** Warn when return value of a function is not used.
-- **PIE (PHP 8.5+):** Official PHP Installer for Extensions replaces PECL.
-
-- [Detailed PHP 8.0 Features](../answers/php80_features.md)
-- [Detailed PHP 8.1 Features](../answers/php81_features.md)
-- [Detailed PHP 8.2 Features](../answers/php82_features.md)
-- [Detailed PHP 8.3 Features](../answers/php83_features.md)
-- [Detailed PHP 8.4 Features](../answers/php84_features.md)
-- [Detailed PHP 8.5 Features](../answers/php85_features.md)
-
----
-
 ### What are Named Arguments (introduced in PHP 8.0)?
 
 <span className="badge badge--success margin-bottom--md">Junior</span>
@@ -157,6 +112,94 @@ $country = $session?->user?->getAddress()?->country;
 
 ---
 
+### What are the new array functions introduced in PHP 8.4?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** PHP 8.4 introduced four new functions for searching and validating array elements using a callback: `array_find()`, `array_find_key()`, `array_any()`, and `array_all()`.
+
+```php
+$firstEven = array_find([1, 2, 3, 4], fn($v) => $v % 2 === 0); // 2
+$anyEven = array_any([1, 3, 5], fn($v) => $v % 2 === 0); // false
+```
+
+---
+
+### What are the `array_first()` and `array_last()` functions (introduced in PHP 8.5)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** PHP 8.5 added native functions to get the first and last elements of an array without moving the internal array pointer.
+
+```php
+$arr = ['a' => 1, 'b' => 2, 'c' => 3];
+$first = array_first($arr); // 1
+$last = array_last($arr);   // 3
+```
+
+---
+
+### What is the new class instantiation syntax in PHP 8.4?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** PHP 8.4 allows accessing properties and methods of a newly instantiated class without needing to wrap the `new` expression in parentheses.
+
+```php
+// Before PHP 8.4
+$name = (new User())->getName();
+
+// PHP 8.4
+$name = new User()->getName();
+```
+
+---
+
+### What are the main differences between PHP 5.x and PHP 7/8?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+The transition from **PHP 5** to **PHP 7/8** brought significant improvements in performance, security, and developer experience.
+
+**Key Improvements in PHP 7/8:**
+
+- **Performance:** PHP 7 is up to twice as fast as PHP 5.6, and PHP 8 introduced JIT (Just-In-Time) compilation for further speed gains in certain workloads.
+- **Scalar Type Declarations:** PHP 7/8 supports strict typing for `int`, `float`, `bool`, and `string`.
+- **Return Type Declarations:** You can now specify the return type of a function.
+- **Null Coalescing Operator (`??`):** Provides a shorthand for checking if a value is set and not null.
+- **Spaceship Operator (`<=>`):** Used for combined comparisons (less than, equal to, or greater than).
+- **Anonymous Classes:** Support for creating classes on the fly.
+- **Improved Error Handling:** Many fatal errors were converted to exceptions in PHP 7, and PHP 8 introduced the `Error` class hierarchy.
+- **Match Expressions (PHP 8):** A more powerful and strict version of `switch`.
+- **Named Arguments (PHP 8):** Allows passing arguments by name.
+- **Enums (PHP 8.1):** Support for enumerations.
+- **Readonly Properties (PHP 8.1):** Properties that cannot be modified after initialization.
+- **First-class Callable Syntax (PHP 8.1):** Simplified syntax for function references.
+- **Readonly Classes (PHP 8.2):** Entire classes can be marked as readonly.
+- **DNF Types (PHP 8.2):** Combine union and intersection types.
+- **#[Override] Attribute (PHP 8.3):** Ensure a method overrides a parent method.
+- **Typed Class Constants (PHP 8.3):** Add type hints to class constants.
+- **json_validate() (PHP 8.3):** Check if a string is valid JSON without decoding.
+- **Property Hooks (PHP 8.4):** Support for computed properties with `get` and `set` hooks.
+- **Asymmetric Visibility (PHP 8.4):** Different visibility for reading and writing properties.
+- **New Array Functions (PHP 8.4):** `array_find()`, `array_find_key()`, `array_any()`, and `array_all()`.
+- **Simplified Class Instantiation (PHP 8.4):** Create class and call method/property without extra parentheses: `new User()->name`.
+- **Pipe Operator (PHP 8.5):** New operator (`|>`) for chaining function calls.
+- **URI Extension (PHP 8.5):** A new built-in extension for URI parsing and manipulation.
+- **array_first() and array_last() (PHP 8.5):** Get first and last elements of an array.
+- **#[\NoDiscard] Attribute (PHP 8.5):** Warn when return value of a function is not used.
+- **PIE (PHP 8.5+):** Official PHP Installer for Extensions replaces PECL.
+
+- [Detailed PHP 8.0 Features](../answers/php80_features.md)
+- [Detailed PHP 8.1 Features](../answers/php81_features.md)
+- [Detailed PHP 8.2 Features](../answers/php82_features.md)
+- [Detailed PHP 8.3 Features](../answers/php83_features.md)
+- [Detailed PHP 8.4 Features](../answers/php84_features.md)
+- [Detailed PHP 8.5 Features](../answers/php85_features.md)
+
+---
+
 ### What are Enums (introduced in PHP 8.1)?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
@@ -245,6 +288,39 @@ class User {
 
 ---
 
+### What are Property Hooks (introduced in PHP 8.4)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Property hooks allow defining custom logic for getting and setting class properties directly on the property declaration, reducing the need for explicit getter and setter methods.
+
+```php
+class User {
+    public string $name {
+        get => strtoupper($this->name);
+        set => strtolower($value);
+    }
+}
+```
+
+---
+
+### What is the Pipe Operator (introduced in PHP 8.5)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** The pipe operator (`|>`) allows passing the result of an expression as the first argument to a function or method, making it easier to chain multiple transformations.
+
+```php
+$result = "  hello world  "
+    |> trim(...)
+    |> strtoupper(...)
+    |> (fn($str) => str_replace('WORLD', 'PHP 8.5', $str));
+// Result: "HELLO PHP 8.5"
+```
+
+---
+
 ### What are Readonly Classes (introduced in PHP 8.2)?
 
 <span className="badge badge--warning margin-bottom--md">Senior</span>
@@ -291,23 +367,6 @@ public function count(Countable&Iterator $it) { ... }
 
 ---
 
-### What are Property Hooks (introduced in PHP 8.4)?
-
-<span className="badge badge--primary margin-bottom--md">Middle</span>
-
-**Answer:** Property hooks allow defining custom logic for getting and setting class properties directly on the property declaration, reducing the need for explicit getter and setter methods.
-
-```php
-class User {
-    public string $name {
-        get => strtoupper($this->name);
-        set => strtolower($value);
-    }
-}
-```
-
----
-
 ### What is Asymmetric Visibility (introduced in PHP 8.4)?
 
 <span className="badge badge--warning margin-bottom--md">Senior</span>
@@ -318,65 +377,6 @@ class User {
 class User {
     public private(set) string $id;
 }
-```
-
----
-
-### What are the new array functions introduced in PHP 8.4?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** PHP 8.4 introduced four new functions for searching and validating array elements using a callback: `array_find()`, `array_find_key()`, `array_any()`, and `array_all()`.
-
-```php
-$firstEven = array_find([1, 2, 3, 4], fn($v) => $v % 2 === 0); // 2
-$anyEven = array_any([1, 3, 5], fn($v) => $v % 2 === 0); // false
-```
-
----
-
-### What are the `array_first()` and `array_last()` functions (introduced in PHP 8.5)?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** PHP 8.5 added native functions to get the first and last elements of an array without moving the internal array pointer.
-
-```php
-$arr = ['a' => 1, 'b' => 2, 'c' => 3];
-$first = array_first($arr); // 1
-$last = array_last($arr);   // 3
-```
-
----
-
-### What is the new class instantiation syntax in PHP 8.4?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** PHP 8.4 allows accessing properties and methods of a newly instantiated class without needing to wrap the `new` expression in parentheses.
-
-```php
-// Before PHP 8.4
-$name = (new User())->getName();
-
-// PHP 8.4
-$name = new User()->getName();
-```
-
----
-
-### What is the Pipe Operator (introduced in PHP 8.5)?
-
-<span className="badge badge--primary margin-bottom--md">Middle</span>
-
-**Answer:** The pipe operator (`|>`) allows passing the result of an expression as the first argument to a function or method, making it easier to chain multiple transformations.
-
-```php
-$result = "  hello world  "
-    |> trim(...)
-    |> strtoupper(...)
-    |> (fn($str) => str_replace('WORLD', 'PHP 8.5', $str)); 
-// Result: "HELLO PHP 8.5"
 ```
 
 ---

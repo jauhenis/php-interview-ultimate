@@ -18,16 +18,6 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
 ---
 
-### What is the `EXPLAIN` statement and how to read its output?
-
-<span className="badge badge--primary margin-bottom--md">Middle</span>
-
-**Answer:** The `EXPLAIN` statement provides information about how MySQL executes a query. It shows which indexes are used, how tables are joined, and the estimated number of rows examined. Key columns include `type` (join type, where `const` and `ref` are good, while `ALL` is a full table scan), `key` (the actual index used), and `Extra` (additional info like `Using filesort` or `Using temporary`, which often indicate performance issues).
-
-[Detailed Guide on EXPLAIN](../answers/mysql_explain.md)
-
----
-
 ### What is the difference between `mysqli` and `PDO`?
 
 <span className="badge badge--success margin-bottom--md">Junior</span>
@@ -252,6 +242,16 @@ $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 - **`JOIN ... ON`**: Defines how tables are linked together. It is processed _during_ the join operation.
 - **`WHERE`**: Filters the resulting rows _after_ the join has been logically formed.
 - **Performance**: For `INNER JOIN`, they are often functionally equivalent as the optimizer can move conditions between them. For `OUTER JOIN` (LEFT/RIGHT), the placement is critical: a condition in `ON` determines which rows are joined (keeping all rows from the "outer" table), while a condition in `WHERE` filters the final result set (potentially turning a LEFT JOIN into an INNER JOIN if it filters out NULLs).
+
+---
+
+### What is the `EXPLAIN` statement and how to read its output?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** The `EXPLAIN` statement provides information about how MySQL executes a query. It shows which indexes are used, how tables are joined, and the estimated number of rows examined. Key columns include `type` (join type, where `const` and `ref` are good, while `ALL` is a full table scan), `key` (the actual index used), and `Extra` (additional info like `Using filesort` or `Using temporary`, which often indicate performance issues).
+
+[Detailed Guide on EXPLAIN](../answers/mysql_explain.md)
 
 ---
 

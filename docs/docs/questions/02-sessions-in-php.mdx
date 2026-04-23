@@ -13,6 +13,35 @@ sidebar_label: '2. Sessions in PHP'
 
 ---
 
+### What is the role of cookies in sessions?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Cookies are primarily used to store the **Session ID** on the client side. The session data itself remains on the server, but the cookie acts as a "key" that the browser presents to the server so it can identify which session data belongs to the current user.
+
+---
+
+### Cookie vs Sessions: What is the key difference?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- **Storage:** Cookies are stored on the client (browser); Sessions are stored on the server.
+- **Security:** Sessions are more secure as the actual data isn't exposed to the user.
+- **Capacity:** Cookies have a size limit (typically 4KB); Sessions can store much larger amounts of data.
+- **Expiration:** Cookies can persist for a long time; Sessions typically expire when the browser is closed or after a period of inactivity.
+
+---
+
+### What should you store in sessions?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** You should only store essential, non-sensitive data that needs to persist across requests, such as the user's ID (to verify authentication), flash messages, or temporary state like a shopping cart. Avoid storing large objects, sensitive passwords (unhashed), or large amounts of data that could better be stored in a database.
+
+---
+
 ### How do sessions work under the hood?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
@@ -43,33 +72,5 @@ sidebar_label: '2. Sessions in PHP'
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Answer:** Modern PHP development (especially with frameworks like Laravel or Symfony) treats sessions as an abstraction. Instead of manual `$_SESSION` manipulation, developers use Session services. For scalability, session data is rarely stored in files on the server anymore; instead, distributed stores like Redis, Memcached, or even the Database are used. For stateless APIs, sessions are often replaced by JWT (JSON Web Tokens).
-
----
-
-### What is the role of cookies in sessions?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** Cookies are primarily used to store the **Session ID** on the client side. The session data itself remains on the server, but the cookie acts as a "key" that the browser presents to the server so it can identify which session data belongs to the current user.
-
----
-
-### Cookie vs Sessions: What is the key difference?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** 
-- **Storage:** Cookies are stored on the client (browser); Sessions are stored on the server.
-- **Security:** Sessions are more secure as the actual data isn't exposed to the user.
-- **Capacity:** Cookies have a size limit (typically 4KB); Sessions can store much larger amounts of data.
-- **Expiration:** Cookies can persist for a long time; Sessions typically expire when the browser is closed or after a period of inactivity.
-
----
-
-### What should you store in sessions?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** You should only store essential, non-sensitive data that needs to persist across requests, such as the user's ID (to verify authentication), flash messages, or temporary state like a shopping cart. Avoid storing large objects, sensitive passwords (unhashed), or large amounts of data that could better be stored in a database.
 
 ---

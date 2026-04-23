@@ -1,0 +1,157 @@
+---
+title: '11. Symfony'
+sidebar_label: '11. Symfony'
+---
+
+# 11. Symfony
+
+### What is the Symfony framework and its main philosophy?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Symfony is a set of reusable PHP components and a web framework for building high-performance applications. Its philosophy is based on **reusability**, **standardization** (following PSRs), and **decoupling**. It promotes best practices like Dependency Injection and the use of the Service Container.
+
+---
+
+### What are Bundles in Symfony?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** A bundle is similar to a plugin in other software. In Symfony, everything is a bundle, including the core framework functionality (FrameworkBundle, SecurityBundle). Bundles are used to share code and features across different applications.
+
+---
+
+### How to install a new package in Symfony using Flex?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Symfony Flex is a Composer plugin that automates the configuration of packages. You install a package using:
+
+```bash
+composer require <package-name>
+```
+
+Flex then uses "recipes" to automatically update configuration files (like `config/bundles.php` and `config/packages/`) for you.
+
+---
+
+### What is the Service Container?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** The Service Container (or Dependency Injection Container) is a central registry that manages the instantiation and lifecycle of objects (services) in your application. It allows for loose coupling and easy testing by injecting dependencies where they are needed.
+
+---
+
+### What is the HttpFoundation component?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** The HttpFoundation component provides an object-oriented layer for the HTTP specification. It defines the `Request`, `Response`, `Session`, and `Cookie` objects, replacing PHP's superglobals (`$_GET`, `$_POST`, etc.) with a cleaner, more testable API.
+
+---
+
+### How do you access the session in Symfony (v5-8)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** In Symfony 5.3+, the session should be accessed via the `RequestStack` service. In a controller, you can also get it directly from the `Request` object:
+
+```php
+// In a Controller
+public function index(Request $request)
+{
+    $session = $request->getSession();
+    $session->set('name', 'value');
+}
+
+// In a Service
+public function __construct(private RequestStack $requestStack) {}
+
+public function doSomething()
+{
+    $session = $this->requestStack->getSession();
+}
+```
+
+---
+
+### What is Autowiring and Autoconfiguration?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **Autowiring:** Automatically injects services into your classes based on type-hints in the constructor or methods.
+- **Autoconfiguration:** Automatically tags services based on the interfaces they implement (e.g., adding `kernel.event_subscriber` to classes implementing `EventSubscriberInterface`).
+
+---
+
+### Explain Dependency Injection types in Symfony.
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+1. **Constructor Injection:** (Preferred) Dependencies are passed via the `__construct` method. Ensures the service is always in a valid state.
+2. **Setter Injection:** Dependencies are passed via setter methods. Useful for optional dependencies.
+3. **Property Injection:** Dependencies are injected directly into public properties. Rarely used, mainly for third-party compatibility.
+
+---
+
+### What are the must-have Symfony bundles for a modern app?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **FrameworkBundle:** Core framework features.
+- **DoctrineBundle:** Database integration (ORM).
+- **SecurityBundle:** Authentication and authorization.
+- **TwigBundle:** Templating engine.
+- **MakerBundle:** Code generation (CLI).
+- **WebProfilerBundle/DebugBundle:** Development tools.
+- **MonologBundle:** Logging.
+- **LexikJWTAuthenticationBundle:** For JWT-based APIs.
+- **NelmioApiDocBundle:** Swagger/OpenAPI documentation.
+
+---
+
+### How does Symfony integration with RoadRunner and FrankenPHP work (Symfony Runtime)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Symfony uses the **Runtime Component** to decouple the application from the global state and server environment.
+
+- **RoadRunner:** A Golang-based high-performance PHP application server. Symfony integrates via the `symfony/runtime` and specific RoadRunner runners.
+- **FrankenPHP:** A modern PHP server built on Caddy that supports worker mode and early hints.
+  These servers keep the application in memory between requests, significantly improving performance by avoiding the overhead of bootstrapping the framework for every request.
+
+---
+
+### What are the key changes in Symfony 8.0 compared to 7.x and 6.x?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+- **PHP 8.4 requirement:** Symfony 8.0 requires the latest PHP features.
+- **AssetMapper:** A build-free frontend development tool (replaces Webpack Encore for many cases).
+- **ObjectMapper:** For easy DTO transformations.
+- **Scheduler & Webhooks:** Enhanced built-in support for task automation and third-party integrations.
+- **Constructor Extractor:** Enabled by default for better property information extraction.
+
+---
+
+### How to optimize a Symfony application for high performance?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+1. **Use OPcache & JIT:** Essential for PHP 8+.
+2. **Dump Autoloader:** Use `composer dump-autoload --optimize`.
+3. **Precompute config:** Run `php bin/console cache:clear --env=prod`.
+4. **Use a modern server:** Move from PHP-FPM to RoadRunner or FrankenPHP (Worker Mode).
+5. **Optimize Doctrine:** Use `partial` objects, read-only entities, and avoid N+1 queries using `JOIN FETCH`.
+6. **Use HTTP Caching:** Leverage the Gateway Cache (Varnish or Symfony's built-in Reverse Proxy).

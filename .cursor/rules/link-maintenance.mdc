@@ -1,0 +1,26 @@
+# Category & Link Integrity Maintenance
+
+This rule ensures that all internal links remain valid when categories are renumbered, renamed, or restructured.
+
+## Triggering Conditions
+- Renaming any file in `docs/docs/questions/` or `docs/i18n/ru/questions/`.
+- Changing the numbering of categories in `QUESTIONS.md` or `translate/ru/QUESTIONS.md`.
+- Adding or removing a category.
+
+## Mandatory Actions
+
+### 1. Global Link Update
+- **Search and Replace**: Perform a project-wide search for the old filename and replace it with the new filename (e.g., `10-laravel-symfony.mdx` -> `10-laravel.mdx`).
+- **Relative Paths**: Ensure relative links in `docs/` and `answers/` are updated.
+
+### 2. Anchor Link Synchronization
+- **TOC Sync**: Update the Table of Contents in `QUESTIONS.md` and `translate/ru/QUESTIONS.md` to match the new numbering.
+- **Internal Anchors**: Search for all internal anchor links (e.g., `[Text](#old-number-slug)`) and update them to the new numbering (e.g., `[Text](#new-number-slug)`).
+
+### 3. Multilingual Consistency
+- **Simultaneous Update**: Every link change in the English documentation **MUST** be applied to the Russian documentation immediately.
+- **Filename Match**: Ensure filenames remain identical across both language directories.
+
+### 4. Verification Step
+- After making changes, run a grep search for the OLD filename or OLD anchor pattern to ensure no leftovers remain.
+- Verify that the generated anchors (slugs) still match the headers in both languages.

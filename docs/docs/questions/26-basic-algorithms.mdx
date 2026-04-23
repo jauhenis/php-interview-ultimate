@@ -1,0 +1,201 @@
+---
+title: '26. Basic Algorithms'
+sidebar_label: '26. Basic Algorithms'
+---
+
+# 26. Basic Algorithms
+
+Understanding basic algorithms is crucial for writing efficient code and solving complex problems in PHP development.
+
+### How would you reverse a string in PHP?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Reversing a string can be done in multiple ways depending on the string's character set (ASCII vs UTF-8). [Detailed Guide](../answers/reverse_string.md)
+
+- **Junior:** Use `strrev()`.
+- **Middle:** Use a manual `for` loop (byte-by-byte).
+- **Senior:** Use a multi-byte safe approach like `mb_str_split()`.
+
+```php
+// Junior
+function reverseString(string $str): string {
+    return strrev($str);
+}
+
+// Senior (UTF-8 safe)
+function mb_strrev(string $string, string $encoding = null): string {
+    $chars = mb_str_split($string, 1, $encoding ?: mb_internal_encoding());
+    return implode('', array_reverse($chars));
+}
+```
+
+---
+
+### What is Linear Search and how is it implemented in PHP?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Linear Search is the simplest search algorithm. It checks every element in a list sequentially until it finds the target value or reaches the end of the list.
+
+- **Complexity:** O(n).
+- **Use Case:** Small datasets or unsorted lists.
+
+```php
+function linearSearch(array $arr, $target): int
+{
+    foreach ($arr as $index => $value) {
+        if ($value === $target) {
+            return $index;
+        }
+    }
+    return -1;
+}
+```
+
+---
+
+### What is Binary Search and what are its requirements?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Binary Search is a fast search algorithm that works by repeatedly dividing the search interval in half.
+
+- **Requirement:** The array **must be sorted**.
+- **Complexity:** O(log n).
+
+```php
+function binarySearch(array $arr, $target): int
+{
+    $low = 0;
+    $high = count($arr) - 1;
+
+    while ($low <= $high) {
+        $mid = floor(($low + $high) / 2);
+        if ($arr[$mid] === $target) {
+            return $mid;
+        }
+        if ($arr[$mid] < $target) {
+            $low = $mid + 1;
+        } else {
+            $high = $mid - 1;
+        }
+    }
+    return -1;
+}
+```
+
+---
+
+### What is Bubble Sort?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.
+
+- **Complexity:** O(n²).
+- **Use Case:** Educational purposes or very small datasets.
+
+```php
+function bubbleSort(array $arr): array
+{
+    $n = count($arr);
+    for ($i = 0; $i < $n; $i++) {
+        for ($j = 0; $j < $n - $i - 1; $j++) {
+            if ($arr[$j] > $arr[$j + 1]) {
+                // Swap
+                $temp = $arr[$j];
+                $arr[$j] = $arr[$j + 1];
+                $arr[$j + 1] = $temp;
+            }
+        }
+    }
+    return $arr;
+}
+```
+
+---
+
+### How does Quick Sort work?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Quick Sort is a "divide and conquer" algorithm. It picks an element as a "pivot" and partitions the array around the pivot, so that elements smaller than the pivot are on the left and larger ones are on the right. It then recursively sorts the sub-arrays.
+
+- **Complexity:** O(n log n) average, O(n²) worst case.
+
+```php
+function quickSort(array $arr): array
+{
+    if (count($arr) < 2) {
+        return $arr;
+    }
+
+    $pivot = $arr[0];
+    $left = $right = [];
+
+    for ($i = 1; $i < count($arr); $i++) {
+        if ($arr[$i] < $pivot) {
+            $left[] = $arr[$i];
+        } else {
+            $right[] = $arr[$i];
+        }
+    }
+
+    return array_merge(quickSort($left), [$pivot], quickSort($right));
+}
+```
+
+---
+
+### What is Merge Sort and what is its main advantage?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** Merge Sort is another "divide and conquer" algorithm. It divides the array into two halves, recursively sorts them, and then merges the sorted halves.
+
+- **Advantage:** It has a guaranteed O(n log n) time complexity, even in the worst case. It is also a "stable" sort.
+
+```php
+function mergeSort(array $arr): array
+{
+    $count = count($arr);
+    if ($count <= 1) {
+        return $arr;
+    }
+
+    $mid = (int)($count / 2);
+    $left = array_slice($arr, 0, $mid);
+    $right = array_slice($arr, $mid);
+
+    return merge(mergeSort($left), mergeSort($right));
+}
+
+function merge(array $left, array $right): array
+{
+    $result = [];
+    while (count($left) > 0 && count($right) > 0) {
+        if ($left[0] <= $right[0]) {
+            $result[] = array_shift($left);
+        } else {
+            $result[] = array_shift($right);
+        }
+    }
+    return array_merge($result, $left, $right);
+}
+```
+
+---
+
+### Where should you use these algorithms in real-world PHP development?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+1. **Search Optimization:** Use **Binary Search** when you have a large, static, sorted dataset (e.g., searching in a large sorted list of product IDs or names).
+2. **Resource Management:** **Queues** (FIFO) are used for background job processing (e.g., Laravel Queues, RabbitMQ) to handle tasks like sending emails without blocking the main request.
+3. **Parsing:** **Stacks** (LIFO) or recursive algorithms are used for parsing structured data like HTML, XML, or custom template engines to ensure tags/brackets are correctly nested.
+4. **Data Presentation:** **Sorting** algorithms are essential for displaying data in a specific order (alphabetical, by price, by date).
+
+---

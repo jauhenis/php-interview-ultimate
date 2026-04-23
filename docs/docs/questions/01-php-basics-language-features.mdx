@@ -180,6 +180,24 @@ sidebar_label: '1. PHP Basics & Language Features'
 
 ---
 
+### What are Superglobals in PHP?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Predefined variables that are always available in all scopes throughout a script.
+
+- `$_GET`: Data passed via URL query parameters.
+- `$_POST`: Data passed via HTTP POST method (form data).
+- `$_FILES`: Data about uploaded files.
+- `$_COOKIE`: Data stored in cookies.
+- `$_SESSION`: Data stored in the session.
+- `$_SERVER`: Information about headers, paths, and script locations.
+- `$_ENV`: Environment variables.
+- `$_REQUEST`: Contains contents of `$_GET`, `$_POST`, and `$_COOKIE`.
+- `$GLOBALS`: References all variables available in global scope.
+
+---
+
 ### What are Magic Constants in PHP?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
@@ -313,24 +331,6 @@ Do not use `&` purely for memory optimization; PHP's CoW is already efficient fo
 5. **Execution:** The Zend Engine executes the opcodes.
 6. **Output:** The script generates an HTTP response (headers and body).
 7. **Shutdown:** PHP cleans up resources, shuts down extensions, and the process may stay alive (in FPM) to handle the next request.
-
----
-
-### What are Superglobals in PHP?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-
-**Answer:** Predefined variables that are always available in all scopes throughout a script.
-
-- `$_GET`: Data passed via URL query parameters.
-- `$_POST`: Data passed via HTTP POST method (form data).
-- `$_FILES`: Data about uploaded files.
-- `$_COOKIE`: Data stored in cookies.
-- `$_SESSION`: Data stored in the session.
-- `$_SERVER`: Information about headers, paths, and script locations.
-- `$_ENV`: Environment variables.
-- `$_REQUEST`: Contains contents of `$_GET`, `$_POST`, and `$_COOKIE`.
-- `$GLOBALS`: References all variables available in global scope.
 
 ---
 

@@ -62,6 +62,16 @@ from the left table and matching rows from the right table (with NULLs if no mat
 
 ---
 
+### What is a View and why is it used?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Answer:** A **View** is a virtual table created from an SQL query. It doesn't store data itself
+but displays data from underlying tables. It's used to simplify complex queries, enhance security
+(by hiding sensitive columns), and provide a consistent interface for users. [Detailed Guide on
+Views](../answers/sql_views.md)
+
+---
+
 ### What are the `CHECK` and `UNIQUE` constraints?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
@@ -103,13 +113,6 @@ Structures](../answers/postgresql_complex_types.md)
 
 ---
 
-### What is a View and why is it used?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-**Answer:** A **View** is a virtual table created from an SQL query. It doesn't store data itself but displays data from underlying tables. It's used to simplify complex queries, enhance security (by hiding sensitive columns), and provide a consistent interface for users. [Detailed Guide on Views](../answers/sql_views.md)
-
----
-
 ### What are Aggregate Functions in PostgreSQL?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
@@ -121,7 +124,10 @@ Structures](../answers/postgresql_complex_types.md)
 ### What is a Materialized View and how does it differ from a regular View?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
-**Answer:** A regular **View** is a virtual table that re-runs its query every time it is accessed. A **Materialized View** stores the actual query results on disk (like a table). This provides significant performance gains for complex queries but requires manual or scheduled refreshes to stay up-to-date. [Detailed Guide on Views](../answers/sql_views.md)
+**Answer:** A regular **View** is a virtual table that re-runs its query every time it is accessed.
+A **Materialized View** stores the actual query results on disk (like a table). This provides
+significant performance gains for complex queries but requires manual or scheduled refreshes to stay
+up-to-date. [Detailed Guide on Views](../answers/sql_views.md)
 
 ---
 
@@ -157,3 +163,5 @@ exact sets of columns to group by.
 <span className="badge badge--warning margin-bottom--md">Senior</span>
 **Answer:** You can add/drop columns, change types, and add/remove constraints. ```sql ALTER TABLE
 users ADD COLUMN email TEXT UNIQUE; ALTER TABLE users ALTER COLUMN age TYPE SMALLINT; ``` ---
+
+---

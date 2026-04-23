@@ -1,0 +1,148 @@
+---
+title: '11. Symfony'
+sidebar_label: '11. Symfony'
+---
+
+# 11. Symfony
+
+### Что такое фреймворк Symfony и какова его основная философия?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Symfony — это набор многоразовых PHP-компонентов и веб-фреймворк для создания высокопроизводительных приложений. Его философия основана на **повторном использовании кода**, **стандартизации** (следование PSR) и **слабой связанности (decoupling)**. Он продвигает лучшие практики, такие как внедрение зависимостей (Dependency Injection) и использование сервис-контейнера.
+
+---
+
+### Что такое бандлы (Bundles) в Symfony?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Бандл похож на плагин в другом программном обеспечении. В Symfony всё является бандлом, включая основные функции фреймворка (FrameworkBundle, SecurityBundle). Бандлы используются для совместного использования кода и функций в различных приложениях.
+
+---
+
+### Как установить новый пакет в Symfony с помощью Flex?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Symfony Flex — это плагин Composer, который автоматизирует настройку пакетов. Вы устанавливаете пакет с помощью:
+```bash
+composer require <package-name>
+```
+Затем Flex использует «рецепты» (recipes) для автоматического обновления конфигурационных файлов (таких как `config/bundles.php` и `config/packages/`).
+
+---
+
+### Что такое сервис-контейнер (Service Container)?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Сервис-контейнер (или контейнер внедрения зависимостей) — это центральный реестр, который управляет созданием и жизненным циклом объектов (сервисов) в вашем приложении. Он обеспечивает слабую связанность и простоту тестирования, внедряя зависимости там, где они необходимы.
+
+---
+
+### Что такое компонент HttpFoundation?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Компонент HttpFoundation предоставляет объектно-ориентированный слой для спецификации HTTP. Он определяет объекты `Request`, `Response`, `Session` и `Cookie`, заменяя суперглобальные переменные PHP (`$_GET`, `$_POST` и т. д.) более чистым и тестируемым API.
+
+---
+
+### Как получить доступ к сессии в Symfony (версии 5-8)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** В Symfony 5.3+ доступ к сессии должен осуществляться через сервис `RequestStack`. В контроллере вы также можете получить её напрямую из объекта `Request`:
+```php
+// В контроллере
+public function index(Request $request)
+{
+    $session = $request->getSession();
+    $session->set('name', 'value');
+}
+
+// В сервисе
+public function __construct(private RequestStack $requestStack) {}
+
+public function doSomething()
+{
+    $session = $this->requestStack->getSession();
+}
+```
+
+---
+
+### Что такое Autowiring и Autoconfiguration?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:**
+- **Autowiring (Автоматическое связывание):** Автоматически внедряет сервисы в ваши классы на основе подсказок типов (type-hints) в конструкторе или методах.
+- **Autoconfiguration (Автоматическая настройка):** Автоматически помечает (tags) сервисы на основе реализованных ими интерфейсов (например, добавление тега `kernel.event_subscriber` к классам, реализующим `EventSubscriberInterface`).
+
+---
+
+### Объясните типы внедрения зависимостей (Dependency Injection) в Symfony.
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:**
+1. **Внедрение через конструктор (Constructor Injection):** (Рекомендуемый способ) Зависимости передаются через метод `__construct`. Гарантирует, что сервис всегда находится в валидном состоянии.
+2. **Внедрение через сеттер (Setter Injection):** Зависимости передаются через методы-сеттеры. Полезно для необязательных зависимостей.
+3. **Внедрение в свойства (Property Injection):** Зависимости внедряются напрямую в публичные свойства. Используется редко, в основном для совместимости со сторонним кодом.
+
+---
+
+### Какие бандлы Symfony являются обязательными для современного приложения?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:**
+- **FrameworkBundle:** Основные функции фреймворка.
+- **DoctrineBundle:** Интеграция с базой данных (ORM).
+- **SecurityBundle:** Аутентификация и авторизация.
+- **TwigBundle:** Шаблонизатор.
+- **MakerBundle:** Генерация кода (CLI).
+- **WebProfilerBundle/DebugBundle:** Инструменты разработки.
+- **MonologBundle:** Логирование.
+- **LexikJWTAuthenticationBundle:** Для API на базе JWT.
+- **NelmioApiDocBundle:** Документация Swagger/OpenAPI.
+
+---
+
+### Как работает интеграция Symfony с RoadRunner и FrankenPHP (Symfony Runtime)?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Symfony использует компонент **Runtime** для отделения приложения от глобального состояния и серверной среды.
+- **RoadRunner:** Высокопроизводительный сервер приложений PHP на базе Golang. Symfony интегрируется через `symfony/runtime` и специальные раннеры для RoadRunner.
+- **FrankenPHP:** Современный сервер PHP на базе Caddy, поддерживающий режим воркера (worker mode) и Early Hints.
+Эти серверы хранят приложение в памяти между запросами, что значительно повышает производительность за счет исключения затрат на инициализацию фреймворка для каждого запроса.
+
+---
+
+### Каковы основные изменения в Symfony 8.0 по сравнению с 7.x и 6.x?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:**
+- **Требование PHP 8.4:** Symfony 8.0 требует последних возможностей PHP.
+- **AssetMapper:** Инструмент для разработки фронтенда без сборки (заменяет Webpack Encore во многих случаях).
+- **ObjectMapper:** Для простых преобразований DTO.
+- **Scheduler и Webhooks:** Улучшенная встроенная поддержка автоматизации задач и интеграции со сторонними сервисами.
+- **Constructor Extractor:** Включен по умолчанию для лучшего извлечения информации о свойствах.
+
+---
+
+### Как оптимизировать приложение Symfony для высокой производительности?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:**
+1. **Используйте OPcache и JIT:** Обязательно для PHP 8+.
+2. **Оптимизация автозагрузчика:** Используйте `composer dump-autoload --optimize`.
+3. **Предварительная компиляция конфигов:** Выполните `php bin/console cache:clear --env=prod`.
+4. **Используйте современный сервер:** Перейдите с PHP-FPM на RoadRunner или FrankenPHP (Worker Mode).
+5. **Оптимизация Doctrine:** Используйте `partial` объекты, сущности только для чтения (read-only) и избегайте N+1 запросов с помощью `JOIN FETCH`.
+6. **Используйте HTTP-кеширование:** Используйте шлюзовое кеширование (Varnish или встроенный Reverse Proxy Symfony).

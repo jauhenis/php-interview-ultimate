@@ -12,6 +12,7 @@ slug: '/answers/php85_features'
 PHP 8.5 introduces a new built-in extension for URI parsing and manipulation, supporting both RFC 3986 and WHATWG URL standards.
 
 **RFC 3986 Example:**
+
 ```php
 use Uri\Rfc3986\Uri;
 
@@ -21,6 +22,7 @@ echo $uri->getPort(); // 443
 ```
 
 **WHATWG Example:**
+
 ```php
 use Uri\WhatWg\Url;
 
@@ -36,7 +38,7 @@ The pipe operator allows for a more readable syntax when chaining function calls
 $result = "  hello world  "
     |> trim(...)
     |> strtoupper(...)
-    |> (fn($str) => str_replace('WORLD', 'PHP 8.5', $str)); 
+    |> (fn($str) => str_replace('WORLD', 'PHP 8.5', $str));
 // Result: "HELLO PHP 8.5"
 ```
 
@@ -85,7 +87,7 @@ Static closures and first-class callables (e.g., `strlen(...)`) can now be used 
 ```php
 class Formatter {
     public const string_formatter = strtoupper(...);
-    
+
     #[MyAttribute(value: fn() => 'default')]
     public string $data;
 }

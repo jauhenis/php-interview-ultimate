@@ -5,8 +5,6 @@ sidebar_label: '5. System Design Principles (Middle+)'
 
 # 5. System Design Principles (Middle+)
 
-System design is the process of defining the architecture, components, modules, interfaces, and data for a system to satisfy specified requirements. It's about making trade-offs between speed, scalability, reliability, and cost.
-
 ### Middle
 
 #### What is System Design and why is it important?
@@ -78,6 +76,8 @@ Common algorithms include:
 **Answer:** An idempotent operation is one that has the same effect regardless of how many times it is executed. For example, `PUT` and `DELETE` should be idempotent, while `POST` is typically not.
 In distributed systems, idempotency is critical for handling network failures. If a client doesn't receive a confirmation due to a timeout, it might retry the request. If the API is idempotent, the retry won't cause unintended side effects (like charging a customer twice).
 
+---
+
 ### Senior
 
 #### Compare 2PC, 3PC, TCC, and the Saga Pattern.
@@ -120,3 +120,5 @@ In distributed systems, idempotency is critical for handling network failures. I
 **Answer:** Tail latency refers to the high latency experienced by a small percentage of requests (e.g., the 99.9th percentile). In a large-scale system where one user request might trigger hundreds of sub-requests to various microservices, a high tail latency in even one service can slow down the entire response for the user, making it a critical metric for system reliability.
 
 [Detailed System Design Principles Guide](../answers/system_design_principles.md)
+
+---

@@ -5,6 +5,8 @@ sidebar_label: '9. PostgreSQL'
 
 # 9. PostgreSQL
 
+
+
 ### Что такое PostgreSQL и чем она отличается от MySQL?
 <span className="badge badge--success margin-bottom--md">Junior</span>
 **Ответ:** PostgreSQL — это мощная объектно-реляционная система управления базами данных (ORDBMS) с открытым исходным кодом. В отличие от MySQL, которая является чисто реляционной, PostgreSQL поддерживает расширенные типы данных (такие как массивы и геометрические типы) и известна своим строгим соответствием стандартам SQL и расширяемостью.
@@ -64,6 +66,13 @@ CREATE TABLE orders (
 
 ---
 
+### Что такое Представление (View) и зачем оно используется?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+**Ответ:** **Представление** — это виртуальная таблица, созданная на основе SQL-запроса. Оно не хранит данные само по себе, а отображает данные из базовых таблиц. Используется для упрощения сложных запросов, повышения безопасности (путем скрытия конфиденциальных колонок) и обеспечения единого интерфейса для пользователей. [Подробное руководство по представлениям](../answers/sql_views.md)
+
+---
+
 ### Что такое ограничения `CHECK` и `UNIQUE`?
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 **Ответ:** 
@@ -99,13 +108,6 @@ CREATE TYPE status AS ENUM ('pending', 'active', 'closed');
 ### В чём разница между `WHERE` и `HAVING` в PostgreSQL?
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 **Ответ:** `WHERE` фильтрует строки до группировки/агрегации. `HAVING` фильтрует результаты после применения `GROUP BY`.
-
----
-
-### Что такое Представление (View) и зачем оно используется?
-
-<span className="badge badge--success margin-bottom--md">Junior</span>
-**Ответ:** **Представление** — это виртуальная таблица, созданная на основе SQL-запроса. Оно не хранит данные само по себе, а отображает данные из базовых таблиц. Используется для упрощения сложных запросов, повышения безопасности (путем скрытия конфиденциальных колонок) и обеспечения единого интерфейса для пользователей. [Подробное руководство по представлениям](../answers/sql_views.md)
 
 ---
 
@@ -154,4 +156,5 @@ FROM products p1;
 ALTER TABLE users ADD COLUMN email TEXT UNIQUE;
 ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 ```
+
 ---
