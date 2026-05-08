@@ -51,7 +51,7 @@ When converting to boolean, these are false:
 
 Variables can be passed by reference by prefixing them with `&`. In some cases, like passing an argument to a function, you can ensure the function modifies the original variable.
 
-Note: In modern PHP, you can't have a default value for a parameter passed by reference (since it's a pointer to a variable).
+Note: you cannot pass literals or constants by reference because they are not variables. However, assigning them as default values is perfectly valid: if the argument is omitted, PHP simply creates a temporary local variable under the hood to hold that default value.
 
 ## Type Hinting & Strict Types
 
