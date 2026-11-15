@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Expanded section "12. Tools & Composer" with 16 new questions (Junior/Middle/Senior): SemVer constraints, `require` vs `require-dev`, `vendor` directory, autoload types and production optimization, committing `composer.lock`, scripts and plugins, platform requirements, dependency conflicts, `provide`/`replace`/`conflict`, dependency security, private packages and monorepos, Git basics (linked to the existing Git guide), Xdebug, Rector and PHP-CS-Fixer, profiling. Added the missing `composer install` vs `composer update` question to `QUESTIONS.md` and its Russian translation to match the Docusaurus docs.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.
 - Documentation for the "Clone With" syntax introduced in PHP 8.5.
