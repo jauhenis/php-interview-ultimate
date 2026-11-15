@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Expanded section "19. Highload & Scalability" with 13 new questions (Junior/Middle/Senior): CDN, stateless applications, background queues, PHP-FPM tuning, replication lag and read-your-writes, keyset pagination, DB connection management, queues for traffic spikes, preparing for traffic spikes, zero-downtime deployments and migrations, high-write counters, observability, load testing.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.
 - Documentation for the "Clone With" syntax introduced in PHP 8.5.
