@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Expanded section "13. Caching & Redis" with 16 new questions (Junior/Middle/Senior): Redis data types, TTL and expiration, caching strategies, cache invalidation, eviction policies, RDB vs AOF persistence, `KEYS` vs `SCAN`, pipelining vs transactions, phpredis vs Predis, cache stampede, cache penetration/avalanche, Sentinel vs Cluster, rate limiting with Lua, Pub/Sub vs Streams. Synchronized across `QUESTIONS.md`, Russian translation and Docusaurus docs.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.
 - Documentation for the "Clone With" syntax introduced in PHP 8.5.

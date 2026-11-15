@@ -13,6 +13,70 @@ sidebar_label: '13. Caching & Redis'
 
 ---
 
+### What is Redis and what is it used for besides caching?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** Redis (REmote DIctionary Server) is an in-memory data structure store. It keeps data in RAM, which makes reads and writes take well under a millisecond. Typical use cases:
+
+- **Cache**: query results, rendered fragments, API responses.
+- **Session storage**: `session.save_handler = redis` with the phpredis extension, shared by all app servers.
+- **Queues**: Laravel queues (lists + sorted sets), Symfony Messenger Redis transport (streams).
+- **Counters and rate limiting**: the atomic `INCR` command.
+- **Leaderboards and rankings**: sorted sets.
+- **Distributed locks**: `SET lock:key token NX PX 30000`.
+- **Messaging**: Pub/Sub and Streams.
+
+---
+
+### What data types does Redis support?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- **String**: binary-safe value up to 512 MB. Also used as an integer counter (`INCR`, `INCRBY`) and as a bitmap (`SETBIT`, `BITCOUNT`).
+- **Hash**: a map of field → value, ideal for objects (`HSET user:1 name John age 30`).
+- **List**: an ordered sequence with fast push/pop at both ends (`LPUSH`, `RPOP`, blocking `BLPOP`). Good for simple queues.
+- **Set**: an unordered collection of unique strings (`SADD`, `SISMEMBER`, `SINTER`). Good for tags and unique visitors.
+- **Sorted Set (ZSet)**: unique members ordered by a numeric score (`ZADD`, `ZRANGE`, `ZRANK`). Good for leaderboards, delayed jobs, and sliding-window rate limiting.
+- **Stream**: an append-only log with consumer groups (`XADD`, `XREADGROUP`).
+- **Special types**: HyperLogLog (approximate count of unique items in ~12 KB with ~0.81% error), Geospatial indexes (`GEOADD`, `GEOSEARCH`), and Bitfields.
+- JSON, time series, and probabilistic structures (Bloom filter, etc.) were part of Redis Stack and are built into Redis 8+.
+
+---
+
+### What is TTL in Redis and how does key expiration work?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:** TTL (Time To Live) is the lifetime of a key. It is set with `SET key value EX 60`, `EXPIRE key 60`, `PEXPIRE` (milliseconds), or `EXPIREAT` (Unix timestamp). `TTL key` returns the remaining seconds: `-1` means the key has no expiration, `-2` means the key does not exist. `PERSIST` removes the expiration. Note that overwriting a key with a plain `SET` resets its TTL (unless you pass `KEEPTTL`).
+
+Expired keys are deleted in two ways:
+
+- **Passively**: when a client accesses an expired key, Redis deletes it and returns nothing.
+- **Actively**: a background cycle regularly samples random keys with a TTL and deletes the expired ones.
+
+This means an expired key can still occupy memory for a short time.
+
+---
+
+### Why is Redis so fast?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Answer:**
+
+- **Data lives in RAM**, so there is no disk I/O on reads.
+- **Commands are executed by a single thread**, so there are no locks or context switches between commands, and every command is atomic.
+- **I/O multiplexing** (epoll/kqueue) lets one thread serve thousands of connections without blocking.
+- **Compact, specialized encodings** (listpack, intset, skiplist) keep memory usage and CPU cache misses low.
+- **A simple protocol** (RESP) is cheap to parse.
+
+Since Redis 6, network reads and writes can be offloaded to I/O threads (`io-threads`), but commands are still executed one at a time. The flip side: a single slow command (`KEYS *`, `HGETALL` on a huge hash, a heavy Lua script) blocks all other clients.
+
+---
+
 ### Redis vs Memcached
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
@@ -22,6 +86,244 @@ sidebar_label: '13. Caching & Redis'
 - **Redis:** Supports various data types (strings, lists, sets, etc.), persistence, and pub/sub.
 - **Memcached:** Simple key-value store, mostly for simple caching.
   [Redis vs Memcached Comparison](../answers/caching.md)
+
+---
+
+### What caching strategies do you know?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **Cache-Aside (Lazy Loading)**: the application reads from the cache; on a miss, it loads the data from the DB and writes it to the cache. This is the most common pattern in PHP (`Cache::remember()` in Laravel, `$cache->get($key, $callback)` in Symfony). Only requested data is cached, but the first request is slow and data can be stale until the TTL expires.
+- **Read-Through**: the cache layer itself loads data from the DB on a miss, and the application talks only to the cache.
+- **Write-Through**: every write goes to the cache and the DB synchronously. The cache is always fresh, but writes are slower.
+- **Write-Behind (Write-Back)**: writes go to the cache and are flushed to the DB asynchronously, often in batches. Writes are very fast, but data can be lost if the cache fails before the flush.
+- **Refresh-Ahead**: hot keys are refreshed in the background before they expire.
+
+```php
+function getUser(Redis $redis, PDO $pdo, int $id): ?array
+{
+    $key = "user:{$id}";
+
+    $cached = $redis->get($key);
+    if ($cached !== false) {
+        return json_decode($cached, true);
+    }
+
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
+    $stmt->execute([$id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+    if ($user !== null) {
+        $redis->setex($key, 3600, json_encode($user));
+    }
+
+    return $user;
+}
+```
+
+---
+
+### How do you invalidate a cache?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** "There are only two hard things in Computer Science: cache invalidation and naming things" (Phil Karlton). Common approaches:
+
+- **TTL**: the simplest one. You accept that data may be stale for up to TTL seconds.
+- **Explicit deletion on write**: after updating the DB, delete the key (`DEL`) instead of updating it. Deleting avoids a race where two concurrent writers leave an older value in the cache. Delete only after the DB transaction commits.
+- **Versioned keys**: include a version in the key (`catalog:v42:product:1`). Bumping the version makes all old keys unreachable, and they expire by TTL.
+- **Tags**: group keys by tag and invalidate the whole group (`TagAwareCacheInterface::invalidateTags()` in Symfony, `Cache::tags()` in Laravel, which is not supported by the file and database drivers).
+- **Event-driven invalidation**: domain events or CDC (e.g., Debezium) invalidate caches across services.
+
+Even "delete after commit" has an edge case: a reader may load the old value before the commit and write it to the cache after the delete. A short TTL or a "delayed double delete" limits the damage.
+
+---
+
+### What happens when Redis runs out of memory? Which eviction policies exist?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** When memory usage reaches `maxmemory`, Redis behaves according to `maxmemory-policy`:
+
+- `noeviction` (default): new writes fail with an OOM error, reads still work.
+- `allkeys-lru` / `volatile-lru`: evict the least recently used key among all keys / among keys with a TTL.
+- `allkeys-lfu` / `volatile-lfu`: evict the least frequently used key (Redis 4.0+).
+- `allkeys-random` / `volatile-random`: evict a random key.
+- `volatile-ttl`: evict the key with the shortest remaining TTL.
+
+For a pure cache, `allkeys-lru` or `allkeys-lfu` is the usual choice. If the same instance also stores sessions, queues, or locks, eviction may silently delete them, so use a `volatile-*` policy (and set a TTL only on cache keys) or, better, a separate instance. If no key has a TTL, the `volatile-*` policies behave like `noeviction`. LRU and LFU are approximate: Redis samples a few keys (`maxmemory-samples`, default 5) instead of tracking a global order.
+
+---
+
+### How does Redis persistence work: RDB vs AOF?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **RDB (snapshots)**: Redis periodically writes a point-in-time snapshot of the whole dataset (`save` rules, `BGSAVE`). It forks a child process that writes the file using the OS copy-on-write mechanism. Files are compact and restarts are fast, which is good for backups. However, you lose all writes since the last snapshot, and forking a large dataset can cause latency spikes and extra memory usage.
+- **AOF (Append Only File)**: every write command is appended to a log. The `appendfsync` setting controls durability: `always` (safest, slowest), `everysec` (default, you lose at most ~1 second of writes), or `no` (the OS decides when to flush). The log is compacted in the background by an AOF rewrite. Files are larger and restarts are slower.
+- **Hybrid** (`aof-use-rdb-preamble yes`, default since Redis 5): the rewritten AOF starts with an RDB snapshot followed by recent commands, combining fast restarts with good durability.
+- **No persistence**: a valid choice for a pure cache that can be rebuilt from the DB.
+
+Even with AOF `always`, replication is asynchronous, so Redis should not be the only copy of critical data.
+
+---
+
+### Why should you never use `KEYS *` in production?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:** `KEYS` scans the whole keyspace in O(N), and because commands run in a single thread, it blocks the server for the entire scan, which can take seconds with millions of keys. Use cursor-based `SCAN` instead (`SCAN 0 MATCH user:* COUNT 100`). It returns small batches and never blocks for long. It may return the same key more than once, and keys added or removed during iteration may or may not be returned. `HSCAN`, `SSCAN`, and `ZSCAN` do the same for collections.
+
+```php
+$redis->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY);
+
+$iterator = null;
+while ($keys = $redis->scan($iterator, 'session:*', 1000)) {
+    $redis->unlink($keys);
+}
+```
+
+Other commands that can block Redis:
+
+- `DEL` on a huge key: use `UNLINK`, which frees memory in a background thread.
+- `FLUSHALL` / `FLUSHDB`: use the `ASYNC` option.
+- `HGETALL`, `SMEMBERS`, `LRANGE 0 -1` on big collections.
+
+Find big keys with `redis-cli --bigkeys` and slow commands with `SLOWLOG GET`. Dangerous commands can be blocked for application users with ACL rules.
+
+---
+
+### What is the difference between pipelining and transactions (MULTI/EXEC)?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **Pipelining**: the client sends many commands without waiting for each reply and then reads all replies at once. It saves network round trips (1000 `GET`s in one round trip instead of 1000). It is **not atomic**: commands from other clients can run in between.
+- **MULTI/EXEC**: commands are queued and then executed as one isolated block, and no other client's command runs in the middle. There is **no rollback**: if a command fails at runtime (e.g., `INCR` on a non-numeric string), the other commands are still applied. Only errors detected while queueing (e.g., a wrong number of arguments) abort the whole transaction (`EXECABORT`).
+- **WATCH**: optimistic locking. If a watched key changes before `EXEC`, the transaction is aborted (`EXEC` returns null) and the client retries.
+- For atomic "read, decide, write" logic, use **Lua scripts** (`EVAL`), which run atomically on the server.
+
+```php
+// Pipelining: one network round trip
+$pipe = $redis->pipeline();
+foreach ($ids as $id) {
+    $pipe->get("user:{$id}");
+}
+$users = $pipe->exec();
+
+// Transaction: both commands are executed together
+$redis->multi()
+    ->incr("views:{$pageId}")
+    ->expire("views:{$pageId}", 86400)
+    ->exec();
+```
+
+---
+
+### phpredis vs Predis: which PHP client should you choose?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Answer:**
+
+- **phpredis**: a C extension (`pecl install redis`). It is faster and uses less memory. It supports persistent connections (`pconnect`), built-in serializers (igbinary, msgpack) and compression (lzf, zstd, lz4), Redis Cluster/Sentinel, and a native session handler. It requires installing the extension on every server and in every Docker image.
+- **Predis**: a pure PHP library installed via Composer. It needs no extension and is easy to extend, but it is slower because the protocol is parsed in PHP.
+
+Both are supported by Laravel (`REDIS_CLIENT`, default `phpredis`) and by the Symfony Cache component. For production, phpredis is usually the better choice. Predis is convenient when you cannot install extensions.
+
+---
+
+### What is a cache stampede (dogpile effect) and how do you prevent it?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** When a hot key expires, many concurrent requests get a cache miss at the same moment, and all of them run the same expensive query to rebuild the value. The DB load spikes and can cause a cascading failure. Ways to prevent it:
+
+- **Locking (mutex)**: only one process rebuilds the value (`SET lock:key token NX EX 10`), while the others wait briefly or return a stale value. Laravel provides `Cache::lock()`. Symfony Cache's `get()` locks automatically so that only one process on a server computes a missing value.
+- **Probabilistic early expiration (XFetch)**: each request may decide to rebuild the value before the TTL expires, with a probability that grows as expiration approaches: `time() - $delta * $beta * log(random) >= $expiry`, where `$delta` is how long the recomputation takes. Symfony Cache supports this through the `$beta` argument of `get()`.
+- **Stale-while-revalidate**: serve the stale value while the cache is refreshed in the background. In Laravel: `Cache::flexible('stats', [300, 600], fn () => ...)`.
+- **Background refresh (cache warming)**: a cron job or queue worker refreshes hot keys before they expire, so users never see a miss.
+- **TTL jitter**: add a random offset to TTLs so that many keys don't expire at the same time.
+
+---
+
+### What are cache penetration, cache breakdown, and cache avalanche, and how do you handle them?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+- **Cache penetration**: requests for data that doesn't exist (e.g., `id=-1` or random IDs from a bot). Such data is never in the cache, so every request goes to the DB. Fixes: cache the "not found" result with a short TTL, put a Bloom filter of existing IDs in front of the DB (`BF.ADD` / `BF.EXISTS`), validate input, and apply rate limiting.
+- **Cache breakdown**: a single very hot key expires, which leads to a stampede (see the previous question). Fixes: locking, early refresh, and stale-while-revalidate.
+- **Cache avalanche**: a large part of the cache disappears at once, because many keys were written with the same TTL (e.g., during a deploy or warm-up) or because a Redis node restarted with empty memory. Fixes: TTL jitter (`3600 + random_int(0, 300)`), high availability (replicas, Sentinel, or Cluster), persistence for a warm restart, gradual cache warm-up, a circuit breaker or rate limiter in front of the DB, and a local in-process cache (APCu) as a second level.
+
+---
+
+### Redis Sentinel vs Redis Cluster: what's the difference?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Both are built on **replication**: a master with one or more replicas. Replication is asynchronous, so a write acknowledged by the master can be lost if the master fails before replicating it. `WAIT numreplicas timeout` reduces this risk but does not eliminate it.
+
+- **Sentinel** provides high availability for a single master-replica group. Sentinel processes monitor the master, agree on its failure (quorum), promote a replica, and tell clients the new master address. There is **no sharding**: the whole dataset must fit into one master, and writes scale only vertically.
+- **Cluster** provides **sharding and high availability**. The keyspace is split into 16384 hash slots (`CRC16(key) mod 16384`) distributed among several masters, each with its own replicas, and failover is built in. Limitations:
+  - Multi-key commands, transactions, and Lua scripts work only if all keys are in the same slot. Use **hash tags**: in `{user:42}:profile` and `{user:42}:cart`, only the part in braces is hashed, so both keys land in the same slot.
+  - Only database 0 is available (no `SELECT`).
+  - Clients must be cluster-aware and follow `MOVED`/`ASK` redirects (the `RedisCluster` class in phpredis, or the `cluster` option in Predis).
+
+Choose Sentinel when the data fits on one node and you need automatic failover. Choose Cluster when you need to scale memory or write throughput horizontally.
+
+---
+
+### How do you implement a rate limiter with Redis?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:** Common algorithms:
+
+- **Fixed window**: `INCR` a key like `rate:{userId}:{minute}` and set `EXPIRE` on the first hit. It is simple, but allows bursts of up to 2× the limit around the window boundary.
+- **Sliding window log**: a sorted set with request timestamps as scores. Remove old entries (`ZREMRANGEBYSCORE`), count the rest (`ZCARD`), and add the new one (`ZADD`). It is precise, but memory grows with the number of requests.
+- **Sliding window counter / token bucket**: smooth limiting with constant memory, usually implemented in Lua.
+
+The check and the increment must be atomic. If `INCR` and `EXPIRE` are sent separately and the process crashes between them, the key lives forever and the user is blocked permanently. A Lua script executes atomically:
+
+```php
+$script = <<<'LUA'
+local current = redis.call('INCR', KEYS[1])
+if current == 1 then
+    redis.call('EXPIRE', KEYS[1], ARGV[1])
+end
+return current
+LUA;
+
+$key = sprintf('rate:%d:%d', $userId, intdiv(time(), 60));
+$count = $redis->eval($script, [$key, 60], 1);
+
+if ($count > 100) {
+    http_response_code(429); // Too Many Requests
+    exit;
+}
+```
+
+A Lua script blocks Redis while it runs, so keep scripts short. Load a script once with `SCRIPT LOAD` and call it by hash with `EVALSHA` to avoid sending the body every time. In frameworks, use the ready-made `RateLimiter` in Laravel or the RateLimiter component in Symfony (fixed window, sliding window, token bucket), both of which can store state in Redis.
+
+---
+
+### Redis Pub/Sub vs Redis Streams: when should you use which?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Answer:**
+
+- **Pub/Sub** is fire-and-forget: `PUBLISH channel message` is delivered only to subscribers connected at that moment. There is no persistence and no acknowledgement. If a subscriber is offline or too slow (output buffer limit), the message is lost (at-most-once delivery). It is good for real-time notifications, cross-server cache invalidation, and WebSocket broadcasting (e.g., Laravel Broadcasting with the Redis driver).
+- **Streams** are a persistent append-only log. Entries are added with `XADD` and have IDs, and you can read history (`XRANGE`). Consumer groups (`XREADGROUP`) distribute messages between workers, each message must be acknowledged with `XACK`, unacknowledged messages stay in the Pending Entries List (`XPENDING`), and stuck messages can be reassigned to another consumer (`XAUTOCLAIM`). This gives at-least-once delivery, so consumers must be idempotent. Trim the stream with `MAXLEN` or `MINID`. The Symfony Messenger Redis transport is built on Streams.
+
+Compared to Kafka, Streams are lighter but limited by RAM and less durable (asynchronous replication). Kafka is better for high volumes, long retention, and replaying events. In PHP, `subscribe()` and blocking `XREADGROUP` calls must run in a long-running CLI worker, not in a PHP-FPM request.
 
 ---
 
