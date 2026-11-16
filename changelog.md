@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Expanded section "21. Elasticsearch" with 15 new questions (Junior/Middle/Senior): core concepts, when (not) to use Elasticsearch, `text` vs `keyword`, `match` vs `term`, query vs filter context, BM25 scoring, deep pagination, aggregations, bulk indexing from PHP, cluster health, syncing with the primary DB, zero-downtime mapping changes, shard sizing, refresh/flush/translog, autocomplete and fuzzy search.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.
 - Documentation for the "Clone With" syntax introduced in PHP 8.5.
