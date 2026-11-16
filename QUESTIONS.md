@@ -1732,9 +1732,106 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ## 19. Highload & Scalability
 
+### Junior
+#### What is a CDN and why is it used?
+**Answer:** A CDN (Content Delivery Network) is a network of edge servers around the world that cache content close to users. Instead of every request travelling to your origin server, users get files from the nearest edge location.
+
+- **Lower latency**: static assets (JS, CSS, images, video) are served from a nearby location.
+- **Less load on the origin**: most requests for static files never reach your servers.
+- **Protection and extras**: DDoS mitigation, TLS termination, image optimization, and a WAF.
+
+Caching is controlled with HTTP headers (`Cache-Control: public, max-age=31536000, immutable`, `ETag`). For static assets, use **cache busting**: put a content hash in the file name (`app.3f9a1c.js`). Then a file can be cached "forever", and a new deploy simply references new file names. A CDN can also cache HTML pages and API responses (`s-maxage`, `stale-while-revalidate`), but never cache personalized responses publicly.
+
+#### What does it mean for an application to be stateless, and why is it required for horizontal scaling?
+**Answer:** A stateless application server does not keep any data between requests in its own memory or on its local disk. Any request can be handled by any server, so you can add and remove servers behind a load balancer freely.
+
+Typical pieces of state and where to move them:
+
+- **Sessions**: from local files to Redis/Memcached or a DB (or use stateless tokens like JWT).
+- **Uploaded files**: from the local disk to object storage (S3, MinIO) or a shared file system.
+- **Cache**: from local files to a shared cache (Redis). Local APCu is fine only for data that may differ slightly between servers.
+- **Scheduled tasks (cron)**: if cron runs on every server, a job runs N times. Use a single scheduler or a distributed lock (`onOneServer()` in Laravel).
+- **Logs**: send them to a central system (ELK, Loki) instead of keeping them in local files.
+
+Classic PHP-FPM is already stateless per request (the share-nothing model), which is one reason PHP applications scale horizontally so easily.
+
+#### Why should heavy tasks be moved to background queues?
+**Answer:** A web request should do only what the user must wait for. Sending emails, generating PDFs, resizing images, calling slow external APIs, and exporting reports should be moved to a **queue** and processed by **workers**:
+
+- **Faster responses**: the user gets a response immediately ("Your report is being generated").
+- **Resilience**: if an external API is down, the job is retried later instead of failing the user request.
+- **Load leveling**: traffic spikes fill the queue instead of overloading the servers, and workers process jobs at a steady pace.
+- **Independent scaling**: the number of workers can be scaled separately from web servers.
+
+In PHP: Laravel Queues, Symfony Messenger, with RabbitMQ, Redis, Amazon SQS, or Kafka as the transport. Jobs must be **idempotent** (a job can run more than once), failed jobs go to a **dead letter queue**, and PHP-FPM time limits don't apply to long-running workers (but memory leaks do, so restart workers periodically).
+
 ### Middle
 #### What is Load Balancing?
 **Answer:** Distributing network or application traffic across multiple servers to improve responsiveness and availability.
+
+#### How do you tune PHP-FPM for high load?
+**Answer:** Key settings of the pool (`www.conf`):
+
+- **`pm`**: process manager mode. `static` keeps a fixed number of workers (best for dedicated high-load servers, no spawn overhead), `dynamic` keeps between `pm.min_spare_servers` and `pm.max_spare_servers` idle workers, and `ondemand` spawns workers only when requests arrive (good for low-traffic sites).
+- **`pm.max_children`**: the maximum number of workers, i.e., the maximum number of requests processed **in parallel**. Estimate it from memory: `(RAM available for PHP) / (average worker memory)`. For example, 8 GB / 80 MB ≈ 100 workers. Too many workers cause swapping, too few cause queueing.
+- **`pm.max_requests`**: restart a worker after N requests, which protects against memory leaks.
+- **`request_terminate_timeout`**: kill requests that run too long.
+- **`request_slowlog_timeout`** + **`slowlog`**: log a stack trace of requests slower than N seconds, which is great for finding bottlenecks.
+
+Monitor the **status page** (`pm.status_path`): a non-zero `listen queue` and a growing `max children reached` counter mean that all workers are busy and requests are waiting. Also enable **OPcache** (with `opcache.validate_timestamps=0` in production) and the optimized Composer autoloader. If workers mostly wait for I/O (DB, APIs), more workers help; if CPU is at 100%, you need more servers or faster code.
+
+#### What is replication lag and how do you deal with read-your-writes consistency?
+**Answer:** With primary-replica replication, writes go to the primary and reads are spread across replicas. Replication is usually **asynchronous**, so replicas are slightly behind: from milliseconds to seconds or more under heavy load. Problem: a user updates their profile, the next request reads from a replica, and the user sees the old data.
+
+Solutions:
+
+- **Sticky reads after write**: after a write, read from the primary for the rest of the request (`'sticky' => true` in the Laravel DB config) or for a few seconds for that user (a flag in the session or a cookie).
+- **Read critical data from the primary**: e.g., balances, order status after payment, and anything used for a following write.
+- **Wait for the replica to catch up**: MySQL `WAIT_FOR_EXECUTED_GTID_SET()` with the GTID of the write, or route reads only to replicas whose lag is below a threshold (ProxySQL can do this).
+- **Semi-synchronous replication**: the primary waits until at least one replica has received the write. This reduces data loss on failover, but adds write latency.
+- **Monitor lag**: `Seconds_Behind_Source` in MySQL, `pg_stat_replication` in PostgreSQL. Alert on it.
+
+#### Why is OFFSET pagination slow on large tables, and what is keyset pagination?
+**Answer:** `SELECT ... ORDER BY id LIMIT 20 OFFSET 1000000` forces the DB to read and discard one million rows before returning 20. The deeper the page, the slower the query. Results can also "jump" when rows are inserted or deleted between page loads.
+
+**Keyset (cursor) pagination** remembers the last seen value of the sort key and continues from it:
+
+```sql
+-- first page
+SELECT id, title, created_at FROM posts
+ORDER BY created_at DESC, id DESC
+LIMIT 20;
+
+-- next page: values from the last row of the previous page
+SELECT id, title, created_at FROM posts
+WHERE (created_at, id) < (:last_created_at, :last_id)
+ORDER BY created_at DESC, id DESC
+LIMIT 20;
+```
+
+With an index on `(created_at, id)`, every page costs the same, no matter how deep. The sort must be unique, so a tie-breaker like `id` is needed. The trade-off is that you can't jump to "page 500", only to the next or previous page. That is fine for infinite scroll and APIs (`cursorPaginate()` in Laravel). For exports and batch processing, iterate in chunks by primary key (`chunkById()`) instead of `OFFSET`.
+
+#### Why is connection management a problem for PHP applications at scale?
+**Answer:** In PHP-FPM, each worker holds its own DB connection, opened at the start of a request (or kept with persistent connections). The number of connections = workers × servers. For example, 20 servers × 100 workers = 2000 connections, while PostgreSQL works best with a few hundred connections (each one is a separate process), and MySQL also degrades with thousands of threads.
+
+Solutions:
+
+- **Connection pooler**: **PgBouncer** for PostgreSQL (transaction pooling mode: thousands of client connections share a few dozen real ones) and **ProxySQL** for MySQL (pooling, read/write splitting, query routing). In transaction mode, session-level features (session variables, advisory locks, `LISTEN`) don't work reliably, and prepared statements need support in the pooler (PgBouncer 1.21+).
+- **Persistent connections** (`PDO::ATTR_PERSISTENT`): save the connection setup time, but the number of connections still equals the number of workers, and state (open transactions, locks, session variables) can leak between requests.
+- **Right-size the pools**: don't set `pm.max_children` higher than the DB can serve, and release connections early in long-running scripts.
+- **Long-running runtimes** (RoadRunner, Swoole, FrankenPHP) can keep their own connection pools, but you must handle reconnects and reset state between requests.
+
+#### How do message queues help handle traffic spikes and what should you keep in mind?
+**Answer:** A queue decouples **accepting** work from **processing** it. During a spike, the web layer quickly accepts requests and publishes messages, while workers consume them at the rate the downstream systems (DB, external APIs) can sustain. This is called **load leveling**, and the queue acts as a buffer.
+
+Things to keep in mind:
+
+- **Delivery semantics**: most brokers give at-least-once delivery, so consumers must be **idempotent** (deduplication by message ID, unique constraints, upserts).
+- **Retries with backoff** and a **dead letter queue** for messages that keep failing. Distinguish temporary errors (retry) from permanent ones (don't retry).
+- **Monitoring queue depth and consumer lag**: a growing queue means consumers can't keep up, so scale workers or optimize processing. Autoscale workers on queue depth.
+- **Ordering**: parallel consumers break global ordering. If order matters for an entity, partition by entity ID (Kafka partitions, RabbitMQ consistent hash exchange).
+- **Back pressure**: the queue is not infinite. Set limits (max length, TTL) and decide what happens when it is full: reject, drop low-priority messages, or slow down producers.
+- **Reliable publishing**: use the Transactional Outbox pattern so that a message is not lost if the broker is unavailable at commit time.
 
 ### Senior
 #### How to optimize a slow GET endpoint that retrieves many records?
@@ -1749,6 +1846,91 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 #### What is Database Replication?
 **Answer:** Copying data from one database server (Master) to another (Slave) to improve reliability, fault tolerance, and performance.
+
+#### How do you prepare for a sudden traffic spike (e.g., 10× during a sale)?
+**Answer:**
+
+**Before the event:**
+
+- **Load test** realistic scenarios at the expected peak and above, and find the first bottleneck (usually the DB).
+- **Cache aggressively**: CDN for static files and public pages, Redis for hot data, and pre-warm caches before the start.
+- **Scale ahead**: autoscaling reacts with a delay (minutes to boot instances), so scale out in advance for a known event. Check limits: DB connections, external API quotas, and cloud account limits.
+- **Move non-critical work to queues** (emails, analytics, recommendations).
+
+**During the event:**
+
+- **Graceful degradation**: turn off expensive non-essential features (recommendations, live counters, complex search filters) with **feature flags / kill switches**.
+- **Rate limiting and load shedding**: reject excess traffic early and cheaply (HTTP 429/503 at the load balancer or API gateway) instead of letting every request time out. A **virtual waiting room** is an option for extreme cases.
+- **Protect dependencies**: circuit breakers and timeouts on external calls.
+- **Watch dashboards** for error rate, latency percentiles, saturation, queue depth, and DB load, and have a runbook ready.
+
+**After:** a post-mortem: what broke first and what to fix before the next event.
+
+#### How do you perform zero-downtime deployments and database migrations?
+**Answer:**
+
+**Deployment strategies:**
+
+- **Rolling**: replace instances one by one. Old and new versions run at the same time, so they must be compatible.
+- **Blue-green**: deploy the new version to an identical environment and switch traffic at once. Instant rollback by switching back.
+- **Canary**: route a small percentage of traffic to the new version, watch metrics, and increase gradually.
+- For PHP on a single server: deploy to a new release directory and switch a `current` symlink atomically, then reload PHP-FPM (or reset OPcache) so it picks up the new code.
+
+**Database migrations** must be **backward compatible**, because old code keeps running during the deploy. Use the **expand / contract** pattern. For example, to rename a column:
+
+1. **Expand**: add the new column, and the code writes to both columns.
+2. **Migrate**: backfill existing data in batches.
+3. Switch reads to the new column.
+4. **Contract**: in a later release, stop writing the old column and drop it.
+
+Watch out for locking DDL on large tables: use `ALGORITHM=INSTANT/INPLACE` in MySQL 8 or online schema change tools (**gh-ost**, **pt-online-schema-change**). In PostgreSQL, use `CREATE INDEX CONCURRENTLY` and set a `lock_timeout` for migrations. Never run a long-locking migration in the same step as the deploy.
+
+#### How do you design a high-write counter (views, likes) that doesn't kill the database?
+**Answer:** `UPDATE posts SET views = views + 1 WHERE id = ?` on every request creates **hot row** contention: all transactions wait for the same row lock, and the DB write load equals the traffic.
+
+Approaches:
+
+- **Aggregate in Redis, flush in batches**: `INCR views:post:42` on each view (atomic, sub-millisecond), and a background job periodically (e.g., every minute) writes the accumulated values to the DB in one batch and resets the counters (`GETDEL` or a Lua script). You trade a little accuracy and freshness for a massive reduction in DB writes.
+- **Sharded counters**: split one counter into N rows (`post_id, shard_no, count`), update a random shard, and read the sum. Contention is reduced N times.
+- **Event log + async aggregation**: write events to a queue or Kafka (or an append-only table) and aggregate them in a consumer or an analytics DB (ClickHouse).
+- **Unique counts**: for "unique visitors", use Redis HyperLogLog (`PFADD`/`PFCOUNT`): ~12 KB per counter with ~0.81% error, instead of storing every user ID.
+
+For likes, which must be unique per user and reversible, keep the `(user_id, post_id)` relation with a unique constraint as the source of truth, and treat the displayed number as a cached, eventually consistent aggregate.
+
+#### What is observability and which metrics matter for a highload system?
+**Answer:** Observability is the ability to understand what is happening inside a system from its outputs. It is built on three pillars:
+
+- **Metrics**: numeric time series (Prometheus + Grafana) for dashboards and alerts.
+- **Logs**: structured (JSON) event records with a correlation/request ID (ELK, Loki).
+- **Traces**: the path of a single request across services, with timings of each span (OpenTelemetry, Jaeger, Tempo). Traces show where time is spent in a distributed system.
+
+Useful methodologies:
+
+- **RED** for services: **R**ate (requests/s), **E**rrors (error rate), **D**uration (latency distribution).
+- **USE** for resources (CPU, memory, disk, connections): **U**tilization, **S**aturation (queueing), **E**rrors.
+- **The four golden signals** (Google SRE): latency, traffic, errors, saturation.
+
+Measure latency with **percentiles** (p50, p95, p99), not averages: an average hides the slow tail that real users experience. Define **SLIs** (what you measure, e.g., the share of requests faster than 300 ms), **SLOs** (the target, e.g., 99.9% per month), and the **error budget** that tells you when to prioritize reliability over new features. Alert on symptoms that users feel (SLO burn rate), not on every CPU spike.
+
+#### How do you load test a PHP application?
+**Answer:**
+
+**Tools:** **k6** (scripts in JavaScript, easy to put into CI), **Gatling**, **JMeter**, **Locust** (Python), and **wrk**/**wrk2** or `ab` for quick benchmarks of a single endpoint.
+
+**Types of tests:**
+
+- **Load test**: expected peak traffic. Do we meet the SLO?
+- **Stress test**: increase load until the system breaks. Where is the limit, and how does it fail?
+- **Spike test**: a sudden jump in traffic. Do autoscaling and caches cope?
+- **Soak (endurance) test**: moderate load for hours. Reveals memory leaks, connection leaks, and growing queues.
+
+**Best practices:**
+
+- Test in a **production-like environment** with realistic data volumes: a query that is fast on 1,000 rows can be slow on 10 million.
+- Model **realistic user scenarios** (browse → search → add to cart → checkout) with think time, not just one endpoint.
+- Watch **p95/p99 latency, error rate, and throughput** together with server-side **saturation** (CPU, PHP-FPM `listen queue`, DB connections, slow queries) to find the bottleneck.
+- Beware of **coordinated omission**: some tools wait for slow responses before sending the next request and thus underreport latency (wrk2 and k6 with arrival-rate executors avoid this).
+- Change one thing at a time, re-run, and compare results.
 
 ---
 
