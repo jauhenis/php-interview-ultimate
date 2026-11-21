@@ -2,6 +2,13 @@
 
 Follow these rules for every task in this repository. Apply each content or formatting requirement whenever the task touches the files it covers.
 
+## Keep AI instructions in sync
+
+Whenever a change adds, edits, renames, or removes an AI instruction, rule, or skill file, review all repository AI guidance. Update every counterpart and affected reference in the same change, regardless of which tool's file changed first.
+
+- Keep shared project requirements consistent between `AGENTS.md` and `.cursor/rules/`. Preserve each tool's format and the scope of each rule.
+- Mirror shared skills between `.agents/skills/` and `.cursor/skills/`. Before committing, compare the affected rules and skill files and resolve any differences in their requirements.
+
 ## Keep all versions in sync
 
 - Use `QUESTIONS.md` for questions and concise answers, and `answers/` for detailed guides. Mirror them in `docs/docs/questions/` and `docs/docs/answers/`, respectively. When an edit starts in Docusaurus, update the corresponding root content in the same change.
