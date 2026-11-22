@@ -99,9 +99,9 @@ const config = {
             label: 'Answers',
           },
           {
-            to: '/answers/php84_features',
+            to: '/answers/php86_features',
             position: 'left',
-            label: 'PHP 8.4 News',
+            label: 'PHP 8.6 News',
           },
           {
             to: '/answers/php85_features',

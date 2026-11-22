@@ -13,6 +13,8 @@ This repository is a curated collection of PHP interview questions and answers, 
 - A non-commercial website with a collection of PHP interview questions and answers from this repository.
 - Open-source and free to use.
 
+Study the [PHP 8.6 release guide](answers/php86_features.md) in English or [Russian](translate/ru/answers/php86_features.md).
+
 ## Modern Frontend
 
 Check out the new **[Modular Interview Questions Documentation](docs/)**!
