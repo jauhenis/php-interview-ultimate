@@ -99,14 +99,14 @@ const config = {
             label: 'Answers',
           },
           {
-            to: '/answers/php86_features',
-            position: 'left',
-            label: 'PHP 8.6 News',
-          },
-          {
             to: '/answers/php85_features',
             position: 'left',
             label: 'PHP 8.5 News',
+          },
+          {
+            to: '/answers/php86_features',
+            position: 'left',
+            label: 'PHP 8.6 News',
           },
           {
             type: 'localeDropdown',
