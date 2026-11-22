@@ -1,6 +1,6 @@
 # Ultimate PHP Interview Questions & Answers
 
-This file contains a curated list of PHP interview questions and answers, merged from multiple sources and categorized by level (Junior, Middle, Senior).
+This collection covers 29 topics and uses three difficulty levels: Junior, Middle, and Senior.
 
 ## Table of Contents
 1. [PHP Basics & Language Features](#1-php-basics--language-features)
@@ -178,7 +178,7 @@ Do not use `&` purely for memory optimization; PHP's CoW is already efficient fo
 ### Senior
 #### What are the risks of using PHP as a long-lived process (daemon)?
 **Answer:** Memory leaks and global state contamination are the biggest risks, as variables and objects persist between requests.
-[Running PHP as a Daemon](answers/php_advanced_extras/#php-as-a-daemon-swoole-roadrunner)
+[Running PHP as a Daemon](answers/php_advanced_extras.md#php-as-a-daemon-swoole-roadrunner)
 
 #### How does the Opcache work?
 **Answer:** OpCache improves performance by storing precompiled bytecode in shared memory, avoiding the need for PHP to load, parse, and compile scripts on every request.
