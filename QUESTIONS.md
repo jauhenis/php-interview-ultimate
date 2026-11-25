@@ -1825,9 +1825,50 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ## 19. Highload & Scalability
 
+### Junior
+#### What is a CDN and why is it used?
+**Answer:** A CDN is a network of servers that cache content close to users. It serves static files such as JS, CSS and images faster and takes that load off your own servers.
+
+[Detailed Guide](answers/highload.md)
+
+#### What is a stateless application and why does horizontal scaling need it?
+**Answer:** A stateless server keeps no data between requests in its own memory or on its disk, so any server can handle any request. Sessions, uploaded files and cache move to shared storage such as Redis or S3.
+
+[Detailed Guide](answers/highload.md)
+
+#### Why move heavy tasks to a background queue?
+**Answer:** The user gets a response without waiting for slow work such as sending emails or generating PDFs. Workers process the jobs separately and can retry them if they fail.
+
+[Detailed Guide](answers/highload.md)
+
 ### Middle
 #### What is Load Balancing?
 **Answer:** Distributing network or application traffic across multiple servers to improve responsiveness and availability.
+
+#### How do you tune PHP-FPM for high load?
+**Answer:** Set `pm.max_children` from available memory divided by the average memory of one worker. Use `pm.max_requests` to restart workers against memory leaks, and enable the slow log to find slow requests.
+
+[Detailed Guide](answers/highload.md)
+
+#### What is replication lag and how do you handle it?
+**Answer:** Replicas apply writes from the primary with a delay, so a user can read stale data right after a write. Read from the primary for a short time after a write, and always for critical data.
+
+[Detailed Guide](answers/highload.md)
+
+#### Why is `OFFSET` pagination slow on large tables?
+**Answer:** The database reads and discards all skipped rows, so deeper pages are slower. Keyset pagination continues from the last seen sort value and uses an index, so every page costs the same.
+
+[Detailed Guide](answers/highload.md)
+
+#### Why can database connections become a bottleneck for PHP applications?
+**Answer:** Each PHP-FPM worker holds its own connection, so the total equals workers times servers and can exceed what the database handles well. A connection pooler such as PgBouncer or ProxySQL shares a small number of real connections.
+
+[Detailed Guide](answers/highload.md)
+
+#### How do message queues help with traffic spikes?
+**Answer:** The queue stores incoming work, and workers process it at a pace the database and external APIs can sustain. Consumers must be idempotent, because a message can be delivered more than once.
+
+[Detailed Guide](answers/highload.md)
 
 ### Senior
 #### How to optimize a slow GET endpoint that retrieves many records?
@@ -1842,6 +1883,31 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 #### What is Database Replication?
 **Answer:** Copying data from one database server (Master) to another (Slave) to improve reliability, fault tolerance, and performance.
+
+#### How do you prepare for a sudden traffic spike?
+**Answer:** Load test the expected peak beforehand, warm the caches and add servers in advance. During the spike, turn off non-essential features and reject excess traffic early with rate limiting.
+
+[Detailed Guide](answers/highload.md)
+
+#### How do you deploy and migrate the database without downtime?
+**Answer:** Use rolling, blue-green or canary deployments. Keep migrations backward compatible with the expand and contract pattern: add the new schema, move the code, and remove the old schema in a later release.
+
+[Detailed Guide](answers/highload.md)
+
+#### How do you build a counter with many writes, such as page views?
+**Answer:** Updating one database row on every view makes all requests wait for the same row lock. Increment the counter in Redis with `INCR` and write the totals to the database in batches.
+
+[Detailed Guide](answers/highload.md)
+
+#### What is observability, and which metrics matter for a highload system?
+**Answer:** Observability is understanding a system's state from its metrics, logs and traces. Track request rate, error rate and latency percentiles such as p95 and p99, not averages.
+
+[Detailed Guide](answers/highload.md)
+
+#### How do you load test a PHP application?
+**Answer:** Use a tool such as k6 or JMeter to run realistic user scenarios in a production-like environment. Watch latency percentiles, errors and server saturation to find the first bottleneck.
+
+[Detailed Guide](answers/highload.md)
 
 ---
 

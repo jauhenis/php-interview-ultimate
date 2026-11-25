@@ -13,6 +13,7 @@ This section contains detailed guides and explanations for various PHP-related t
 * [Advanced MySQL Concepts](mysql_advanced.md)
 * [Advanced Testing & Debugging](testing_debugging_advanced.md)
 * [Architecture & Highload: Scalability, Microservices, and Performance](architecture_highload.md)
+* [Highload & Scalability in Practice](highload.md)
 * [Caching: Redis vs Memcached in PHP](caching.md)
 * [Clean Code & Programming Best Practices](clean_code.md)
 * [Design Patterns in PHP](design_patterns.md)

@@ -13,6 +13,7 @@ slug: '/answers'
 - [Продвинутые концепции MySQL](/answers/mysql_advanced)
 - [Продвинутое тестирование и отладка](/answers/testing_debugging_advanced)
 - [Архитектура и Highload: масштабируемость, микросервисы и производительность](/answers/architecture_highload)
+- [Highload и масштабирование на практике](/answers/highload)
 - [Кэширование: Redis vs Memcached в PHP](/answers/caching)
 - [Чистый код и лучшие практики программирования](/answers/clean_code)
 - [Паттерны проектирования в PHP](/answers/design_patterns)
