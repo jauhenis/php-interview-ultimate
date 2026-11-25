@@ -269,9 +269,13 @@ String: "BA" -> No Match
 
 ---
 
+<a name="7-advanced-pcre-features"></a>
+
 ## 7. Advanced PCRE Features (PHP-Specific) {#7-advanced-pcre-features}
 
 In PHP, the **PCRE** engine provides even more powerful features.
+
+<a name="atomic-groups"></a>
 
 ### Atomic Groups `(?>...)` {#atomic-groups}
 Forbids backtracking once a match is locked. Prevents "catastrophic backtracking".
@@ -284,6 +288,8 @@ Forbids backtracking once a match is locked. Prevents "catastrophic backtracking
 Allows matching nested structures like balanced parentheses: `/\((?:[^()]+|(?R))*\)/`.
 
 ---
+
+<a name="8-the-best-regex-trick-ever-exclude-context"></a>
 
 ## 8. "The Best Regex Trick Ever" (Exclude Context) {#8-the-best-regex-trick-ever-exclude-context}
 
@@ -300,6 +306,8 @@ $realMatches = array_filter($matches[1]);
 
 ---
 
+<a name="9-step-by-step-tutorial-building-a-complex-regex"></a>
+
 ## 9. Step-by-Step Tutorial: Building a Complex Regex {#9-step-by-step-tutorial-building-a-complex-regex}
 
 **Goal**: Extract valid **E-mail addresses** from HTML, but ignore those inside `<code>` tags or `href="..."` attributes.
@@ -310,6 +318,8 @@ $realMatches = array_filter($matches[1]);
 
 ---
 
+<a name="10-the-elements-of-good-regex-style"></a>
+
 ## 10. The Elements of Good Regex Style (AGRA) {#10-the-elements-of-good-regex-style}
 
 1. **A - Anchor**: Use `^`, `$`, `\A`, `\z`.
@@ -318,6 +328,8 @@ $realMatches = array_filter($matches[1]);
 4. **A - Atomic**: Use `(?>...)` where backtracking is unnecessary.
 
 ---
+
+<a name="11-php-regex-functions-in-depth"></a>
 
 ## 11. PHP Regex Functions in Depth {#11-php-regex-functions-in-depth}
 
@@ -338,6 +350,8 @@ preg_match('#[a-z]#', 'apple'); // Valid
 ```
 
 ---
+
+<a name="12-is-chatgpt-good-at-regex"></a>
 
 ## 12. Is ChatGPT good at Regex? {#12-is-chatgpt-good-at-regex}
 

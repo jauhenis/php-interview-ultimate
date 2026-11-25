@@ -31,6 +31,7 @@ slug: "/answers"
 * [Новые возможности PHP 8.3](php83_features.md)
 * [Новые возможности PHP 8.4](php84_features.md)
 * [Новые возможности PHP 8.5](php85_features.md)
+* [Новые возможности PHP 8.6](php86_features.md)
 * [Типы данных PHP](data_types.md)
 * [Числа с плавающей точкой](floating_point_numbers.md)
 * [Сборка мусора в PHP](garbage_collector.md)

@@ -5,13 +5,15 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Expanded section "12. Tools & Composer" with 16 new questions (Junior/Middle/Senior): SemVer constraints, `require` vs `require-dev`, `vendor` directory, autoload types and production optimization, committing `composer.lock`, scripts and plugins, platform requirements, dependency conflicts, `provide`/`replace`/`conflict`, dependency security, private packages and monorepos, Git basics (linked to the existing Git guide), Xdebug, Rector and PHP-CS-Fixer, profiling. Added the missing `composer install` vs `composer update` question to `QUESTIONS.md` and its Russian translation to match the Docusaurus docs.
+- English and Russian Composer and tooling guide (`answers/composer_tools.md`) and new interview questions in the "12. Tools & Composer" section.
+- English and Russian PHP 8.6 release guides and nine interview questions in the PHP 7/8+ section.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.
 - Documentation for the "Clone With" syntax introduced in PHP 8.5.
 - New section "2. Sessions in PHP" in `QUESTIONS.md` and Docusaurus documentation.
 
 ### Changed
+- Updated the header to link to PHP 8.6 and 8.5. The PHP 8.4 guide remains available in the answers index.
 - **Renumbered all documentation sections** starting from section 2 to accommodate the new Sessions chapter.
 - Updated PHP 8.5 Pipe Operator (`|>`) examples to use the correct first-class callable syntax (`(...)`).
 - Moved `json_validate()` documentation from PHP 8.2 to the correct PHP 8.3 section.
