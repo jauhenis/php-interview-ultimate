@@ -1878,35 +1878,15 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 ## 21. Elasticsearch
 
 ### Junior
-#### What are the core concepts of Elasticsearch: cluster, node, index, document, shard, replica?
-**Answer:**
+#### What are the core concepts of Elasticsearch: cluster, node, index, document, shard and replica?
+**Answer:** A cluster is a group of nodes, and a node is one Elasticsearch server. An index stores JSON documents and is split into primary shards spread across nodes. A replica is a copy of a shard on another node.
 
-- **Cluster**: a group of nodes that work together and share data. It is identified by a name.
-- **Node**: a single Elasticsearch server (JVM process). Nodes have roles: master-eligible, data, ingest, coordinating, etc.
-- **Index**: a collection of documents with similar structure, roughly like a table in a relational DB (`products`, `logs-2026.11.15`).
-- **Document**: a JSON object stored in an index and identified by `_id`, roughly like a row.
-- **Mapping**: the schema of an index: field names and types and how they are analyzed.
-- **Shard**: an index is split into **primary shards**, and each one is a separate Lucene index. Shards are distributed among nodes, which allows horizontal scaling.
-- **Replica**: a copy of a primary shard on another node. Replicas provide fault tolerance and also serve search requests, which increases read throughput.
+[Detailed Guide](answers/elasticsearch.md)
 
-Since Elasticsearch 7.0, an index has a single mapping type (the old "index = database, type = table" analogy is obsolete), and types were removed completely in 8.0.
+#### When should you use Elasticsearch, and why not as the primary database?
+**Answer:** Use it for full-text search, filtering with facets and log analytics. It has no multi-document transactions or joins, and new documents become searchable only after a refresh. Keep the source of truth in a relational database and sync Elasticsearch from it.
 
-#### When should you use Elasticsearch, and why shouldn't it be your primary database?
-**Answer:** Elasticsearch is good at:
-
-- **Full-text search** with relevance ranking, typo tolerance, synonyms, stemming, and highlighting.
-- **Faceted search and filtering** in catalogs (filter by brand, price, and attributes with counters).
-- **Log and metrics analytics** (ELK / Elastic Stack: Elasticsearch, Logstash/Beats, Kibana).
-- **Aggregations** over large datasets in near real time.
-
-It should usually not be the **primary source of truth**:
-
-- No multi-document ACID transactions and no joins (only limited `nested` and `join` field types).
-- **Near real-time**: a new document becomes searchable only after a refresh (1 second by default).
-- Changing a field type requires a full reindex.
-- It is designed as a rebuildable index, not as a system of record: no constraints, no foreign keys, and backups are done via snapshots.
-
-The common pattern: MySQL/PostgreSQL is the source of truth, and Elasticsearch is a **read-optimized search index** that is synchronized from it and can be rebuilt at any time.
+[Detailed Guide](answers/elasticsearch.md)
 
 ### Middle
 #### What is Elasticsearch and its main features?
@@ -1919,200 +1899,71 @@ The common pattern: MySQL/PostgreSQL is the source of truth, and Elasticsearch i
 #### What are Analyzers?
 **Answer:** Components that process text during indexing or searching. They consist of a Character Filter, a Tokenizer, and a Token Filter.
 
-#### What is the difference between `text` and `keyword` field types?
-**Answer:**
+#### What is the difference between `text` and `keyword` fields?
+**Answer:** A `text` field is analyzed into tokens for full-text search. A `keyword` field stores the exact value and is used for filters, sorting and aggregations.
 
-- **`text`**: the value is **analyzed**, i.e., split into tokens, lowercased, stemmed, etc. Used for full-text search (`match` queries) on titles, descriptions, and articles. It cannot be used efficiently for sorting or aggregations.
-- **`keyword`**: the value is stored **as is**, as a single exact token. Used for exact matching (`term` queries), filters, sorting, and aggregations: statuses, tags, emails, IDs, and SKUs.
-
-If you index a string without an explicit mapping, dynamic mapping creates both: a `text` field and a `.keyword` sub-field (with `ignore_above: 256`). It is better to define the mapping explicitly:
-
-```json
-{
-    "mappings": {
-        "properties": {
-            "title":  { "type": "text", "fields": { "raw": { "type": "keyword" } } },
-            "status": { "type": "keyword" },
-            "price":  { "type": "scaled_float", "scaling_factor": 100 }
-        }
-    }
-}
-```
+[Detailed Guide](answers/elasticsearch.md)
 
 #### What is the difference between `match` and `term` queries?
-**Answer:**
+**Answer:** `match` analyzes the search string and runs a full-text search on a `text` field. `term` looks for the exact value without analysis and is meant for `keyword`, numeric and date fields.
 
-- **`match`**: a **full-text** query. The search string goes through the same analyzer as the field, and the resulting tokens are searched in the inverted index. `match` on `title` with "Red Shoes" finds documents containing "red" or "shoes" (use `"operator": "and"` to require both).
-- **`term`**: an **exact** query without analysis. It looks for exactly the given token. It is meant for `keyword`, numeric, date, and boolean fields.
+[Detailed Guide](answers/elasticsearch.md)
 
-A classic bug: a `term` query for "Red Shoes" on a `text` field returns nothing, because the index contains the lowercased tokens "red" and "shoes", not the original string. Use `term` on `keyword` fields and `match` on `text` fields.
+#### What is the difference between query context and filter context?
+**Answer:** Query context calculates a relevance score, while filter context only checks whether a document matches and can be cached. In a `bool` query, put full-text conditions in `must` or `should` and exact conditions in `filter`.
 
-#### What is the difference between query context and filter context? How does a `bool` query work?
-**Answer:**
+[Detailed Guide](answers/elasticsearch.md)
 
-- **Query context** answers "**how well** does this document match?" and calculates a relevance score (`_score`).
-- **Filter context** answers "**does** this document match: yes or no?" No score is calculated, and results of frequently used filters are **cached**, so filters are faster.
+#### How does Elasticsearch calculate relevance?
+**Answer:** It uses BM25 by default. A document scores higher when the term appears more often in it, the term is rare in the index and the field is short.
 
-A `bool` query combines clauses:
+[Detailed Guide](answers/elasticsearch.md)
 
-- `must`: must match and contributes to the score (query context).
-- `should`: increases the score if it matches. With no `must` or `filter`, at least one `should` must match (`minimum_should_match`).
-- `filter`: must match, no scoring, cacheable.
-- `must_not`: must not match (filter context).
+#### How do you paginate deep into search results?
+**Answer:** `from` and `size` become expensive on deep pages and are limited to 10,000 results by default. Use `search_after` with a point in time (PIT) instead.
 
-Rule: put full-text conditions in `must`/`should` and exact conditions (status, category, price range, dates) in `filter`.
+[Detailed Guide](answers/elasticsearch.md)
 
-```json
-{
-    "query": {
-        "bool": {
-            "must":     [{ "match": { "title": "running shoes" } }],
-            "filter":   [
-                { "term":  { "status": "active" } },
-                { "range": { "price": { "gte": 50, "lte": 150 } } }
-            ],
-            "must_not": [{ "term": { "brand": "noname" } }]
-        }
-    }
-}
-```
+#### What are aggregations?
+**Answer:** Aggregations calculate statistics over the documents a query matches, like `GROUP BY` in SQL. Bucket aggregations such as `terms` group documents, and metric aggregations such as `avg` calculate values.
 
-#### How does relevance scoring work in Elasticsearch?
-**Answer:** Since version 5.0, Elasticsearch uses **BM25** by default, an improved version of TF-IDF. The score of a document depends on:
+[Detailed Guide](answers/elasticsearch.md)
 
-- **Term frequency (TF)**: how often the term appears in the field. More occurrences increase the score, but with saturation, so 100 occurrences are not 100 times better than one.
-- **Inverse document frequency (IDF)**: how rare the term is across the index. Rare terms ("elasticsearch") weigh more than common ones ("the").
-- **Field length**: a match in a short field (a title) weighs more than in a long one (an article body).
+#### How do you index many documents efficiently?
+**Answer:** Use the Bulk API, which sends many operations in one request. Check the response for item errors, because `_bulk` returns HTTP 200 even when some operations fail.
 
-You can influence scoring with **boosting** (`"title^3"` in `multi_match`), `function_score` (e.g., boost by popularity, freshness, or distance), and `rescore`. To understand why a document got its score, use `"explain": true`. Note that IDF is calculated per shard, so with few documents scores may look inconsistent.
+[Detailed Guide](answers/elasticsearch.md)
 
-#### How do you paginate deeply in Elasticsearch?
-**Answer:**
+#### What do the green, yellow and red cluster statuses mean?
+**Answer:** Green means all shards are allocated. Yellow means some replicas are not allocated, but all data is available. Red means at least one primary shard is missing, so some data is unavailable.
 
-- **`from` + `size`**: simple, but each shard must return `from + size` documents to the coordinating node, which sorts them all. Cost grows with depth, so the default limit is `from + size <= 10000` (`index.max_result_window`). Fine for the first pages of a UI.
-- **`search_after`** + **Point in Time (PIT)**: the recommended way to paginate deeply. You pass the sort values of the last document from the previous page, so every page is equally cheap. PIT keeps a consistent snapshot of the index between requests. It doesn't support jumping to an arbitrary page number, which is like keyset pagination in SQL.
-- **`scroll`**: the old way to export large result sets. It is no longer recommended for deep pagination; use `search_after` with PIT instead.
-
-Increasing `max_result_window` to millions is a bad idea: it can exhaust heap memory.
-
-#### What are aggregations in Elasticsearch?
-**Answer:** Aggregations compute analytics over the documents matched by a query, similar to `GROUP BY` and aggregate functions in SQL, but in a single request together with the search:
-
-- **Metric aggregations**: `avg`, `sum`, `min`, `max`, `stats`, `cardinality` (approximate count of unique values, HyperLogLog++), `percentiles`.
-- **Bucket aggregations**: group documents into buckets. `terms` (by field value), `range`, `date_histogram` (by time interval), `histogram`, `filters`.
-- **Pipeline aggregations**: work on the results of other aggregations (`derivative`, `moving_fn`, `bucket_sort`).
-
-Aggregations can be nested, e.g., sales per category (`terms`) per month (`date_histogram`) with the average price (`avg`). A typical use case is facets in an online store: "Brand: Nike (120), Adidas (95)". Aggregations need `keyword`, numeric, or date fields (doc values). `terms` aggregations on high-cardinality fields are approximate and can be memory-intensive.
-
-#### How do you index data into Elasticsearch efficiently from PHP?
-**Answer:** Use the official client `elasticsearch/elasticsearch` and the **Bulk API**: sending documents one by one means one HTTP request per document, while `_bulk` sends thousands of operations in a single request.
-
-```php
-use Elastic\Elasticsearch\ClientBuilder;
-
-$client = ClientBuilder::create()->setHosts(['http://localhost:9200'])->build();
-
-$params = ['body' => []];
-foreach ($products as $i => $product) {
-    $params['body'][] = ['index' => ['_index' => 'products', '_id' => $product['id']]];
-    $params['body'][] = ['title' => $product['title'], 'price' => $product['price']];
-
-    if (($i + 1) % 1000 === 0) {
-        $response = $client->bulk($params);
-        $params = ['body' => []];
-    }
-}
-if ($params['body'] !== []) {
-    $response = $client->bulk($params);
-}
-```
-
-Tips:
-
-- Keep bulk requests around 5–15 MB and tune the size experimentally.
-- **Check the response for errors**: `_bulk` returns HTTP 200 even if some items failed (`errors: true` in the body).
-- For a large initial import, set `refresh_interval` to `-1` and `number_of_replicas` to `0`, then restore both after the import.
-
-#### What do the cluster health statuses green, yellow, and red mean?
-**Answer:** `GET _cluster/health` returns:
-
-- **Green**: all primary and replica shards are allocated. Everything is fine.
-- **Yellow**: all primary shards are allocated, but some replicas are not. All data is available, but fault tolerance is reduced. A typical case: a single-node cluster with `number_of_replicas: 1`, because a replica can never be placed on the same node as its primary.
-- **Red**: at least one primary shard is not allocated, so part of the data is unavailable and searches on that index return partial results or errors.
-
-To investigate, use `GET _cat/shards?v`, `GET _cat/indices?v&health=red`, and `GET _cluster/allocation/explain`. Common reasons are a failed node, a full disk (disk watermarks, by default 85% low and 90% high, and at 95% the flood stage makes indices read-only), or allocation rules that cannot be satisfied.
+[Detailed Guide](answers/elasticsearch.md)
 
 ### Senior
 #### How do you keep Elasticsearch in sync with the primary database?
-**Answer:**
+**Answer:** After a database commit, publish an event and let a worker reindex the record, or stream changes with CDC such as Debezium. Use the record's primary key as the document `_id` so reindexing is idempotent.
 
-- **Dual write**: the application writes to the DB and then to Elasticsearch. Simple, but unreliable: if the second write fails or the process crashes, the data diverges, and there is no atomicity between the two systems.
-- **Asynchronous indexing via a queue**: after a DB commit, publish an event (`ProductUpdated`), and a worker re-reads the entity from the DB and indexes it. Retries and DLQs handle failures. To guarantee the event is not lost, use the **Transactional Outbox** pattern: the event is written to an `outbox` table in the same DB transaction and later published by a relay.
-- **CDC (Change Data Capture)**: a tool like **Debezium** reads the DB binlog/WAL and streams changes to Kafka, and a consumer indexes them. Nothing is lost even if a change bypasses the application code, but it adds infrastructure.
-- **Periodic batch sync**: re-index records changed since `updated_at` (cron, Logstash JDBC input). Simple, but adds latency and misses hard deletes.
-
-In all cases: index **idempotently** (use the DB primary key as `_id`), protect against out-of-order updates (use the `version` + `version_type: external` parameters or re-read the latest state from the DB), and keep a **full reindex** procedure for recovery.
+[Detailed Guide](answers/elasticsearch.md)
 
 #### How do you change a mapping without downtime?
-**Answer:** The type of an existing field cannot be changed (only new fields can be added), because data is already indexed in a specific way. The solution is **reindexing behind an alias**:
+**Answer:** Create a new index with the new mapping, copy the data into it, and switch an alias that the application queries. An existing field's type cannot be changed in place.
 
-1. The application always works with an **alias** (`products`) instead of a concrete index (`products_v1`).
-2. Create a new index `products_v2` with the new mapping.
-3. Copy the data: the `_reindex` API (inside the cluster) or a full re-import from the primary DB.
-4. Catch up on changes made during the reindex: write to both indices, or replay changes from a queue or `updated_at`.
-5. Switch the alias atomically:
-
-```json
-POST _aliases
-{
-    "actions": [
-        { "remove": { "index": "products_v1", "alias": "products" } },
-        { "add":    { "index": "products_v2", "alias": "products" } }
-    ]
-}
-```
-
-6. Delete the old index after verification. Rolling back is just switching the alias back.
-
-To avoid surprises, disable unexpected fields with `"dynamic": "strict"` (or use explicit `dynamic_templates`): dynamic mapping can guess a wrong type, and a "mapping explosion" (thousands of fields) can slow down the whole cluster.
+[Detailed Guide](answers/elasticsearch.md)
 
 #### How do you choose the number of shards and replicas?
-**Answer:**
+**Answer:** Keep shards roughly between 10 and 50 GB and avoid many small shards. The number of primary shards is fixed when the index is created, while replicas can be changed at any time.
 
-- **Primary shards** define how data is split. Their number is set at index creation and cannot be changed later without reindexing (except via the `_split` and `_shrink` APIs). Since version 7, the default is 1.
-- **Replicas** can be changed at any time. They provide fault tolerance and increase search throughput, but each replica costs disk and indexing resources.
+[Detailed Guide](answers/elasticsearch.md)
 
-Guidelines:
+#### Why is a document not searchable right after indexing?
+**Answer:** Documents become searchable only after a refresh, which runs every second by default. The translog keeps written documents durable until a flush commits them to disk.
 
-- Aim for a shard size of roughly **10–50 GB** (and below ~200M documents per shard).
-- **Oversharding** is a common mistake: every shard costs heap memory, file handles, and cluster state, and a search fans out to all shards. Hundreds of tiny shards are slower than a few large ones.
-- For time-based data (logs, events), use **data streams / rollover** with **ILM** (Index Lifecycle Management): roll over to a new index by size or age, and move old indices through the hot → warm → cold → delete phases.
-- For production, use at least 3 master-eligible nodes for a quorum and at least 1 replica.
-
-#### Why isn't a document searchable immediately after indexing? Explain refresh, flush, and translog.
-**Answer:** Elasticsearch is **near real-time**:
-
-1. A new document is written to an in-memory buffer and to the **translog** (a transaction log on disk for durability).
-2. A **refresh** (every 1 second by default, `refresh_interval`) turns the buffer into a new Lucene **segment** that is visible to search. Only then can the document be found. A `GET` by `_id`, however, is real-time.
-3. A **flush** performs a Lucene commit: segments are fsynced to disk and the translog is cleared.
-4. In the background, small segments are **merged** into larger ones, and deleted documents are purged.
-
-Practical consequences:
-
-- In tests, or when the user must immediately see their change, use `?refresh=wait_for` on the write request. Avoid `?refresh=true` under load, because it creates many tiny segments.
-- For heavy indexing, increase `refresh_interval` (e.g., `30s`) or disable it during a bulk import.
-- Updates and deletes do not modify documents in place: Elasticsearch marks the old version as deleted and writes a new one, so frequently updated documents (e.g., counters) are expensive.
+[Detailed Guide](answers/elasticsearch.md)
 
 #### How do you implement autocomplete and typo-tolerant search?
-**Answer:**
+**Answer:** Use `fuzziness` in a `match` query for typos. For autocomplete, use edge n-grams, the `search_as_you_type` field type or the completion suggester.
 
-- **Fuzzy search**: `match` with `"fuzziness": "AUTO"` tolerates typos using the Levenshtein edit distance (0 edits for short words, up to 2 for longer ones). Good for "iphnoe" → "iphone".
-- **Edge n-grams**: at index time, a custom analyzer splits words into prefixes ("lap", "lapt", "lapto", "laptop"). Prefix search becomes a simple term lookup, which is fast and flexible, but the index grows. Use a standard analyzer at search time so the query is not split into n-grams too.
-- **`search_as_you_type` field type**: built-in field that creates the shingle and edge n-gram sub-fields automatically. Query it with `multi_match` of type `bool_prefix`.
-- **Completion suggester**: a dedicated `completion` field stored in an in-memory FST structure. It is the fastest option for "search box suggestions", but it supports only prefix matching and is harder to update and filter.
-- **Synonyms and language analyzers**: synonym filters ("tv" ↔ "television") and language-specific stemmers (e.g., the `russian` analyzer) for better recall.
-
-In practice, these are combined: n-gram or `search_as_you_type` for suggestions, `match` with fuzziness for the main search, and boosting of exact matches so that they rank higher than fuzzy ones.
+[Detailed Guide](answers/elasticsearch.md)
 
 ---
 
