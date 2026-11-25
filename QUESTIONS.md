@@ -1,6 +1,6 @@
 # Ultimate PHP Interview Questions & Answers
 
-This file contains a curated list of PHP interview questions and answers, merged from multiple sources and categorized by level (Junior, Middle, Senior).
+This collection covers 29 topics and uses three difficulty levels: Junior, Middle, and Senior.
 
 ## Table of Contents
 1. [PHP Basics & Language Features](#1-php-basics--language-features)
@@ -178,7 +178,7 @@ Do not use `&` purely for memory optimization; PHP's CoW is already efficient fo
 ### Senior
 #### What are the risks of using PHP as a long-lived process (daemon)?
 **Answer:** Memory leaks and global state contamination are the biggest risks, as variables and objects persist between requests.
-[Running PHP as a Daemon](answers/php_advanced_extras/#php-as-a-daemon-swoole-roadrunner)
+[Running PHP as a Daemon](answers/php_advanced_extras.md#php-as-a-daemon-swoole-roadrunner)
 
 #### How does the Opcache work?
 **Answer:** OpCache improves performance by storing precompiled bytecode in shared memory, avoiding the need for PHP to load, parse, and compile scripts on every request.
@@ -823,6 +823,99 @@ $result = "  hello  " |> trim(...) |> strtoupper(...);
 [PHP 8.3 Features](answers/php83_features.md)
 [PHP 8.4 Features](answers/php84_features.md)
 [PHP 8.5 Features](answers/php85_features.md)
+[PHP 8.6 Features](answers/php86_features.md)
+
+---
+
+**PHP 8.6**
+
+### When does a partially applied function run?
+
+**Middle**
+
+**Answer:** The function runs when the resulting closure is called. A `?` marks an argument the caller will supply later.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### How does `clamp()` handle a value outside its bounds?
+
+**Junior**
+
+**Answer:** `clamp(125, 0, 100)` returns `100`. A value below the minimum yields the minimum, and a value within the range passes through.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### Why use `Time\Duration` for a timeout?
+
+**Middle**
+
+**Answer:** It represents elapsed time with nanosecond precision, independently of a calendar date or time zone.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### What can a parameter typed as `SortDirection` accept?
+
+**Junior**
+
+**Answer:** The two cases are `SortDirection::Ascending` and `SortDirection::Descending`. Libraries can use the same type for sort order.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### How can an event loop wait for many streams in PHP 8.6?
+
+**Senior**
+
+**Answer:** `Io\Poll\Context` monitors registered handles for events such as `Io\Poll\Event::Read`. Its implementation uses a platform facility such as epoll or kqueue.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### How can a stream report a structured error?
+
+**Middle**
+
+**Answer:** Set the stream `error_mode` option in the stream context’s `stream` section to `StreamErrorMode::Exception`. Catch `StreamException` and inspect the `StreamErrorCode` on each error returned by `getErrors()`.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### Can a constructor replace a readonly property’s declared default?
+
+**Middle**
+
+**Answer:** No. PHP 8.6 allows an instance readonly property to have a default, and that default initializes the property.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### Why does PHP 8.6 deprecate `return` inside `finally`?
+
+**Middle**
+
+**Answer:** It can suppress a pending exception or replace a result from `try` or `catch`. Keep cleanup in `finally` and return the result elsewhere.
+
+[Detailed Guide](answers/php86_features.md)
+
+---
+
+### How should code using `mb_ereg()` or `mb_split()` migrate?
+
+**Middle**
+
+**Answer:** These mbstring regex functions are deprecated. Port the patterns to PCRE and use the `u` modifier for UTF-8 input.
+
+[Detailed Guide](answers/php86_features.md)
 
 ---
 

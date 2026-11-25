@@ -11,9 +11,9 @@
     "message": "Ответы",
     "description": "Navbar item with label Answers"
   },
-  "item.label.PHP 8.4 News": {
-    "message": "Новое в PHP 8.4",
-    "description": "Navbar item with label PHP 8.4 News"
+  "item.label.PHP 8.6 News": {
+    "message": "Новое в PHP 8.6",
+    "description": "Navbar item with label PHP 8.6 News"
   },
   "item.label.PHP 8.5 News": {
     "message": "Новое в PHP 8.5",

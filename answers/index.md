@@ -31,6 +31,7 @@ This section contains detailed guides and explanations for various PHP-related t
 * [PHP 8.3 New Features](php83_features.md)
 * [PHP 8.4 New Features](php84_features.md)
 * [PHP 8.5 New Features](php85_features.md)
+* [PHP 8.6 New Features](php86_features.md)
 * [PHP Data Types](data_types.md)
 * [Floating Point Numbers Explained](floating_point_numbers.md)
 * [PHP Garbage Collection](garbage_collector.md)

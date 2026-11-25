@@ -13,19 +13,18 @@ This repository is a curated collection of PHP interview questions and answers, 
 - A non-commercial website with a collection of PHP interview questions and answers from this repository.
 - Open-source and free to use.
 
-## Modern Frontend
+Study the [PHP 8.6 release guide](answers/php86_features.md) in English or [Russian](translate/ru/answers/php86_features.md).
 
-Check out the new **[Modular Interview Questions Documentation](docs/)**!
-- **Modularized**: Each question is an independent module.
-- **Categorized**: Junior, Middle, Senior, and Expert levels.
-- **Themed**: Beautiful, readable UI with Tailwind CSS.
-- **Searchable**: Easy navigation through topics.
+## Question indexes
+
+Browse all 29 topics in the [English question index](QUESTIONS.md) or the [Russian question index](translate/ru/QUESTIONS.md). Both collections use Junior, Middle, and Senior difficulty levels. The documentation site groups questions by topic and offers a header search for finding questions and detailed answers.
 
 ## Table of Contents
 - [About](#about)
 - [Source Repositories](#source-repositories)
 - [Source Projects and Learning Web Sites](#source-projects-and-learning-web-sites)
 - [Project Structure](#project-structure)
+- [Development](#development)
 - [Key Topics Covered](#key-topics-covered)
 
 ## About
@@ -50,7 +49,7 @@ The content that was used to learn Design Patterns, Refactoring principles:
 - Partially written and organized using [Gemini](https://gemini.google.com/), [Cursor](https://www.cursor.com/), and [JetBrains AI](https://www.jetbrains.com/ai/).
 
 ## Project Structure
-The repository is organized into subdirectories under `src/`, each representing a source repository:
+The question indexes link to detailed guides in `answers/` and `translate/ru/answers/`. Docusaurus publishes their counterparts from `docs/docs/` and `docs/i18n/ru/`. The `src/` directory contains source material:
 
 - `src/interview_questions_and_answers/`: Detailed questions and answers covering a wide range of topics from core PHP to architecture.
 - `src/PHP-LARAVEL-Interview-questions/`: PHP and Laravel specific questions by Sabbir Hossain.
@@ -59,35 +58,19 @@ The repository is organized into subdirectories under `src/`, each representing 
 
 ## Development
 
-### Frontend Development (Docusaurus)
-To run the frontend locally from the root:
-1. `npm run install:docs`
-2. `npm run dev`
+Run the documentation commands from the repository root using the Compose Node service:
 
-Alternatively, from the `docs` directory:
-1. `cd docs`
-2. `npm install`
-3. `npm start` or `npm run dev`
-
-To lint and format the codebase:
-From the root: `npm run lint` or `npm run format`
-From the `docs` directory: `npm run lint` or `npm run format`
-
-### Docker
-Alternatively, you can build and run the frontend using Docker:
 ```bash
-docker compose up --build
+docker compose up -d node
+docker compose exec -w /app node npm run install:docs
+docker compose exec -w /app node npm run build
 ```
-The documentation will be available at `http://localhost:8888` (served via Nginx) or `http://localhost:3333` (served via Node).
 
-To run the frontend in **development mode** with hot-reloading:
-```bash
-docker compose run --service-ports node npm run dev
-```
-The documentation will be available at `http://localhost:3333`.
+For a live preview, run `docker compose run --rm -p 3333:3000 -w /app node npm run dev` and open [localhost:3333](http://localhost:3333). To check or format the frontend, run `npm run lint` or `npm run format` in the same container from `/app`.
 
 ## Key Topics Covered
-- The documentation is now organized into 29 major categories, including:
+Examples from the 29 topics include:
+
 - **Core PHP**: Data types, generators, magic constants, PHP features (8.0+), and more.
 - **Kafka**: High-performance distributed streaming, EOS, and PHP implementation.
 - **Regexp**: Comprehensive guide to regular expressions in PHP, including PCRE functions and common tasks.

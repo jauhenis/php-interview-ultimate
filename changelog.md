@@ -5,13 +5,15 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Expanded section "21. Elasticsearch" with 15 new questions (Junior/Middle/Senior): core concepts, when (not) to use Elasticsearch, `text` vs `keyword`, `match` vs `term`, query vs filter context, BM25 scoring, deep pagination, aggregations, bulk indexing from PHP, cluster health, syncing with the primary DB, zero-downtime mapping changes, shard sizing, refresh/flush/translog, autocomplete and fuzzy search.
+- New interview questions in the "21. Elasticsearch" section and an expanded English and Russian Elasticsearch guide (`answers/elasticsearch.md`).
+- English and Russian PHP 8.6 release guides and nine interview questions in the PHP 7/8+ section.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.
 - Documentation for the "Clone With" syntax introduced in PHP 8.5.
 - New section "2. Sessions in PHP" in `QUESTIONS.md` and Docusaurus documentation.
 
 ### Changed
+- Updated the header to link to PHP 8.6 and 8.5. The PHP 8.4 guide remains available in the answers index.
 - **Renumbered all documentation sections** starting from section 2 to accommodate the new Sessions chapter.
 - Updated PHP 8.5 Pipe Operator (`|>`) examples to use the correct first-class callable syntax (`(...)`).
 - Moved `json_validate()` documentation from PHP 8.2 to the correct PHP 8.3 section.
