@@ -1532,210 +1532,89 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 - `composer.lock`: Stores the exact versions of the packages that were installed.
 
 #### What is the difference between `composer install` and `composer update`?
-**Answer:**
+**Answer:** `composer install` installs the exact versions from `composer.lock`. `composer update` resolves the newest versions allowed by `composer.json` and rewrites `composer.lock`.
 
-- `composer install`: Checks for `composer.lock` file. If it exists, it installs the exact versions listed there. If not, it reads `composer.json`, installs the latest compatible versions, and creates the lock file.
-- `composer update`: Ignores `composer.lock` and tries to update all packages to the latest versions allowed by the constraints in `composer.json`, then updates the lock file.
+[Detailed Guide](answers/composer_tools.md)
 
-#### What is Semantic Versioning and what do `^` and `~` mean in Composer?
-**Answer:** Semantic Versioning (SemVer) uses the `MAJOR.MINOR.PATCH` format: **MAJOR** changes break backward compatibility, **MINOR** adds features in a backward-compatible way, and **PATCH** contains backward-compatible bug fixes. Composer version constraints:
+#### What do `^` and `~` mean in Composer version constraints?
+**Answer:** `^1.2.3` allows any version up to the next major release (`>=1.2.3 <2.0.0`). `~1.2.3` allows only the last specified part to grow (`>=1.2.3 <1.3.0`).
 
-- `1.2.3`: exactly this version.
-- `^1.2.3` (caret, recommended): `>=1.2.3 <2.0.0`, i.e., any version without breaking changes. For `0.x` versions it is stricter: `^0.3` means `>=0.3.0 <0.4.0`, because in `0.x` every minor version may break compatibility.
-- `~1.2` (tilde): `>=1.2 <2.0`, while `~1.2.3` means `>=1.2.3 <1.3.0`. The last specified segment is allowed to grow.
-- `>=1.0 <2.0`, `1.0 - 2.0`, `1.*`, and `^1.0 || ^2.0`: ranges, wildcards, and alternatives.
+[Detailed Guide](answers/composer_tools.md)
 
 #### What is the difference between `require` and `require-dev`?
-**Answer:**
+**Answer:** `require` lists packages the application needs to run. `require-dev` lists packages needed only for development and tests, such as PHPUnit. `composer install --no-dev` skips them in production.
 
-- `require`: packages the application needs to run in production (frameworks, HTTP clients, ORMs).
-- `require-dev`: packages needed only for development and CI (PHPUnit, PHPStan, PHP-CS-Fixer, Faker, debug bars). Install them with `composer require --dev vendor/package`.
+[Detailed Guide](answers/composer_tools.md)
 
-In production, run `composer install --no-dev` so that dev packages are not installed. This makes `vendor` smaller and reduces the attack surface. `autoload-dev` (e.g., the `Tests\` namespace) is also skipped with `--no-dev`. Dev dependencies of the packages you install are never installed, only your own (root) `require-dev`.
+#### Should you commit the `vendor` directory?
+**Answer:** No. Add `vendor/` to `.gitignore`, because `composer install` recreates it from `composer.json` and `composer.lock`.
 
-#### What is the `vendor` directory and should you commit it to Git?
-**Answer:** `vendor/` is where Composer installs dependencies and generates the autoloader (`vendor/autoload.php`). It should **not** be committed: add it to `.gitignore`. The dependencies are fully described by `composer.json` + `composer.lock`, and anyone can recreate `vendor/` with `composer install`. Committing it bloats the repository and causes huge, unreadable diffs and merge conflicts. Never edit files in `vendor/` directly: your changes will be lost on the next install. To fix a bug in a dependency, send a patch upstream, use a fork, or apply a patch with a plugin like `cweagans/composer-patches`.
-
-#### What is the difference between `git fetch` and `git pull`?
-**Answer:**
-
-- `git fetch` downloads new commits from the remote and updates remote-tracking branches (e.g., `origin/main`), but does not touch your working branch. It is always safe.
-- `git pull` is `git fetch` followed by `git merge` of the remote branch into your current branch (or `git rebase` with `git pull --rebase` or `pull.rebase = true`).
-
-Use `fetch` when you want to see what changed before integrating it (`git log main..origin/main`).
-[Git: Merge vs Rebase vs Pull vs Fetch](answers/git.md)
+[Detailed Guide](answers/composer_tools.md)
 
 ### Middle
 #### What is Autoloading and how does Composer handle it?
 **Answer:** Autoloading automatically loads class files when they are needed. Composer uses PSR-4 (and others) to map namespaces to directories.
 
 #### What autoload types does Composer support?
-**Answer:**
+**Answer:** `psr-4` maps a namespace prefix to a directory and is the usual choice. `classmap` scans directories for classes, `files` includes files on every request, and `psr-0` is deprecated.
 
-- **`psr-4`** (recommended): maps a namespace prefix to a directory (`"App\\": "src/"`, so `App\Service\Mailer` is loaded from `src/Service/Mailer.php`).
-- **`psr-0`**: the deprecated predecessor of PSR-4, where the full namespace is reflected in the path and underscores in class names become directory separators.
-- **`classmap`**: Composer scans the listed directories and builds a `class → file` map. Useful for legacy code without namespaces.
-- **`files`**: files that are included on **every** request (e.g., global helper functions). Functions cannot be autoloaded, but keep this list short.
-
-`autoload-dev` has the same structure for test classes. After changing autoload rules, run `composer dump-autoload` to regenerate the autoloader.
+[Detailed Guide](answers/composer_tools.md)
 
 #### How do you optimize the Composer autoloader for production?
-**Answer:**
+**Answer:** Run `composer install --no-dev --optimize-autoloader`, which turns PSR-4 rules into a class map. `--classmap-authoritative` goes further and never searches the disk for classes missing from the map.
 
-- **Level 1, `--optimize` / `-o`**: converts PSR-4/PSR-0 rules into a classmap, so most classes are found with a single array lookup instead of filesystem checks. If a class is not in the map, Composer still falls back to PSR-4 rules.
-- **Level 2/A, `--classmap-authoritative` / `-a`**: implies `-o` and tells the autoloader to trust the classmap only. Unknown classes are never searched on disk. This is the fastest option, but classes generated at runtime (e.g., proxies) won't be found.
-- **Level 2/B, `--apcu-autoloader`**: caches class lookups (including misses) in APCu. Requires the APCu extension.
+[Detailed Guide](answers/composer_tools.md)
 
-A typical production build:
+#### Should you commit `composer.lock`?
+**Answer:** In an application, yes: every environment then installs the same versions. A library's lock file is ignored when the library is installed as a dependency, so committing it is optional.
 
-```bash
-composer install --no-dev --optimize-autoloader --classmap-authoritative --no-interaction
-```
-
-With OPcache preloading, you can go further by loading the most-used classes into shared memory at server start.
-
-#### Should you commit `composer.lock`? Is there a difference between an application and a library?
-**Answer:**
-
-- **Application**: always commit `composer.lock`. Every developer, the CI, and production get exactly the same dependency versions, so "works on my machine" problems disappear and deployments are reproducible.
-- **Library**: the lock file of a library is **ignored** when the library is installed as a dependency, because only the constraints in its `composer.json` matter. Committing it is optional: it keeps the dev environment consistent within the team, but it can hide incompatibilities with newer dependency versions. Libraries should be tested in CI against both the lowest and the highest allowed versions (`composer update --prefer-lowest` and plain `composer update`).
-
-Merge conflicts in `composer.lock` should not be fixed by hand: take one side and re-run `composer update <package>` (or `composer update --lock`) for the packages that were changed.
+[Detailed Guide](answers/composer_tools.md)
 
 #### What are Composer scripts and plugins?
-**Answer:**
+**Answer:** Scripts are commands in the `scripts` section of `composer.json`, run by name or on events such as `post-install-cmd`. Plugins are packages that extend Composer itself. Since Composer 2.2, each plugin must be allowed in `config.allow-plugins`.
 
-- **Scripts** are commands defined in the `scripts` section of `composer.json`. They can be custom aliases (`"test": "phpunit"`, run with `composer test`) or hooks on Composer events (`post-install-cmd`, `post-update-cmd`, `post-autoload-dump`), e.g., to clear the cache or publish assets. They can be disabled with `--no-scripts`.
-- **Plugins** are Composer packages (type `composer-plugin`) that hook into Composer's internals: for example, `symfony/flex` (recipes), `phpstan/extension-installer`, and `cweagans/composer-patches`. Since Composer 2.2, plugins must be explicitly allowed in `config.allow-plugins`, because a plugin runs arbitrary code during `install`.
+[Detailed Guide](answers/composer_tools.md)
 
-```json
-{
-    "scripts": {
-        "test": "phpunit",
-        "analyse": "phpstan analyse",
-        "post-autoload-dump": ["@php artisan package:discover --ansi"]
-    },
-    "config": {
-        "allow-plugins": {
-            "symfony/flex": true
-        }
-    }
-}
-```
+#### What is `config.platform` used for?
+**Answer:** It tells Composer which PHP version and extensions the production server has. Composer then resolves dependencies for that platform, even if developers run a newer PHP locally.
 
-#### What are platform requirements and what is `config.platform` used for?
-**Answer:** Packages can require a PHP version and extensions: `"php": "^8.2"`, `"ext-redis": "*"`, `"ext-intl": "*"`. Composer checks them against the PHP that runs Composer, and since Composer 2 it also generates `vendor/composer/platform_check.php`, which fails at runtime if the server's PHP is too old.
+[Detailed Guide](answers/composer_tools.md)
 
-Problem: a developer runs PHP 8.4 locally, but production runs PHP 8.2. `composer update` may pick package versions that require PHP 8.3+, and production breaks. Solution: pin the target platform in `composer.json`:
+#### What is PHP-CS-Fixer used for?
+**Answer:** PHP-CS-Fixer automatically fixes code style, such as formatting, spacing and imports, according to a rule set like `@PER-CS`. In CI, it usually runs with `--dry-run` to report violations without changing files.
 
-```json
-{
-    "config": {
-        "platform": {
-            "php": "8.2.0"
-        }
-    }
-}
-```
+[Detailed Guide](answers/composer_tools.md)
 
-Composer then resolves dependencies as if it were running on PHP 8.2. Use `composer check-platform-reqs` in the deployment pipeline to verify that the server meets all requirements. Avoid `--ignore-platform-reqs` in real projects: it hides real incompatibilities.
+#### What is Rector used for?
+**Answer:** Rector refactors code automatically, for example to use newer PHP syntax or upgrade a framework version. It changes code by rules that you enable in its configuration.
 
-#### What is the difference between `git merge` and `git rebase`?
-**Answer:**
-
-- **Merge** joins two branches with a new merge commit (or a fast-forward if the target has no new commits). History is preserved exactly as it happened. It is non-destructive, but history can get noisy.
-- **Rebase** replays your commits on top of another branch, creating new commits with new hashes. History becomes linear and clean, but it is **rewritten**.
-
-The golden rule: never rebase commits that others have already pulled (shared branches like `main`). It is fine to rebase your own feature branch to update it from `main` or to clean up commits with `git rebase -i` before opening a PR. After rebasing a pushed branch, use `git push --force-with-lease` instead of `--force`: it refuses to overwrite commits you haven't seen. Many teams use **squash merge**, which turns a whole PR into one commit on `main`.
-[Git: Merge vs Rebase vs Pull vs Fetch](answers/git.md)
-
-#### What is Xdebug and what is it used for?
-**Answer:** Xdebug is a PHP extension for debugging and analysis. In Xdebug 3, features are enabled with `xdebug.mode`:
-
-- `debug`: **step debugging** in an IDE (PhpStorm, VS Code): breakpoints, variable inspection, step over/into. The extension connects to the IDE via the DBGp protocol (default port **9003**).
-- `develop`: improved `var_dump()` output and stack traces.
-- `coverage`: code coverage for PHPUnit.
-- `profile`: writes cachegrind files to analyze where time is spent (open them in PhpStorm, KCachegrind, or QCachegrind).
-- `trace`: logs every function call.
-
-```ini
-xdebug.mode=debug
-xdebug.start_with_request=trigger
-xdebug.client_host=host.docker.internal
-xdebug.client_port=9003
-```
-
-With `start_with_request=trigger`, debugging starts only when the `XDEBUG_TRIGGER` (or `XDEBUG_SESSION`) cookie, GET/POST parameter, or env variable is present. Xdebug slows PHP down significantly, so **never install it in production**. For coverage only, **PCOV** is much faster.
-
-#### What are Rector and PHP-CS-Fixer used for?
-**Answer:**
-
-- **PHP-CS-Fixer** automatically fixes **code style**: formatting, imports, spacing, according to rulesets like `@PER-CS` or `@Symfony`. **PHP_CodeSniffer** is an alternative: `phpcs` detects violations and `phpcbf` fixes them. **Laravel Pint** is a zero-config wrapper around PHP-CS-Fixer.
-- **Rector** performs **automated refactoring** by changing the code's AST according to rules: upgrading PHP versions (e.g., adding constructor promotion, `readonly`, `match`), upgrading frameworks (Symfony, Laravel, PHPUnit), adding type declarations, and removing dead code.
-
-Both tools are usually run in CI in check mode (`php-cs-fixer fix --dry-run --diff`, `rector process --dry-run`) and locally or in a pre-commit hook in fix mode. Together with static analysis (PHPStan/Psalm), they make large upgrades much cheaper.
+[Detailed Guide](answers/composer_tools.md)
 
 ### Senior
 #### How do you resolve a dependency conflict in Composer?
-**Answer:** A conflict means that no combination of versions satisfies all constraints at once. Steps:
+**Answer:** Read the constraint chain in the error and use `composer why-not vendor/package 2.0` to see what blocks a version. Then update the related packages together with `composer update vendor/package -W`, or change your constraints.
 
-1. **Read the error**: Composer prints the chain of constraints that conflict.
-2. **Investigate**: `composer why vendor/package` shows who requires a package, and `composer why-not vendor/package 3.0` shows what prevents installing a specific version.
-3. **Update together**: `composer update vendor/a vendor/b -w` (`--with-dependencies`) also updates their dependencies, and `-W` (`--with-all-dependencies`) updates them even if they are also listed in your root `require`.
-4. **Relax or change your constraints**, or upgrade or replace the package that holds everything back.
-5. **Temporary workarounds**: an inline alias (`"vendor/pkg": "dev-fix-branch as 1.4.0"`) to use a fork or branch as if it were a release, or a fork in `repositories`.
+[Detailed Guide](answers/composer_tools.md)
 
-Avoid `--ignore-platform-reqs` and editing the lock file by hand: they hide problems instead of solving them.
+#### What do `provide`, `replace` and `conflict` mean in `composer.json`?
+**Answer:** `provide` declares that the package implements a virtual package such as `psr/log-implementation`. `replace` means the package contains another package's code, so that package is not installed. `conflict` lists versions that cannot be installed together with it.
 
-#### What do `provide`, `replace`, and `conflict` mean in `composer.json`?
-**Answer:**
-
-- **`provide`**: the package implements a virtual package or interface. For example, `monolog/monolog` provides `psr/log-implementation`, so a library can require `psr/log-implementation` and let the application choose any logger.
-- **`replace`**: the package contains the code of another package, so the other package will not be installed. For example, the `symfony/symfony` monorepo replaces individual `symfony/*` components. A common trick is replacing polyfills you don't need on a modern PHP version: `"replace": {"symfony/polyfill-php80": "*"}`.
-- **`conflict`**: the listed versions cannot be installed together with this package, e.g., `"conflict": {"doctrine/orm": "<2.15"}` when an older version has a known bug.
+[Detailed Guide](answers/composer_tools.md)
 
 #### How do you keep Composer dependencies secure?
-**Answer:** Dependencies are a supply chain risk: you run code you didn't write.
+**Answer:** Run `composer audit` in CI to check installed packages against known vulnerabilities, and commit `composer.lock` so builds use reviewed versions. Allow only trusted plugins, because they run code during installation.
 
-- **`composer audit`** (Composer 2.4+) checks installed packages against the security advisories database. It also runs automatically after `composer update` and `composer require`. Add it to CI.
-- **`roave/security-advisories`**: a meta-package that "conflicts" with every vulnerable version, so they can't be installed at all.
-- **Commit `composer.lock`** and use `composer install` in CI/production, so builds use exactly the reviewed versions.
-- **`allow-plugins`**: allow only plugins you trust, because plugins execute code during installation.
-- **Automated updates**: Dependabot or Renovate open PRs for new versions, which your tests verify.
-- **Minimize dependencies**: every package (and its transitive dependencies) increases the attack surface. Check maintenance status and popularity before adding one.
-- **Private packages**: use HTTPS repositories and store credentials in `auth.json` or `COMPOSER_AUTH` (CI secret), never in `composer.json`.
+[Detailed Guide](answers/composer_tools.md)
 
-#### How do you work with private packages and monorepos in Composer?
-**Answer:** Additional sources are added in the `repositories` section:
+#### How do you use private packages in Composer?
+**Answer:** Add their source in the `repositories` section: a Git repository (`vcs`), a private registry such as Private Packagist or Satis, or a local directory (`path`). Store credentials in `auth.json` or the `COMPOSER_AUTH` environment variable, not in `composer.json`.
 
-- **`vcs`**: a Git repository (GitHub, GitLab, Bitbucket). Composer reads tags and branches as versions. Simple, but slow with many packages.
-- **`composer`**: your own package registry. **Satis** (self-hosted static registry), **Private Packagist** (SaaS), or the GitLab/GitHub package registries.
-- **`path`**: a local directory, symlinked into `vendor/`. Ideal for monorepos and for developing a package alongside an app.
+[Detailed Guide](answers/composer_tools.md)
 
-```json
-{
-    "repositories": [
-        { "type": "vcs", "url": "git@github.com:acme/billing-sdk.git" },
-        { "type": "path", "url": "packages/*", "options": { "symlink": true } }
-    ],
-    "require": {
-        "acme/billing-sdk": "^2.1",
-        "acme/shared-kernel": "*@dev"
-    }
-}
-```
+#### How do you profile a PHP application?
+**Answer:** Use an APM such as New Relic or Datadog to find slow endpoints, then a profiler such as Blackfire or XHProf to see which calls take the time.
 
-Credentials go to `auth.json` (in `.gitignore`) or to the `COMPOSER_AUTH` environment variable in CI. Large monorepos often use a split tool (e.g., `splitsh-lite`) to publish each package to its own read-only repository, like Symfony and Laravel do.
-
-#### How do you profile a PHP application, including in production?
-**Answer:** First measure, then optimize. Tools:
-
-- **Xdebug profiler** (`xdebug.mode=profile`): very detailed, but has a large overhead. Local use only.
-- **Blackfire**: commercial profiler with on-demand profiling, call graphs, comparisons between runs, and performance assertions in CI. Safe for production because profiling is triggered only for specific requests.
-- **Tideways / XHProf / SPX**: lightweight profilers. Tideways is a commercial APM with continuous sampling, XHProf (originally by Facebook) is open source, and SPX is open source with a built-in web UI.
-- **APM** (New Relic, Datadog, OpenTelemetry-based tools): continuous monitoring of response times, slow transactions, DB queries, and external calls across all requests.
-
-In practice: an APM shows **which** endpoints are slow, and a profiler shows **why** (slow SQL and N+1 queries, heavy loops, too many object hydrations, slow external API calls). Typical findings in PHP apps are N+1 queries, missing indexes, missing caches, and slow autoloading (fixed by the optimized autoloader and OPcache).
+[Detailed Guide](answers/composer_tools.md)
 
 ## 13. Caching & Redis
 

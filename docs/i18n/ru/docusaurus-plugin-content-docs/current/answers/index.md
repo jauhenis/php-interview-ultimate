@@ -15,6 +15,7 @@ slug: '/answers'
 - [Архитектура и Highload: масштабируемость, микросервисы и производительность](/answers/architecture_highload)
 - [Кэширование: Redis vs Memcached в PHP](/answers/caching)
 - [Чистый код и лучшие практики программирования](/answers/clean_code)
+- [Composer и инструменты PHP](/answers/composer_tools)
 - [Паттерны проектирования в PHP](/answers/design_patterns)
 - [Doctrine ORM и слой базы данных Symfony](/answers/doctrine)
 - [Концепции Elasticsearch](/answers/elasticsearch)
