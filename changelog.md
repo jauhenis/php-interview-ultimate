@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- New interview questions in the "21. Elasticsearch" section and an expanded English and Russian Elasticsearch guide (`answers/elasticsearch.md`).
 - English and Russian PHP 8.6 release guides and nine interview questions in the PHP 7/8+ section.
 - Comprehensive guide for PHP 8.5 new features in both English and Russian.
 - Detailed information about the new URI extension (RFC 3986 & WHATWG) in PHP 8.5.

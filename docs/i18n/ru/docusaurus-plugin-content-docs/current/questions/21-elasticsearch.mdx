@@ -5,7 +5,25 @@ sidebar_label: '21. Elasticsearch'
 
 # 21. Elasticsearch
 
+### Каковы основные понятия Elasticsearch: кластер, узел, индекс, документ, шард и реплика?
 
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Кластер — группа узлов, а узел — один сервер Elasticsearch. Индекс хранит JSON-документы и делится на первичные шарды, распределённые по узлам. Реплика — копия шарда на другом узле.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Когда использовать Elasticsearch и почему не как основную базу данных?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Он подходит для полнотекстового поиска, фильтрации с фасетами и анализа логов. В нём нет транзакций по нескольким документам и JOIN, а новые документы находятся поиском только после refresh. Источником истины оставьте реляционную БД и синхронизируйте Elasticsearch с ней.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
 
 ### Что такое Elasticsearch и каковы его основные возможности?
 
@@ -29,6 +47,136 @@ sidebar_label: '21. Elasticsearch'
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Ответ:** Компоненты, обрабатывающие текст при индексации или поиске. Они состоят из символьного фильтра (Character Filter), токенизатора (Tokenizer) и фильтра токенов (Token Filter).
+
+---
+
+### Чем отличаются поля `text` и `keyword`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Поле `text` разбивается анализатором на токены для полнотекстового поиска. Поле `keyword` хранит точное значение и используется для фильтров, сортировки и агрегаций.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Чем отличаются запросы `match` и `term`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** `match` анализирует строку поиска и выполняет полнотекстовый поиск по полю `text`. `term` ищет точное значение без анализа и предназначен для полей `keyword`, числовых полей и дат.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Чем отличается query context от filter context?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Query context вычисляет релевантность, а filter context только проверяет, подходит ли документ, и может кэшироваться. В запросе `bool` полнотекстовые условия кладите в `must` или `should`, а точные — в `filter`.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как Elasticsearch вычисляет релевантность?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** По умолчанию используется BM25. Документ получает более высокую оценку, если термин встречается в нём чаще, редко встречается в индексе и найден в коротком поле.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как делать глубокую пагинацию по результатам поиска?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** `from` и `size` дорожают на дальних страницах и по умолчанию ограничены 10 000 результатов. Вместо них используйте `search_after` вместе с point in time (PIT).
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Что такое агрегации?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Агрегации вычисляют статистику по документам, найденным запросом, как `GROUP BY` в SQL. Bucket-агрегации, например `terms`, группируют документы, а метрические, например `avg`, вычисляют значения.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как эффективно индексировать много документов?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Используйте Bulk API: он отправляет много операций одним запросом. Проверяйте ответ на ошибки отдельных операций, потому что `_bulk` возвращает HTTP 200, даже если часть из них не выполнилась.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Что означают статусы кластера green, yellow и red?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Green — все шарды размещены. Yellow — часть реплик не размещена, но все данные доступны. Red — не размещён хотя бы один первичный шард, и часть данных недоступна.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как синхронизировать Elasticsearch с основной базой данных?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** После коммита в БД публикуйте событие, а воркер пусть переиндексирует запись. Другой вариант — передавать изменения через CDC, например Debezium. Используйте первичный ключ записи как `_id` документа, чтобы переиндексация была идемпотентной.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как изменить маппинг без простоя?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Создайте новый индекс с новым маппингом, скопируйте в него данные и переключите алиас, к которому обращается приложение. Тип существующего поля нельзя изменить на месте.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как выбрать количество шардов и реплик?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Держите размер шарда примерно от 10 до 50 ГБ и избегайте множества мелких шардов. Число первичных шардов фиксируется при создании индекса, а число реплик можно менять в любой момент.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Почему документ не находится поиском сразу после индексации?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Документы становятся доступны для поиска только после refresh, который по умолчанию выполняется раз в секунду. Translog сохраняет записанные документы, пока flush не зафиксирует их на диске.
+
+[Подробное руководство](../answers/elasticsearch.md)
+
+---
+
+### Как реализовать автодополнение и поиск с опечатками?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Для опечаток используйте `fuzziness` в запросе `match`. Для автодополнения — edge n-grams, тип поля `search_as_you_type` или completion suggester.
+
+[Подробное руководство](../answers/elasticsearch.md)
 
 ---
 

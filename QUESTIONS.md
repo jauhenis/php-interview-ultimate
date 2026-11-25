@@ -1877,6 +1877,17 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 ## 21. Elasticsearch
 
+### Junior
+#### What are the core concepts of Elasticsearch: cluster, node, index, document, shard and replica?
+**Answer:** A cluster is a group of nodes, and a node is one Elasticsearch server. An index stores JSON documents and is split into primary shards spread across nodes. A replica is a copy of a shard on another node.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### When should you use Elasticsearch, and why not as the primary database?
+**Answer:** Use it for full-text search, filtering with facets and log analytics. It has no multi-document transactions or joins, and new documents become searchable only after a refresh. Keep the source of truth in a relational database and sync Elasticsearch from it.
+
+[Detailed Guide](answers/elasticsearch.md)
+
 ### Middle
 #### What is Elasticsearch and its main features?
 **Answer:** A distributed, RESTful search and analytics engine built on top of Apache Lucene. It provides fast search capabilities across large datasets.
@@ -1887,6 +1898,72 @@ However, it would **not** be fully in compliance with the **Uniform Interface** 
 
 #### What are Analyzers?
 **Answer:** Components that process text during indexing or searching. They consist of a Character Filter, a Tokenizer, and a Token Filter.
+
+#### What is the difference between `text` and `keyword` fields?
+**Answer:** A `text` field is analyzed into tokens for full-text search. A `keyword` field stores the exact value and is used for filters, sorting and aggregations.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### What is the difference between `match` and `term` queries?
+**Answer:** `match` analyzes the search string and runs a full-text search on a `text` field. `term` looks for the exact value without analysis and is meant for `keyword`, numeric and date fields.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### What is the difference between query context and filter context?
+**Answer:** Query context calculates a relevance score, while filter context only checks whether a document matches and can be cached. In a `bool` query, put full-text conditions in `must` or `should` and exact conditions in `filter`.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### How does Elasticsearch calculate relevance?
+**Answer:** It uses BM25 by default. A document scores higher when the term appears more often in it, the term is rare in the index and the field is short.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### How do you paginate deep into search results?
+**Answer:** `from` and `size` become expensive on deep pages and are limited to 10,000 results by default. Use `search_after` with a point in time (PIT) instead.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### What are aggregations?
+**Answer:** Aggregations calculate statistics over the documents a query matches, like `GROUP BY` in SQL. Bucket aggregations such as `terms` group documents, and metric aggregations such as `avg` calculate values.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### How do you index many documents efficiently?
+**Answer:** Use the Bulk API, which sends many operations in one request. Check the response for item errors, because `_bulk` returns HTTP 200 even when some operations fail.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### What do the green, yellow and red cluster statuses mean?
+**Answer:** Green means all shards are allocated. Yellow means some replicas are not allocated, but all data is available. Red means at least one primary shard is missing, so some data is unavailable.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+### Senior
+#### How do you keep Elasticsearch in sync with the primary database?
+**Answer:** After a database commit, publish an event and let a worker reindex the record, or stream changes with CDC such as Debezium. Use the record's primary key as the document `_id` so reindexing is idempotent.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### How do you change a mapping without downtime?
+**Answer:** Create a new index with the new mapping, copy the data into it, and switch an alias that the application queries. An existing field's type cannot be changed in place.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### How do you choose the number of shards and replicas?
+**Answer:** Keep shards roughly between 10 and 50 GB and avoid many small shards. The number of primary shards is fixed when the index is created, while replicas can be changed at any time.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### Why is a document not searchable right after indexing?
+**Answer:** Documents become searchable only after a refresh, which runs every second by default. The translog keeps written documents durable until a flush commits them to disk.
+
+[Detailed Guide](answers/elasticsearch.md)
+
+#### How do you implement autocomplete and typo-tolerant search?
+**Answer:** Use `fuzziness` in a `match` query for typos. For autocomplete, use edge n-grams, the `search_as_you_type` field type or the completion suggester.
+
+[Detailed Guide](answers/elasticsearch.md)
 
 ---
 
