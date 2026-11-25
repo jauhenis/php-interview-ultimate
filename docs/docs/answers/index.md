@@ -15,6 +15,7 @@ This section contains detailed guides and explanations for various PHP-related t
 - [Architecture & Highload: Scalability, Microservices, and Performance](/answers/architecture_highload)
 - [Caching: Redis vs Memcached in PHP](/answers/caching)
 - [Clean Code & Programming Best Practices](/answers/clean_code)
+- [Composer and PHP Tooling](/answers/composer_tools)
 - [Design Patterns in PHP](/answers/design_patterns)
 - [Doctrine ORM & Symfony Database Layer](/answers/doctrine)
 - [Elasticsearch Concepts](/answers/elasticsearch)

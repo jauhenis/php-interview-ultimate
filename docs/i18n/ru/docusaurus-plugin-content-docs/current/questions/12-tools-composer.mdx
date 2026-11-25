@@ -5,8 +5,6 @@ sidebar_label: '12. Инструменты и Composer'
 
 # 12. Инструменты и Composer
 
-
-
 ### Что такое Composer?
 
 <span className="badge badge--success margin-bottom--md">Junior</span>
@@ -37,11 +35,171 @@ sidebar_label: '12. Инструменты и Composer'
 
 ---
 
+### В чём разница между `composer install` и `composer update`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** `composer install` устанавливает точные версии из `composer.lock`. `composer update` подбирает самые новые версии, допустимые в `composer.json`, и перезаписывает `composer.lock`.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Что означают `^` и `~` в ограничениях версий Composer?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** `^1.2.3` допускает любую версию до следующей мажорной (`>=1.2.3 <2.0.0`). `~1.2.3` позволяет расти только последней указанной части (`>=1.2.3 <1.3.0`).
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### В чём разница между `require` и `require-dev`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** В `require` перечислены пакеты, без которых приложение не работает. В `require-dev` — пакеты только для разработки и тестов, например PHPUnit. `composer install --no-dev` не устанавливает их на проде.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Нужно ли коммитить папку `vendor`?
+
+<span className="badge badge--success margin-bottom--md">Junior</span>
+
+**Ответ:** Нет. Добавьте `vendor/` в `.gitignore`: `composer install` воссоздаёт её из `composer.json` и `composer.lock`.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
 ### Что такое автозагрузка (Autoloading) и как Composer с ней работает?
 
 <span className="badge badge--primary margin-bottom--md">Middle</span>
 
 **Ответ:** Автозагрузка автоматически подключает файлы классов, когда они необходимы. Composer использует PSR-4 (и другие стандарты) для сопоставления пространств имён с директориями.
+
+---
+
+### Какие типы автозагрузки поддерживает Composer?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** `psr-4` сопоставляет префикс пространства имён с директорией, и обычно используют именно его. `classmap` сканирует директории в поисках классов, `files` подключает файлы при каждом запросе, а `psr-0` устарел.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Как оптимизировать автозагрузчик Composer для прода?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Запускайте `composer install --no-dev --optimize-autoloader`: правила PSR-4 превращаются в карту классов. `--classmap-authoritative` идёт дальше и не ищет на диске классы, которых нет в карте.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Нужно ли коммитить `composer.lock`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** В приложении — да: тогда во всех окружениях устанавливаются одни и те же версии. Lock-файл библиотеки игнорируется, когда её устанавливают как зависимость, поэтому коммитить его не обязательно.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Что такое скрипты и плагины Composer?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Скрипты — это команды в секции `scripts` файла `composer.json`, которые запускаются по имени или на события вроде `post-install-cmd`. Плагины — пакеты, расширяющие сам Composer. Начиная с Composer 2.2, каждый плагин нужно разрешить в `config.allow-plugins`.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Для чего нужен `config.platform`?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Он сообщает Composer, какая версия PHP и какие расширения стоят на проде. Composer подбирает зависимости под эту платформу, даже если у разработчиков локально более новый PHP.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Для чего нужен PHP-CS-Fixer?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** PHP-CS-Fixer автоматически исправляет стиль кода — форматирование, отступы, импорты — по набору правил вроде `@PER-CS`. В CI его обычно запускают с `--dry-run`, чтобы сообщить о нарушениях, не меняя файлы.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Для чего нужен Rector?
+
+<span className="badge badge--primary margin-bottom--md">Middle</span>
+
+**Ответ:** Rector автоматически рефакторит код, например переводит его на новый синтаксис PHP или новую версию фреймворка. Он меняет код по правилам, включённым в его конфигурации.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Как разрешить конфликт зависимостей в Composer?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Прочитайте цепочку ограничений в сообщении об ошибке и выполните `composer why-not vendor/package 2.0`, чтобы увидеть, что блокирует версию. Затем обновите связанные пакеты вместе через `composer update vendor/package -W` или измените свои ограничения.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Что означают `provide`, `replace` и `conflict` в `composer.json`?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** `provide` объявляет, что пакет реализует виртуальный пакет, например `psr/log-implementation`. `replace` означает, что пакет содержит код другого пакета, поэтому тот не устанавливается. `conflict` перечисляет версии, которые нельзя установить вместе с ним.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Как обеспечить безопасность зависимостей Composer?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Запускайте `composer audit` в CI, чтобы проверять установленные пакеты на известные уязвимости, и коммитьте `composer.lock`, чтобы сборки использовали проверенные версии. Разрешайте только доверенные плагины: они выполняют код при установке.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Как использовать приватные пакеты в Composer?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** Добавьте их источник в секцию `repositories`: Git-репозиторий (`vcs`), приватный реестр вроде Private Packagist или Satis либо локальную директорию (`path`). Храните учётные данные в `auth.json` или переменной окружения `COMPOSER_AUTH`, а не в `composer.json`.
+
+[Подробное руководство](../answers/composer_tools.md)
+
+---
+
+### Как профилировать PHP-приложение?
+
+<span className="badge badge--warning margin-bottom--md">Senior</span>
+
+**Ответ:** С помощью APM, например New Relic или Datadog, найдите медленные эндпоинты, а затем профайлером, например Blackfire или XHProf, выясните, какие вызовы занимают время.
+
+[Подробное руководство](../answers/composer_tools.md)
 
 ---
 

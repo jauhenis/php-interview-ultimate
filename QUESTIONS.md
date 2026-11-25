@@ -1531,9 +1531,90 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 - `composer.json`: Lists the required dependencies and their version constraints.
 - `composer.lock`: Stores the exact versions of the packages that were installed.
 
+#### What is the difference between `composer install` and `composer update`?
+**Answer:** `composer install` installs the exact versions from `composer.lock`. `composer update` resolves the newest versions allowed by `composer.json` and rewrites `composer.lock`.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What do `^` and `~` mean in Composer version constraints?
+**Answer:** `^1.2.3` allows any version up to the next major release (`>=1.2.3 <2.0.0`). `~1.2.3` allows only the last specified part to grow (`>=1.2.3 <1.3.0`).
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What is the difference between `require` and `require-dev`?
+**Answer:** `require` lists packages the application needs to run. `require-dev` lists packages needed only for development and tests, such as PHPUnit. `composer install --no-dev` skips them in production.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### Should you commit the `vendor` directory?
+**Answer:** No. Add `vendor/` to `.gitignore`, because `composer install` recreates it from `composer.json` and `composer.lock`.
+
+[Detailed Guide](answers/composer_tools.md)
+
 ### Middle
 #### What is Autoloading and how does Composer handle it?
 **Answer:** Autoloading automatically loads class files when they are needed. Composer uses PSR-4 (and others) to map namespaces to directories.
+
+#### What autoload types does Composer support?
+**Answer:** `psr-4` maps a namespace prefix to a directory and is the usual choice. `classmap` scans directories for classes, `files` includes files on every request, and `psr-0` is deprecated.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### How do you optimize the Composer autoloader for production?
+**Answer:** Run `composer install --no-dev --optimize-autoloader`, which turns PSR-4 rules into a class map. `--classmap-authoritative` goes further and never searches the disk for classes missing from the map.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### Should you commit `composer.lock`?
+**Answer:** In an application, yes: every environment then installs the same versions. A library's lock file is ignored when the library is installed as a dependency, so committing it is optional.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What are Composer scripts and plugins?
+**Answer:** Scripts are commands in the `scripts` section of `composer.json`, run by name or on events such as `post-install-cmd`. Plugins are packages that extend Composer itself. Since Composer 2.2, each plugin must be allowed in `config.allow-plugins`.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What is `config.platform` used for?
+**Answer:** It tells Composer which PHP version and extensions the production server has. Composer then resolves dependencies for that platform, even if developers run a newer PHP locally.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What is PHP-CS-Fixer used for?
+**Answer:** PHP-CS-Fixer automatically fixes code style, such as formatting, spacing and imports, according to a rule set like `@PER-CS`. In CI, it usually runs with `--dry-run` to report violations without changing files.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What is Rector used for?
+**Answer:** Rector refactors code automatically, for example to use newer PHP syntax or upgrade a framework version. It changes code by rules that you enable in its configuration.
+
+[Detailed Guide](answers/composer_tools.md)
+
+### Senior
+#### How do you resolve a dependency conflict in Composer?
+**Answer:** Read the constraint chain in the error and use `composer why-not vendor/package 2.0` to see what blocks a version. Then update the related packages together with `composer update vendor/package -W`, or change your constraints.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### What do `provide`, `replace` and `conflict` mean in `composer.json`?
+**Answer:** `provide` declares that the package implements a virtual package such as `psr/log-implementation`. `replace` means the package contains another package's code, so that package is not installed. `conflict` lists versions that cannot be installed together with it.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### How do you keep Composer dependencies secure?
+**Answer:** Run `composer audit` in CI to check installed packages against known vulnerabilities, and commit `composer.lock` so builds use reviewed versions. Allow only trusted plugins, because they run code during installation.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### How do you use private packages in Composer?
+**Answer:** Add their source in the `repositories` section: a Git repository (`vcs`), a private registry such as Private Packagist or Satis, or a local directory (`path`). Store credentials in `auth.json` or the `COMPOSER_AUTH` environment variable, not in `composer.json`.
+
+[Detailed Guide](answers/composer_tools.md)
+
+#### How do you profile a PHP application?
+**Answer:** Use an APM such as New Relic or Datadog to find slow endpoints, then a profiler such as Blackfire or XHProf to see which calls take the time.
+
+[Detailed Guide](answers/composer_tools.md)
 
 ## 13. Caching & Redis
 
