@@ -14,6 +14,7 @@ This section contains detailed guides and explanations for various PHP-related t
 - [Advanced Testing & Debugging](/answers/testing_debugging_advanced)
 - [Architecture & Highload: Scalability, Microservices, and Performance](/answers/architecture_highload)
 - [Caching: Redis vs Memcached in PHP](/answers/caching)
+- [Redis: Caching Patterns, Persistence and Scaling](/answers/redis)
 - [Clean Code & Programming Best Practices](/answers/clean_code)
 - [Design Patterns in PHP](/answers/design_patterns)
 - [Doctrine ORM & Symfony Database Layer](/answers/doctrine)
