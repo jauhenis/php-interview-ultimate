@@ -1541,12 +1541,89 @@ ALTER TABLE users ALTER COLUMN age TYPE SMALLINT;
 #### What is Caching?
 **Answer:** Storing data in a temporary storage area (like RAM) to retrieve it faster on subsequent requests.
 
+#### What is Redis and what is it used for besides caching?
+**Answer:** Redis is an in-memory key-value store with built-in data structures. Besides caching, PHP projects use it for sessions, queues, counters, rate limiting and distributed locks.
+
+[Detailed Guide](answers/redis.md)
+
+#### What is TTL in Redis and how does key expiration work?
+**Answer:** TTL is a key's lifetime, set with `EXPIRE key 60` or `SET key value EX 60`. `TTL key` returns the remaining seconds. Redis deletes an expired key when a client accesses it and in a periodic background cycle.
+
+[Detailed Guide](answers/redis.md)
+
+#### Why is Redis fast?
+**Answer:** It keeps data in RAM, and a single thread executes commands one at a time, so commands need no locks. As a result, one slow command delays every other client.
+
 ### Middle
 #### Redis vs Memcached
 **Answer:** 
 - **Redis:** Supports various data types (strings, lists, sets, etc.), persistence, and pub/sub.
 - **Memcached:** Simple key-value store, mostly for simple caching.
 [Redis vs Memcached Comparison](answers/caching.md)
+
+#### What are the most used Redis data types?
+**Answer:** Strings for values and counters, hashes for objects, lists for simple queues, sets for unique values and sorted sets for rankings. See the [full list of Redis data types](https://redis.io/docs/latest/develop/data-types/).
+
+#### What caching strategies do you know?
+**Answer:** Cache-aside is the most common in PHP: read from the cache and, on a miss, load the data from the database and store it. Other strategies are read-through, write-through, write-behind and refresh-ahead.
+
+[Detailed Guide](answers/redis.md)
+
+#### How do you invalidate a cache?
+**Answer:** Use a TTL, delete the key after the database transaction commits, or change a version or tag to invalidate a group of keys. Deleting is safer than writing the new value, because concurrent writers cannot leave an older value in the cache.
+
+[Detailed Guide](answers/redis.md)
+
+#### What happens when Redis runs out of memory?
+**Answer:** At `maxmemory`, Redis applies the `maxmemory-policy` setting. The default `noeviction` rejects writes. A Redis instance used only as a cache usually uses `allkeys-lru` or `allkeys-lfu`.
+
+[Detailed Guide](answers/redis.md)
+
+#### How does Redis persistence work: RDB vs AOF?
+**Answer:** RDB saves periodic snapshots, which are compact and fast to load, but writes since the last snapshot are lost. AOF logs every write. With `appendfsync everysec`, you lose at most about one second of writes.
+
+[Detailed Guide](answers/redis.md)
+
+#### Why should you avoid `KEYS *` in production?
+**Answer:** `KEYS` scans the whole keyspace in one call and blocks all other clients until it finishes. Use `SCAN`, which iterates with a cursor in small batches.
+
+[Detailed Guide](answers/redis.md)
+
+#### What is the difference between pipelining and transactions (MULTI/EXEC)?
+**Answer:** Pipelining sends many commands in one network round trip, but other clients' commands can run between them. `MULTI`/`EXEC` runs the queued commands as one isolated block, but does not roll back if one of them fails.
+
+[Detailed Guide](answers/redis.md)
+
+#### phpredis vs Predis: what is the difference?
+**Answer:** phpredis is a PHP extension written in C. Predis is a Composer package written in PHP.
+
+[Detailed Guide](answers/redis.md)
+
+### Senior
+#### What is a cache stampede and how do you prevent it?
+**Answer:** When a frequently read key expires, many requests miss the cache at once and rebuild the same value, which overloads the database. Let one process rebuild the value under a lock, refresh it before it expires, or serve the old value while it refreshes.
+
+[Detailed Guide](answers/redis.md)
+
+#### What are cache penetration and cache avalanche?
+**Answer:** Penetration means requests for data that does not exist always reach the database. Cache the empty result for a short time. An avalanche happens when many keys expire at once or a cache node restarts empty. Add random jitter to TTLs.
+
+[Detailed Guide](answers/redis.md)
+
+#### Redis Sentinel vs Redis Cluster: what is the difference?
+**Answer:** Sentinel adds automatic failover to one master and its replicas, but does not shard data. Cluster shards keys across several masters and includes failover.
+
+[Detailed Guide](answers/redis.md)
+
+#### How do you implement a rate limiter with Redis?
+**Answer:** The simplest approach is a fixed window: increment a key per user and minute with `INCR` and set its TTL on the first request. Run both commands in one Lua script so they execute atomically.
+
+[Detailed Guide](answers/redis.md)
+
+#### Redis Pub/Sub vs Redis Streams: when should you use which?
+**Answer:** Pub/Sub delivers a message only to subscribers connected at that moment and does not store it. Streams store messages, and consumer groups let workers acknowledge each message, so none is lost while a worker is offline.
+
+[Detailed Guide](answers/redis.md)
 
 ---
 

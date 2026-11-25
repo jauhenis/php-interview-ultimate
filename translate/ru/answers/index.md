@@ -14,6 +14,7 @@ slug: "/answers"
 * [Продвинутое тестирование и отладка](testing_debugging_advanced.md)
 * [Архитектура и Highload: масштабируемость, микросервисы и производительность](architecture_highload.md)
 * [Кэширование: Redis vs Memcached в PHP](caching.md)
+* [Redis: паттерны кэширования, персистентность и масштабирование](redis.md)
 * [Чистый код и лучшие практики программирования](clean_code.md)
 * [Паттерны проектирования в PHP](design_patterns.md)
 * [Doctrine ORM и слой базы данных Symfony](doctrine.md)
